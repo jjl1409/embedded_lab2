@@ -83,7 +83,6 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet) {
   if (!packet)
     return NULL;
   uint8_t keycode = packet->keycode[0];
-  uint8_t modifiers = packet->modifiers;
   if (keycode >= 0x4 && keycode <= 0x1d) {
       if (USB_SHIFT_PRESSED(packet)) {
           return 'A' + (keycode - 4);
@@ -91,34 +90,34 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet) {
           return 'a' + (keycode - 4);
       }
   }
-if (keycode >= 0x1e && keycode <= 0x27) {
-        if (USB_SHIFT_PRESSED(packet)) {
-            switch (keycode) {
-                case 0x1e: return '!';
-                case 0x1f: return '@';
-                case 0x20: return '#';
-                case 0x21: return '$';
-                case 0x22: return '%';
-                case 0x23: return '^';
-                case 0x24: return '&';
-                case 0x25: return '*';
-                case 0x26: return '(';
-                case 0x27: return ')';
-            }
-        } else {
-            switch (keycode) {
-                case 0x1e: return '1';
-                case 0x1f: return '2';
-                case 0x20: return '3';
-                case 0x21: return '4';
-                case 0x22: return '5';
-                case 0x23: return '6';
-                case 0x24: return '7';
-                case 0x25: return '8';
-                case 0x26: return '9';
-                case 0x27: return '0';
-            }
-        }
-    }
-    return 0;
+  if (keycode >= 0x1e && keycode <= 0x27) {
+          if (USB_SHIFT_PRESSED(packet)) {
+              switch (keycode) {
+                  case 0x1e: return '!';
+                  case 0x1f: return '@';
+                  case 0x20: return '#';
+                  case 0x21: return '$';
+                  case 0x22: return '%';
+                  case 0x23: return '^';
+                  case 0x24: return '&';
+                  case 0x25: return '*';
+                  case 0x26: return '(';
+                  case 0x27: return ')';
+              }
+          } else {
+              switch (keycode) {
+                  case 0x1e: return '1';
+                  case 0x1f: return '2';
+                  case 0x20: return '3';
+                  case 0x21: return '4';
+                  case 0x22: return '5';
+                  case 0x23: return '6';
+                  case 0x24: return '7';
+                  case 0x25: return '8';
+                  case 0x26: return '9';
+                  case 0x27: return '0';
+              }
+          }
+  }
+  return 0;
 }
