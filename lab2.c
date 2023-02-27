@@ -102,8 +102,8 @@ int main()
   }
 
   /* Start the network thread */
-  pthread_create(&network_thread_r, NULL, network_thread_r, NULL);
-  //pthread_create(&network_thread_w, NULL, network_thread_w, NULL);
+  pthread_create(&network_thread_r, NULL, network_thread_f_r, NULL);
+  //pthread_create(&network_thread_w, NULL, network_thread_f_w, NULL);
 
   /* Look for and handle keypresses */
   for (;;) {
