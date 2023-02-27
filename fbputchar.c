@@ -23,7 +23,7 @@
     ioctl(0, TIOCGWINSZ, &w);
 
     printf ("lines %d\n", w.ws_row);
-    printf ("columns %d\n", w.ws_col);
+    printf ("columns %d\n", w.ws_col);fb_finfo.smem_len
 #define FONT_WIDTH 8
 #define FONT_HEIGHT 16
 #define BITS_PER_PIXEL 32
@@ -104,16 +104,32 @@ void fbputchar(char c, int row, int col)
   }
 }
 
-void fbline(int row)
+void fbline(char c, int row)
 {
-	int cols = atoi(getenv("COLUMNS"));
+	int cols = w.ws_col;
 	int i;
 	for (i = 0; i < cols; i++)
 	{
-		fbputchar('-', row, i);
+		fbputchar(c, row, i);
 	}
 }
 
+void fbclear()
+{
+	int rows = w.ws_row;
+	int row;
+	for (row = 0; row < rows; row++)
+	{
+		fbline(' ', row);
+	}
+}
+
+void fbscroll()
+{
+	memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length),
+		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (w.ws_row - 3));
+	fbline(' ', w.w_row - 4);		
+}
 /*
  * Draw the given string at the given row/column.
  * String must fit on a single line: wrap-around is not handled.
