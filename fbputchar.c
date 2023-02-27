@@ -103,7 +103,7 @@ void fbputchar(char c, int row, int col)
 void fbline(char c, int row)
 {
 	int i;
-	for (i = 0; i < 64; i++)
+	for (i = 0; i < COLS; i++)
 	{
 		fbputchar(c, row, i);
 	}
@@ -112,7 +112,7 @@ void fbline(char c, int row)
 void fbclear()
 {
 	int row;
-	for (row = 0; row < 24; row++)
+	for (row = 0; row < ROWS; row++)
 	{
 		fbline(' ', row);
 	}

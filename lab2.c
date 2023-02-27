@@ -24,7 +24,6 @@ struct winsize w;
 /* arthur.cs.columbia.edu */
 #define SERVER_HOST "128.59.19.114"
 #define SERVER_PORT 42000
-
 #define BUFFER_SIZE 128
 
 /*
@@ -49,8 +48,6 @@ void fbputs(const char *s, int row, int col);
 
 int main()
 {
-	cols = 64;
-	rows = 24;
   int err, col;
 
   struct sockaddr_in serv_addr;
@@ -65,13 +62,13 @@ int main()
   }
 
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < cols ; col++) {
+  for (col = 0 ; col < COLS ; col++) {
     fbputchar('*', 0, col);
-    fbputchar('*', max_rows - 1, col);
+    fbputchar('*', ROWS - 1, col);
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
-  fbline('-', max_rows - 4); 
+  fbline('-', ROWS - 4); 
   /* Open the keyboard */
   if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
     fprintf(stderr, "Did not find a keyboard\n");
@@ -117,7 +114,7 @@ int main()
         if (4 <= key && key <= 40){
         	key += 97 - 4;
         	if (packet.modifiers = 2) key += 65 - 97;
-   			fbputs(key, max_rows - 3, 0); 
+   			fbputs(key, ROWS - 3, 0); 
         }
          + 97 - 4;
         fbputs(keystate, 6, 0);
