@@ -121,7 +121,7 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
-      int key = getCharFromKeyCode(packet);
+      int key = getCharFromKeyCode(&packet);
       fbputchar((char)key, ROWS - 3, msg_buff_indx);
       msg_buff[msg_buff_indx] = (char)key;
       msg_buff_indx++;
