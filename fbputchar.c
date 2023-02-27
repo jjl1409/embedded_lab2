@@ -17,6 +17,7 @@
 #include <sys/ioctl.h>
 
 #include <linux/fb.h>
+#include <linux/string.h>
 
 #define FBDEV "/dev/fb0"
 #define FONT_WIDTH 8
@@ -38,9 +39,6 @@ int fbopen()
 {
   struct winsize w;
   ioctl(0, TIOCGWINSZ, &w);
-
-  printf ("lines %d\n", w.ws_row);
-  printf ("columns %d\n", w.ws_col);
   max_rows = w.ws_row;
   max_cols = w.ws_col;
   int fd = open(FBDEV, O_RDWR); /* Open the device */
@@ -128,9 +126,9 @@ void fbclear()
 
 void fbscroll()
 {
-	memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length),
-		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (w.ws_row - 3));
-	fbline(' ', w.w_row - 4);		
+	memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length,
+		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (max_rows - 3));
+	fbline(' ', max_rows - 4);		
 }
 /*
  * Draw the given string at the given row/column.
