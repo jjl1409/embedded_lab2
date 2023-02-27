@@ -108,7 +108,7 @@ int main()
   // pthread_create(&network_thread_w, NULL, network_thread_f_w, NULL);
 
   /* Look for and handle keypresses */
-  int msg_buff[MESSAGE_SIZE];
+  char msg_buff[MESSAGE_SIZE];
   int msg_buff_indx = 0;
   int for (;;)
   {
@@ -129,7 +129,9 @@ int main()
         else
           key += 'a' - 4;
 
-        fbputchar((char)key, ROWS - 3, 0);
+        fbputchar((char)key, ROWS - 3, msg_buff_indx);
+        msg_buff[msg_buff_indx] = (char)key;
+        msg_buff_indx++;
       }
       fbputs(keystate, 6, 0);
       if (packet.keycode[0] == 0x29)
