@@ -13,6 +13,11 @@
 #include <unistd.h>
 #include "usbkeyboard.h"
 #include <pthread.h>
+#define FBDEV "/dev/fb0"
+    struct winsize w;
+    ioctl(0, TIOCGWINSZ, &w);
+    int max_rows = w.ws_row;
+    int max_cols = w.ws_col;
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -55,13 +60,13 @@ int main()
   }
 
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < 64 ; col++) {
+  for (col = 0 ; col < max_cols ; col++) {
     fbputchar('*', 0, col);
     fbputchar('*', 23, col);
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
-
+  fbline('-', max_rows - 4); 
   /* Open the keyboard */
   if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
     fprintf(stderr, "Did not find a keyboard\n");
@@ -98,13 +103,21 @@ int main()
 			      (unsigned char *) &packet, sizeof(packet),
 			      &transferred, 0);
     if (transferred == sizeof(packet)) {
-      sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-	      packet.keycode[1]);
-      printf("%s\n", keystate);
-      fbputs(keystate, 6, 0);
-      if (packet.keycode[0] == 0x29) { /* ESC pressed? */
-	break;
-      }
+		
+		sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
+		packet.keycode[1]);
+        printf("%s\n", keystate);
+        int key = packet.keycode[0];
+        if (4 <= key && key <= 40){
+        	key += atoi('a') - 4;
+        	if (packet.modifiers = 2) key += atoi('A') - atoi('a');
+   			fpputs(char(key), max_rows - 3, 0); 
+        }
+         + atoi('a') - 4;
+        fbputs(keystate, 6, 0);
+        if (packet.keycode[0] == 0x29) { /* ESC pressed? */
+	        break;
+        }
     }
   }
 

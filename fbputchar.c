@@ -23,7 +23,7 @@
     ioctl(0, TIOCGWINSZ, &w);
 
     printf ("lines %d\n", w.ws_row);
-    printf ("columns %d\n", w.ws_col);fb_finfo.smem_len
+    printf ("columns %d\n", w.ws_col);
 #define FONT_WIDTH 8
 #define FONT_HEIGHT 16
 #define BITS_PER_PIXEL 32
