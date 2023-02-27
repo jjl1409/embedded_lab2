@@ -112,8 +112,10 @@ int main()
         printf("%s\n", keystate);
         int key = packet.keycode[0];
         if (4 <= key && key <= 40){
-        	key += 'a' - 4;
-        	//if ((packet.modifiers | 2) || packet.modifiers |= 32) key += 65 - 97;
+        	if (packet.modifiers & (USB_LSHIFT | USB_RSHIFT)) // Shift pressed
+            key += 'A' - 4;
+          else
+            key += 'a' - 4;
    			fbputchar((char)key, ROWS - 3, 0); 
         }
         fbputs(keystate, 6, 0);
