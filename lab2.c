@@ -41,6 +41,10 @@ void *network_thread_f(void *);
 
 int main()
 {
+	struct winsize w;
+  ioctl(0, TIOCGWINSZ, &w);
+  int max_rows = w.ws_row;
+  int max_cols = w.ws_col;
   int err, col;
 
   struct sockaddr_in serv_addr;
@@ -55,7 +59,7 @@ int main()
   }
 
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < 64 ; col++) {
+  for (col = 0 ; col < max_cols ; col++) {
     fbputchar('*', 0, col);
     fbputchar('*', 23, col);
   }
