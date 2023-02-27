@@ -109,5 +109,5 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet) {
           return '1' + (keycode - 30);
       }
   }
-  return '\0';
+    return '\0';
 }
