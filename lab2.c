@@ -13,11 +13,11 @@
 #include <unistd.h>
 #include "usbkeyboard.h"
 #include <pthread.h>
+#include <sys/ioctl.h>
 #define FBDEV "/dev/fb0"
-    struct winsize w;
-    ioctl(0, TIOCGWINSZ, &w);
-    int max_rows = w.ws_row;
-    int max_cols = w.ws_col;
+struct winsize w;
+int max_rows;
+int max_cols;
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -41,8 +41,12 @@ int sockfd; /* Socket file descriptor */
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
 
-pthread_t network_thread;
-void *network_thread_f(void *);
+pthread_t network_thread_r;
+pthread_t network_thread_w;
+void *network_thread_f_r(void *);
+void *network_thread_f_w(void *);
+void fbline(char c, int row);
+void fbputs(const char *s, int row, int col);
 
 int main()
 {
@@ -58,6 +62,9 @@ int main()
     fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
     exit(1);
   }
+  ioctl(0, TIOCGWINSZ, &w);
+  int max_rows = w.ws_row;
+  int max_cols = w.ws_col;
 
   /* Draw rows of asterisks across the top and bottom of the screen */
   for (col = 0 ; col < max_cols ; col++) {
@@ -95,7 +102,8 @@ int main()
   }
 
   /* Start the network thread */
-  pthread_create(&network_thread, NULL, network_thread_f, NULL);
+  pthread_create(&network_thread_r, NULL, network_thread_r, NULL);
+  pthread_create(&network_thread_w, NULL, network_thread_w, NULL);
 
   /* Look for and handle keypresses */
   for (;;) {
@@ -111,7 +119,7 @@ int main()
         if (4 <= key && key <= 40){
         	key += atoi('a') - 4;
         	if (packet.modifiers = 2) key += atoi('A') - atoi('a');
-   			fpputs(char(key), max_rows - 3, 0); 
+   			fbputs(key, max_rows - 3, 0); 
         }
          + atoi('a') - 4;
         fbputs(keystate, 6, 0);
@@ -122,15 +130,31 @@ int main()
   }
 
   /* Terminate the network thread */
-  pthread_cancel(network_thread);
+  pthread_cancel(network_thread_r);
+  pthread_cancel(network_thread_w);
 
   /* Wait for the network thread to finish */
-  pthread_join(network_thread, NULL);
+  pthread_join(network_thread_r, NULL);
+  pthread_join(network_thread_w, NULL);
 
   return 0;
 }
 
-void *network_thread_f(void *ignored)
+void *network_thread_f_r(void *ignored)
+{
+  char recvBuf[BUFFER_SIZE];
+  int n;
+  /* Receive data */
+  while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
+    recvBuf[n] = '\0';
+    printf("%s", recvBuf);
+    fbputs(recvBuf, 8, 0);
+  }
+
+  return NULL;
+}
+
+void *network_thread_f_w(void *ignored)
 {
   char recvBuf[BUFFER_SIZE];
   int n;
