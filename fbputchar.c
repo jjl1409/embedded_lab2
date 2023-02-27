@@ -28,8 +28,6 @@ struct fb_var_screeninfo fb_vinfo;
 struct fb_fix_screeninfo fb_finfo;
 unsigned char *framebuffer;
 static unsigned char font[];
-int max_rows = 64;
-int max_cols = 24;
 
 /*
  * Open the framebuffer to prepare it to be written to.  Returns 0 on success

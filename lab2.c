@@ -17,8 +17,6 @@
 #define FBDEV "/dev/fb0"
 struct winsize w;
 // hardcoded max rows and cols; 64 * 24
-int max_rows = 64;
-int max_cols = 24;
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -115,11 +113,11 @@ int main()
         printf("%s\n", keystate);
         int key = packet.keycode[0];
         if (4 <= key && key <= 40){
-        	key += atoi('a') - 4;
-        	if (packet.modifiers = 2) key += atoi('A') - atoi('a');
+        	key += 97 - 4;
+        	if (packet.modifiers = 2) key += 65 - 97;
    			fbputs(key, max_rows - 3, 0); 
         }
-         + atoi('a') - 4;
+         + 97 - 4;
         fbputs(keystate, 6, 0);
         if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	        break;
