@@ -28,8 +28,8 @@ struct fb_var_screeninfo fb_vinfo;
 struct fb_fix_screeninfo fb_finfo;
 unsigned char *framebuffer;
 static unsigned char font[];
-int max_rows;
-int max_cols;
+int max_rows = 64;
+int max_cols = 24;
 
 /*
  * Open the framebuffer to prepare it to be written to.  Returns 0 on success
@@ -37,10 +37,6 @@ int max_cols;
  */
 int fbopen()
 {
-  struct winsize w;
-  ioctl(0, TIOCGWINSZ, &w);
-  max_rows = w.ws_row;
-  max_cols = w.ws_col;
   int fd = open(FBDEV, O_RDWR); /* Open the device */
   if (fd == -1) return FBOPEN_DEV;
 

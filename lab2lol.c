@@ -16,8 +16,9 @@
 #include <sys/ioctl.h>
 #define FBDEV "/dev/fb0"
 struct winsize w;
-int max_rows;
-int max_cols;
+// hardcoded max rows and cols; 64 * 24
+int max_rows = 64;
+int max_cols = 24;
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -62,14 +63,11 @@ int main()
     fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
     exit(1);
   }
-  ioctl(0, TIOCGWINSZ, &w);
-  int max_rows = w.ws_row;
-  int max_cols = w.ws_col;
 
   /* Draw rows of asterisks across the top and bottom of the screen */
   for (col = 0 ; col < max_cols ; col++) {
     fbputchar('*', 0, col);
-    fbputchar('*', 23, col);
+    fbputchar('*', max_rows - 1, col);
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
