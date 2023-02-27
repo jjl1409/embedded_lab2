@@ -17,13 +17,9 @@
 #include <sys/ioctl.h>
 
 #include <linux/fb.h>
+#include <linux/string.h>
 
 #define FBDEV "/dev/fb0"
-    struct winsize w;
-    ioctl(0, TIOCGWINSZ, &w);
-
-    printf ("lines %d\n", w.ws_row);
-    printf ("columns %d\n", w.ws_col);
 #define FONT_WIDTH 8
 #define FONT_HEIGHT 16
 #define BITS_PER_PIXEL 32
@@ -32,6 +28,8 @@ struct fb_var_screeninfo fb_vinfo;
 struct fb_fix_screeninfo fb_finfo;
 unsigned char *framebuffer;
 static unsigned char font[];
+int max_rows;
+int max_cols;
 
 /*
  * Open the framebuffer to prepare it to be written to.  Returns 0 on success
@@ -39,6 +37,10 @@ static unsigned char font[];
  */
 int fbopen()
 {
+  struct winsize w;
+  ioctl(0, TIOCGWINSZ, &w);
+  max_rows = w.ws_row;
+  max_cols = w.ws_col;
   int fd = open(FBDEV, O_RDWR); /* Open the device */
   if (fd == -1) return FBOPEN_DEV;
 
@@ -106,9 +108,8 @@ void fbputchar(char c, int row, int col)
 
 void fbline(char c, int row)
 {
-	int cols = w.ws_col;
 	int i;
-	for (i = 0; i < cols; i++)
+	for (i = 0; i < max_cols; i++)
 	{
 		fbputchar(c, row, i);
 	}
@@ -116,9 +117,8 @@ void fbline(char c, int row)
 
 void fbclear()
 {
-	int rows = w.ws_row;
 	int row;
-	for (row = 0; row < rows; row++)
+	for (row = 0; row < max_rows; row++)
 	{
 		fbline(' ', row);
 	}
@@ -126,9 +126,9 @@ void fbclear()
 
 void fbscroll()
 {
-	memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length),
-		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (w.ws_row - 3));
-	fbline(' ', w.w_row - 4);		
+	memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length,
+		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (max_rows - 3));
+	fbline(' ', max_rows - 4);		
 }
 /*
  * Draw the given string at the given row/column.
