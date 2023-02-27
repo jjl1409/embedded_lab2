@@ -1,8 +1,8 @@
 #ifndef _USBKEYBOARD_H
 #define _USBKEYBOARD_H
 
-#include <libusb-1.0/libusb.h>
-
+//#include <libusb-1.0/libusb.h>
+#include "/opt/homebrew/Cellar/libusb/1.0.26/include/libusb-1.0/libusb.h"
 #define USB_HID_KEYBOARD_PROTOCOL 1
 
 /* Modifier bits */
