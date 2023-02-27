@@ -111,12 +111,11 @@ int main()
 		packet.keycode[1]);
         printf("%s\n", keystate);
         int key = packet.keycode[0];
-//        if (4 <= key && key <= 40){
-//        	key += 97 - 4;
-//        	if (packet.modifiers = 2) key += 65 - 97;
-//   			fbputs(key, ROWS - 3, 0); 
-//        }
-//         + 97 - 4;
+        if (4 <= key && key <= 40){
+        	key += 'a' - 4;
+        	//if ((packet.modifiers | 2) || packet.modifiers |= 32) key += 65 - 97;
+   			fbputchar((char)key, ROWS - 3, 0); 
+        }
         fbputs(keystate, 6, 0);
         if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	        break;
