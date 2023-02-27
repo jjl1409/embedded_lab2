@@ -103,7 +103,7 @@ int main()
 
   /* Start the network thread */
   pthread_create(&network_thread_r, NULL, network_thread_r, NULL);
-  pthread_create(&network_thread_w, NULL, network_thread_w, NULL);
+  //pthread_create(&network_thread_w, NULL, network_thread_w, NULL);
 
   /* Look for and handle keypresses */
   for (;;) {
@@ -131,11 +131,11 @@ int main()
 
   /* Terminate the network thread */
   pthread_cancel(network_thread_r);
-  pthread_cancel(network_thread_w);
+  //pthread_cancel(network_thread_w);
 
   /* Wait for the network thread to finish */
   pthread_join(network_thread_r, NULL);
-  pthread_join(network_thread_w, NULL);
+  //pthread_join(network_thread_w, NULL);
 
   return 0;
 }
@@ -156,14 +156,6 @@ void *network_thread_f_r(void *ignored)
 
 void *network_thread_f_w(void *ignored)
 {
-  char recvBuf[BUFFER_SIZE];
-  int n;
-  /* Receive data */
-  while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
-    recvBuf[n] = '\0';
-    printf("%s", recvBuf);
-    fbputs(recvBuf, 8, 0);
-  }
 
   return NULL;
 }
