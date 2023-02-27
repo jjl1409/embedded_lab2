@@ -123,27 +123,20 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
-      int key = packet.keycode[0];
-      if (0x4 <= key && key <= 0x1d)
+      int key = getCharFromKeyCode(&packet);
+      /* write the char to the message buffer and print to the correct position on screen*/
+      if (msg_buff_indx < MESSAGE_SIZE)
       {
-        if ((packet.modifiers & (USB_LSHIFT | USB_RSHIFT)) > 0) // Shift pressed
-          key += 'A' - 4;
-        else
-          key += 'a' - 4;
-        /* write the char to the message buffer and print to the correct position on screen*/
-        if (msg_buff_indx < MESSAGE_SIZE)
+        msg_buff[msg_buff_indx] = (char)key;
+        msg_buff_indx++;
+        msg_buff_col_indx++;
+        /* if we hit the end of the screen go to the next row and reset colun index*/
+        if (msg_buff_col_indx == COLS)
         {
-          msg_buff[msg_buff_indx] = (char)key;
-          msg_buff_indx++;
-          msg_buff_col_indx++;
-          /* if we hit the end of the screen go to the next row and reset colun index*/
-          if (msg_buff_col_indx == COLS)
-          {
-            msg_buff_col_indx = 0;
-            msg_buff_row_indx++;
-          }
-          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
+          msg_buff_col_indx = 0;
+          msg_buff_row_indx++;
         }
+        fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
       }
       fbputs(keystate, 6, 0);
       if (packet.keycode[0] == 0x29)
