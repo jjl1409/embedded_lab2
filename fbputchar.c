@@ -103,7 +103,7 @@ void fbputchar(char c, int row, int col)
 void fbline(char c, int row)
 {
 	int i;
-	for (i = 0; i < max_cols; i++)
+	for (i = 0; i < 64; i++)
 	{
 		fbputchar(c, row, i);
 	}
@@ -112,7 +112,7 @@ void fbline(char c, int row)
 void fbclear()
 {
 	int row;
-	for (row = 0; row < max_rows; row++)
+	for (row = 0; row < 24; row++)
 	{
 		fbline(' ', row);
 	}
@@ -121,8 +121,8 @@ void fbclear()
 void fbscroll()
 {
 	memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length,
-		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (max_rows - 3));
-	fbline(' ', max_rows - 4);		
+		(FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (24 - 3));
+	fbline(' ', 24 - 4);		
 }
 /*
  * Draw the given string at the given row/column.

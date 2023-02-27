@@ -49,6 +49,8 @@ void fbputs(const char *s, int row, int col);
 
 int main()
 {
+	cols = 64;
+	rows = 24;
   int err, col;
 
   struct sockaddr_in serv_addr;
@@ -63,7 +65,7 @@ int main()
   }
 
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < max_cols ; col++) {
+  for (col = 0 ; col < cols ; col++) {
     fbputchar('*', 0, col);
     fbputchar('*', max_rows - 1, col);
   }
