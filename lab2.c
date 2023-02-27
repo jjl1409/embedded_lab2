@@ -110,7 +110,7 @@ int main()
   /* Look for and handle keypresses */
   char msg_buff[MESSAGE_SIZE];
   int msg_buff_indx = 0;
-  int for (;;)
+  for (;;)
   {
     libusb_interrupt_transfer(keyboard, endpoint_address,
                               (unsigned char *)&packet, sizeof(packet),
