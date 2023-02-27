@@ -15,7 +15,7 @@
 #include <pthread.h>
 #include <sys/ioctl.h>
 #define FBDEV "/dev/fb0"
-#define MESSAGE_SIZE 48
+#define MESSAGE_SIZE 128
 struct winsize w;
 // hardcoded max rows and cols; 64 * 24
 
@@ -130,10 +130,20 @@ int main()
           key += 'A' - 4;
         else
           key += 'a' - 4;
-
-        fbputchar((char)key, ROWS - 3, msg_buff_indx);
-        msg_buff[msg_buff_indx] = (char)key;
-        msg_buff_indx++;
+        /* write the char to the message buffer and print to the correct position on screen*/
+        if (msg_buff_indx < MESSAGE_SIZE)
+        {
+          msg_buff[msg_buff_indx] = (char)key;
+          msg_buff_indx++;
+          msg_buff_col_indx++;
+          /* if we hit the end of the screen go to the next row and reset colun index*/
+          if (msg_buff_col_indx == COLS)
+          {
+            msg_buff_col_indx = 0;
+            msg_buff_row_indx++;
+          }
+          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
+        }
       }
       fbputs(keystate, 6, 0);
       if (packet.keycode[0] == 0x29)
