@@ -111,8 +111,8 @@ int main()
 		packet.keycode[1]);
         printf("%s\n", keystate);
         int key = packet.keycode[0];
-        if (4 <= key && key <= 40){
-        	if (packet.modifiers & (USB_LSHIFT | USB_RSHIFT)) // Shift pressed
+        if (0x4 <= key && key <= 0x1d){
+        	if ((packet.modifiers & (USB_LSHIFT | USB_RSHIFT)) > 0) // Shift pressed
             key += 'A' - 4;
           else
             key += 'a' - 4;
