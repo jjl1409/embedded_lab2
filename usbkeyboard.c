@@ -78,3 +78,35 @@ struct libusb_device_handle *openkeyboard(uint8_t *endpoint_address) {
 
   return keyboard;
 }
+
+char getCharFromKeyCode(struct usb_keyboard_packet *packet) {
+  if (!packet)
+    return NULL;
+  uint8_t keycode = packet->keycode[0];
+  uint8_t modifiers = packet->modifiers;
+  if (keycode >= 0x4 && keycode <= 0x1d) {
+      if (USB_SHIFT_PRESSED(packet)) {
+          return 'A' + (keycode - 4);
+      } else {
+          return 'a' + (keycode - 4);
+      }
+  }
+  if (keycode >= 30 && keycode <= 38) {
+      if (USB_SHIFT_PRESSED(packet)) {
+          switch (keycode) {
+              case 30: return '!';
+              case 31: return '@';
+              case 32: return '#';
+              case 33: return '$';
+              case 34: return '%';
+              case 35: return '^';
+              case 36: return '&';
+              case 37: return '*';
+              case 38: return '(';
+          }
+      } else {
+          return '1' + (keycode - 30);
+      }
+  }
+    return '\0';
+}
