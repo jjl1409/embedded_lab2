@@ -138,7 +138,6 @@ int main()
         if (msg_buff_indx < MESSAGE_SIZE)
         {
           msg_buff[msg_buff_indx] = (char)key;
-          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
           msg_buff_indx++;
           msg_buff_col_indx++;
           /* if we hit the end of the screen go to the next row and reset colun index*/
@@ -147,6 +146,7 @@ int main()
             msg_buff_col_indx = 0;
             msg_buff_row_indx++;
           }
+          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
         }
       }
       fbputs(keystate, 6, 0);
