@@ -19,7 +19,11 @@
 #include <linux/fb.h>
 
 #define FBDEV "/dev/fb0"
+    struct winsize w;
+    ioctl(0, TIOCGWINSZ, &w);
 
+    printf ("lines %d\n", w.ws_row);
+    printf ("columns %d\n", w.ws_col);
 #define FONT_WIDTH 8
 #define FONT_HEIGHT 16
 #define BITS_PER_PIXEL 32
@@ -98,6 +102,16 @@ void fbputchar(char c, int row, int col)
     }
     if (y & 0x1) pixelp++;
   }
+}
+
+void fbline(int row)
+{
+	int cols = atoi(getenv("COLUMNS"));
+	int i;
+	for (i = 0; i < cols; i++)
+	{
+		fbputchar('-', row, i);
+	}
 }
 
 /*
