@@ -76,6 +76,10 @@ int main()
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
   fbline('-', ROWS - 4);
+
+  /*reset message buffers*/
+  fbline(' ', ROWS - 3);
+  fbline(' ', ROWS - 2);
   /* Open the keyboard */
   if ((keyboard = openkeyboard(&endpoint_address)) == NULL)
   {
@@ -134,6 +138,7 @@ int main()
         if (msg_buff_indx < MESSAGE_SIZE)
         {
           msg_buff[msg_buff_indx] = (char)key;
+          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
           msg_buff_indx++;
           msg_buff_col_indx++;
           /* if we hit the end of the screen go to the next row and reset colun index*/
@@ -142,7 +147,6 @@ int main()
             msg_buff_col_indx = 0;
             msg_buff_row_indx++;
           }
-          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
         }
       }
       fbputs(keystate, 6, 0);
