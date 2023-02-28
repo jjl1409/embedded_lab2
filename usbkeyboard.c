@@ -115,7 +115,7 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
               case 0x26: return '(';
               case 0x27: return ')';
               case 0x28: return '\n';
-              case 0x2a: return 0;
+              case 0x2a: return '\b';
               case 0x2b: return '\t';
               case 0x2c: return ' ';
               case 0x2d: return '_';
@@ -144,7 +144,7 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
               case 0x26: return '9';
               case 0x27: return '0';
               case 0x28: return '\n';
-              case 0x2a: return 0;
+              case 0x2a: return '\b';
               case 0x2b: return '\t';
               case 0x2c: return ' ';
               case 0x2d: return '-';
