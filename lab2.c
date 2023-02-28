@@ -132,7 +132,7 @@ int main()
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen*/
-      if (key == '~') // enter key
+      if (key == '\n') // enter key
       {
         /*Reset message buffer if enter key pressed*/
         fbline(' ', ROWS - 3);
@@ -141,7 +141,7 @@ int main()
         msg_buff_row_indx = ROWS - 3;
         continue;
       }
-      else if (key == '`') // back space
+      else if (key == '\b') // back space
       {
         /*Back space index*/
         fbputchar(' ', msg_buff_row_indx, msg_buff_col_indx);

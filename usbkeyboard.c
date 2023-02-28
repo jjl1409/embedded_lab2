@@ -94,83 +94,73 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
   if (!packet)
     return NULL;
   uint8_t keycode = packet->keycode[0];
-  if (keycode >= 0x4 && keycode <= 0x1d)
-  {
-    if (USB_SHIFT_PRESSED(packet))
-    {
-      return 'A' + (keycode - 4);
-    }
-    else
-    {
-      return 'a' + (keycode - 4);
-    }
+  if (keycode >= 0x04 && keycode <= 0x1d) {
+      if (USB_SHIFT_PRESSED(packet)) {
+          return 'A' + (keycode - 0x04);
+      } else {
+          return 'a' + (keycode - 0x04);
+      }
   }
-  if (keycode >= 0x1e && keycode <= 0x2c)
-  {
-    if (USB_SHIFT_PRESSED(packet))
-    {
-      switch (keycode)
-      {
-      case 0x1e:
-        return '!';
-      case 0x1f:
-        return '@';
-      case 0x20:
-        return '#';
-      case 0x21:
-        return '$';
-      case 0x22:
-        return '%';
-      case 0x23:
-        return '^';
-      case 0x24:
-        return '&';
-      case 0x25:
-        return '*';
-      case 0x26:
-        return '(';
-      case 0x27:
-        return ')';
-      case 0x28: // enter
-        return '~';
-      case 0x2a: // backspace
-        return '`';
-      case 0x2c: // spacebar
-        return ' ';
+  if (keycode >= 0x1e && keycode <= 0x38) {
+      if (USB_SHIFT_PRESSED(packet)) {
+          switch (keycode) {
+              case 0x1e: return '!';
+              case 0x1f: return '@';
+              case 0x20: return '#';
+              case 0x21: return '$';
+              case 0x22: return '%';
+              case 0x23: return '^';
+              case 0x24: return '&';
+              case 0x25: return '*';
+              case 0x26: return '(';
+              case 0x27: return ')';
+              case 0x28: return '\n';
+              case 0x2a: return 0;
+              case 0x2b: return '\t';
+              case 0x2c: return ' ';
+              case 0x2d: return '-';
+              case 0x2e: return '=';
+              case 0x2f: return '[';
+              case 0x30: return ']';
+              case 0x31: return '\\';
+              case 0x33: return ';';
+              case 0x34: return '\'';
+              case 0x35: return "`";
+              case 0x36: return ",";
+              case 0x37: return ".";
+              case 0x38: return "/";
+              default: return 0;
+          }
+      } else {
+          switch (keycode) {
+              case 0x1e: return '1';
+              case 0x1f: return '2';
+              case 0x20: return '3';
+              case 0x21: return '4';
+              case 0x22: return '5';
+              case 0x23: return '6';
+              case 0x24: return '7';
+              case 0x25: return '8';
+              case 0x26: return '9';
+              case 0x27: return '0';
+              case 0x28: return '\n';
+              case 0x2a: return 0;
+              case 0x2b: return '\t';
+              case 0x2c: return ' ';
+              case 0x2d: return '_';
+              case 0x2e: return '+';
+              case 0x2f: return '{';
+              case 0x30: return '}';
+              case 0x31: return '|';
+              case 0x33: return ':';
+              case 0x34: return '"';
+              case 0x35: return "~";
+              case 0x36: return "<";
+              case 0x37: return ">";
+              case 0x38: return "?";
+              default: return 0;
+          }
       }
-    }
-    else
-    {
-      switch (keycode)
-      {
-      case 0x1e:
-        return '1';
-      case 0x1f:
-        return '2';
-      case 0x20:
-        return '3';
-      case 0x21:
-        return '4';
-      case 0x22:
-        return '5';
-      case 0x23:
-        return '6';
-      case 0x24:
-        return '7';
-      case 0x25:
-        return '8';
-      case 0x26:
-        return '9';
-      case 0x27:
-        return '0';
-      case 0x28: // enter
-        return '~';
-      case 0x2a: // backspace
-        return '`';
-      case 0x2c: // spacebar
-        return ' ';
-      }
-    }
   }
   return 0;
 }
