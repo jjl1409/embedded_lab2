@@ -131,7 +131,11 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
         return '(';
       case 0x27:
         return ')';
-      case 0x2c:
+      case 0x28: // enter
+        return '~';
+      case 0x2a: // backspace
+        return '`';
+      case 0x2c: // spacebar
         return ' ';
       }
     }
@@ -160,6 +164,12 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
       case 0x27:
         return '0';
       case 0x2c:
+        return ' ';
+      case 0x28: // enter
+        return '~';
+      case 0x2a: // backspace
+        return '`';
+      case 0x2c: // spacebar
         return ' ';
       }
     }
