@@ -105,7 +105,7 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
       return 'a' + (keycode - 4);
     }
   }
-  if (keycode >= 0x1e && keycode <= 0x27)
+  if (keycode >= 0x1e && keycode <= 0x2c)
   {
     if (USB_SHIFT_PRESSED(packet))
     {
@@ -131,6 +131,8 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
         return '(';
       case 0x27:
         return ')';
+      case 0x2c:
+        return ' ';
       }
     }
     else
@@ -157,6 +159,8 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
         return '9';
       case 0x27:
         return '0';
+      case 0x2c:
+        return ' ';
       }
     }
   }
