@@ -121,16 +121,6 @@ void fbline(char c, int row)
   }
 }
 
-/* clears just the cell*/
-void fbclear(int row, int col)
-{
-  int row;
-  for (row = 0; row < ROWS; row++)
-  {
-    fbline(' ', row);
-  }
-}
-
 void fbscroll()
 {
   memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length,

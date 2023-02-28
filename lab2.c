@@ -78,7 +78,6 @@ int main()
   fbline('-', ROWS - 4);
 
   /*reset message buffers*/
-  fbresetmsgbuffer();
   fbline(' ', ROWS - 3);
   fbline(' ', ROWS - 2);
 
@@ -129,31 +128,33 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
-      int key = packet.keycode[0];
-      if (0x4 <= key && key <= 0x1d)
+      char key = getCharFromKeyCode(&packet);
+      if (!key)
+        continue;
+      /* write the char to the message buffer and print to the correct position on screen*/
+      if (packet.keycode[0] == 0x28)
       {
-
-        if ((packet.modifiers & (USB_LSHIFT | USB_RSHIFT)) > 0) // Shift pressed
-          key += 'A' - 4;
-        else
-          key += 'a' - 4;
-        /* write the char to the message buffer and print to the correct position on screen*/
-
-        if (key ==)
+        /*Reset message buffer if enter key pressed*/
+        fbline(' ', ROWS - 3);
+        fbline(' ', ROWS - 2);
+      }
+      else if (packet.keycode[0] == 0x4c)
+      {
+        /*Back space index*/
+        fbputchar(' ', msg_buff_row_indx, msg_buff_col_indx);
+        msg_buff_col_indx--;
+      }
+      else if (msg_buff_indx < MESSAGE_SIZE)
+      {
+        msg_buff[msg_buff_indx] = key;
+        fbputchar(key, msg_buff_row_indx, msg_buff_col_indx);
+        msg_buff_indx++;
+        msg_buff_col_indx++;
+        /* if we hit the end of the screen go to the next row and reset colun index*/
+        if (msg_buff_col_indx == COLS)
         {
-        }
-        else if (msg_buff_indx < MESSAGE_SIZE)
-        {
-          msg_buff[msg_buff_indx] = (char)key;
-          fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
-          msg_buff_indx++;
-          msg_buff_col_indx++;
-          /* if we hit the end of the screen go to the next row and reset colun index*/
-          if (msg_buff_col_indx == COLS)
-          {
-            msg_buff_col_indx = 0;
-            msg_buff_row_indx++;
-          }
+          msg_buff_col_indx = 0;
+          msg_buff_row_indx++;
         }
       }
       fbputs(keystate, 6, 0);
