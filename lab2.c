@@ -129,8 +129,8 @@ int main()
               packet.keycode[1]);
       printf("%s\n", keystate);
       char key = getCharFromKeyCode(&packet);
-      if (!key)
-        continue;
+      // if (!key)
+      //   continue;
       /* write the char to the message buffer and print to the correct position on screen*/
       if ((uint8_t)packet.keycode[0] == 0x28)
       {
