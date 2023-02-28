@@ -128,6 +128,8 @@ int main()
               packet.keycode[1]);
       printf("%s\n", keystate);
       char key = getCharFromKeyCode(&packet);
+      if (!key)
+        continue;
       /* write the char to the message buffer and print to the correct position on screen*/
       if (msg_buff_indx < MESSAGE_SIZE)
       {
