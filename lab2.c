@@ -139,6 +139,7 @@ int main()
         fbline(' ', ROWS - 2);
         msg_buff_col_indx = 0;
         msg_buff_row_indx = ROWS - 3;
+        continue;
       }
       else if (key == '`') // back space
       {
