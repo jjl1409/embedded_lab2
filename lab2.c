@@ -132,13 +132,13 @@ int main()
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen*/
-      if (packet.keycode[0] == 0x28)
+      if ((uint8_t)packet.keycode[0] == 0x28)
       {
         /*Reset message buffer if enter key pressed*/
         fbline(' ', ROWS - 3);
         fbline(' ', ROWS - 2);
       }
-      else if (packet.keycode[0] == 0x4c)
+      else if ((uint8_t)packet.keycode[0] == 0x4c)
       {
         /*Back space index*/
         fbputchar(' ', msg_buff_row_indx, msg_buff_col_indx);
