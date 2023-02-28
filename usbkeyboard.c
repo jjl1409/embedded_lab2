@@ -163,8 +163,6 @@ char getCharFromKeyCode(struct usb_keyboard_packet *packet)
         return '9';
       case 0x27:
         return '0';
-      case 0x2c:
-        return ' ';
       case 0x28: // enter
         return '~';
       case 0x2a: // backspace
