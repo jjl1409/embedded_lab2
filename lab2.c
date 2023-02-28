@@ -129,14 +129,16 @@ int main()
               packet.keycode[1]);
       printf("%s\n", keystate);
       char key = getCharFromKeyCode(&packet);
-      // if (!key)
-      //   continue;
+      if (!key)
+        continue;
       /* write the char to the message buffer and print to the correct position on screen*/
       if ((uint8_t)packet.keycode[0] == 0x28)
       {
         /*Reset message buffer if enter key pressed*/
         fbline(' ', ROWS - 3);
         fbline(' ', ROWS - 2);
+        msg_buff_col_indx = 0;
+        msg_buff_row_indx = ROWS - 3;
       }
       else if ((uint8_t)packet.keycode[0] == 0x4c)
       {
