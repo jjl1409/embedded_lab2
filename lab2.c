@@ -78,8 +78,10 @@ int main()
   fbline('-', ROWS - 4);
 
   /*reset message buffers*/
+  fbresetmsgbuffer();
   fbline(' ', ROWS - 3);
   fbline(' ', ROWS - 2);
+
   /* Open the keyboard */
   if ((keyboard = openkeyboard(&endpoint_address)) == NULL)
   {
@@ -130,12 +132,17 @@ int main()
       int key = packet.keycode[0];
       if (0x4 <= key && key <= 0x1d)
       {
+
         if ((packet.modifiers & (USB_LSHIFT | USB_RSHIFT)) > 0) // Shift pressed
           key += 'A' - 4;
         else
           key += 'a' - 4;
         /* write the char to the message buffer and print to the correct position on screen*/
-        if (msg_buff_indx < MESSAGE_SIZE)
+
+        if (key ==)
+        {
+        }
+        else if (msg_buff_indx < MESSAGE_SIZE)
         {
           msg_buff[msg_buff_indx] = (char)key;
           fbputchar((char)key, msg_buff_row_indx, msg_buff_col_indx);
