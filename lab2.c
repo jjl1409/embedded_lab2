@@ -174,8 +174,8 @@ int main()
       handleCursorBlink(&message_pos, &msg_buff);
     }
   //printf("Unlocking\n");
-  usleep(DELAY);
   pthread_mutex_unlock(&keyboard_lock);
+  usleep(DELAY);
   }
 
   /* Terminate the network thread */
