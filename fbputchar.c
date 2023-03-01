@@ -129,7 +129,7 @@ void fbscroll()
 }
 
 void clearTextBox() {
-  for (int i = 0; i < MESSAGE_BOX_START_ROWS - 1; i++) {
+  for (int i = TEXT_BOX_START_ROWS; i < MESSAGE_BOX_START_ROWS - 1; i++) {
     fbline(' ', i);
   }
 }
