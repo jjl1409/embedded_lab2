@@ -50,9 +50,9 @@ char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
 struct position text_pos = {
   .cursor_col_indx = 0,
-  .cursor_row_indx = 8,
+  .cursor_row_indx = 0,
   .msg_buff_col_indx = 0,
-  .msg_buff_row_indx = 0,
+  .msg_buff_row_indx = 8,
   .msg_buff_indx = 0,
   .isBackSpacing = false
 };
