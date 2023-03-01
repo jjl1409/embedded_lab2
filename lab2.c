@@ -156,7 +156,7 @@ int main()
     pthread_mutex_lock(&keyboard_lock);
     //RESET_BACKSPACE(s_keys);
     //RESET_ARROW_KEYS(s_keys)
-    printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", message_pos.cursor_row_indx, message_pos.cursor_col_indx, message_pos.blinking);
+    //printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", message_pos.cursor_row_indx, message_pos.cursor_col_indx, message_pos.blinking);
     if (ESC_PRESSED(s_keys))
     { /* ESC pressed? */
       //printf("Unlocking Thread\n");
@@ -167,7 +167,7 @@ int main()
     } else if (BACKSPACE_PRESSED(s_keys)) {
       handleBackSpace(&message_pos);
     } else if (USB_NOTHING_PRESSED(keys)) {
-      printf("RESETING KEYS\n");
+      //printf("RESETING KEYS\n");
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
       handleCursorBlink(&message_pos, &msg_buff);
       usleep(DELAY);
