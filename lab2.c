@@ -205,6 +205,7 @@ void *keyboard_thread_f(void *ignored) {
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
+      fbputs(keystate, 6, 0);
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
         if (!key)
@@ -216,7 +217,7 @@ void *keyboard_thread_f(void *ignored) {
           handleBackSpace(&message_pos);
         else if (key == '\t') {
           for (int i = 0; i < TAB_SPACING; i++) {
-            printChar(&message_pos, &msg_buff, ' ');
+            printChar(&message_pos, &s_keys, &msg_buff, ' ');
           }
         }
         else 

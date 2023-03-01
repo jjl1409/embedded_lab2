@@ -261,7 +261,7 @@ void handleBackSpace(struct position *pos) {
 }
 
 void handleCursorBlink(struct position *pos, char *buffer) {
-  uint8_t cursor_pos = ((pos->cursor_row_indx - 1) * MAX_COLS) + pos->cursor_col_indx;
+  uint8_t cursor_pos = BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx);
   if (!pos->blinking) {
     fbputchar('_', pos->cursor_row_indx, pos->cursor_col_indx);
     pos->blinking = true;
@@ -274,25 +274,34 @@ void handleCursorBlink(struct position *pos, char *buffer) {
   pos->blinking = false;
 }
 
-void printChar(struct position *pos, char *msg_buff, char key) {
+void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key) {
     printf("Buffer_indx: %d, Rows %d, Cols: %d\n", pos->msg_buff_indx, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", pos->cursor_row_indx, pos->cursor_col_indx, pos->blinking);
     msg_buff[pos->msg_buff_indx] = key;
     /* if we hit the end of the screen go to the next row and reset colun index*/
-    if (pos->msg_buff_col_indx == MAX_COLS - 1 && pos->msg_buff_row_indx == MESSAGE_BOX_END_ROWS) {
-      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    } else if (pos->msg_buff_col_indx == MAX_COLS - 1)
-    {
-      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-      pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
-      pos->msg_buff_row_indx++;
-      pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
-      pos->cursor_row_indx++;
+    if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->cursor_col_indx) {
+      if (pos->msg_buff_col_indx == MAX_COLS - 1 && pos->msg_buff_row_indx == MESSAGE_BOX_END_ROWS) {
+        fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+      } else if (pos->msg_buff_col_indx == MAX_COLS - 1)
+      {
+        fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+        pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
+        pos->msg_buff_row_indx++;
+        pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
+        pos->cursor_row_indx++;
+      } else {
+        fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+        pos->msg_buff_indx++;
+        pos->msg_buff_col_indx++;
+        pos->cursor_col_indx++;
+      }
+    } else if (s_keys->insert) {
+      memmove(msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1, 
+      msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1,
+      MESSAGE_SIZE - BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1);
+      fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     } else {
-      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-      pos->msg_buff_indx++;
-      pos->msg_buff_col_indx++;
-      pos->cursor_col_indx++;
+      fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     }
 }
 
