@@ -19,7 +19,7 @@
             X.caps_lock = false;\
             X.shift_pressed = false;\
             X.escape_pressed = false;\
-            RESET_BACKSPACE(X);
+            RESET_BACKSPACE(X);\
             RESET_ARROW_KEYS(X);\
             }
 #define RESET_ARROW_KEYS(X) {\
