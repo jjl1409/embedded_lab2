@@ -143,7 +143,6 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x27: return ')';
           case 0x28: return '\n';
           case 0x29: s_keys.escape_pressed = true; return 0;
-          //case 0x2a: return '\b';
           case 0x2b: return '\t';
           case 0x2c: return ' ';
           case 0x2d: return '_';
@@ -157,7 +156,6 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x36: return "<";
           case 0x37: return ">";
           case 0x38: return "?";
-          //case 0x39: s_keys.caps_lock = !s_keys.caps_lock; return 0;
           default: return 0;
       }
   } else {
@@ -174,7 +172,6 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x27: return '0';
           case 0x28: return '\n';
           case 0x29: s_keys.escape_pressed = true; return 0;
-          //case 0x2a: s_keys.backspace_pressed = true; return '\b';
           case 0x2b: return '\t';
           case 0x2c: return ' ';
           case 0x2d: return '-';
@@ -188,7 +185,6 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x36: return ",";
           case 0x37: return ".";
           case 0x38: return "/";
-          //case 0x39: s_keys.caps_lock = !s_keys.caps_lock; return 0;
           default: return 0;
       }
   }

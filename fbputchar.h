@@ -35,6 +35,7 @@ struct position {
   uint8_t cursor_col_indx;
   uint8_t cursor_row_indx;
   uint8_t msg_buff_indx;
+  bool blinking;
 };
 
 struct special_keys {

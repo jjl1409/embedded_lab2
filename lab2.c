@@ -51,7 +51,7 @@ void *network_thread_f_w(void *);
 void *keyboard_thread_f(void *);
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
-char msg_buff[MESSAGE_SIZE];
+extern char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
 
@@ -61,6 +61,7 @@ struct position text_pos = {
   .msg_buff_col_indx = TEXT_BOX_START_COLS,
   .msg_buff_row_indx = TEXT_BOX_START_ROWS,
   .msg_buff_indx = 0,
+  .blinking = false,
 };
 
 struct position message_pos = {
@@ -69,6 +70,7 @@ struct position message_pos = {
   .msg_buff_col_indx = MESSAGE_BOX_START_COLS,
   .msg_buff_row_indx = MESSAGE_BOX_START_ROWS,
   .msg_buff_indx = 0,
+  .blinking = false,
 };
 
 struct special_keys s_keys = {\
@@ -169,12 +171,13 @@ int main()
     } else if (USB_NOTHING_PRESSED(keys)) {
       printf("RESETING KEYS\n");
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
-      goto fail;
+      handleCursorBlink(&message_pos, &msg_buff);
     }
   fail:
   printf("Unlocking\n");
   pthread_mutex_unlock(&keyboard_lock);
   usleep(DELAY);
+  handleCursorBlink(&message_pos, &msg_buff);
   }
 
   /* Terminate the network thread */
