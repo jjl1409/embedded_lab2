@@ -140,11 +140,12 @@ int main()
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen */
-      switch (key) {
-        case '\n' : handleEnterKey(&pos);
-        case '\b' : handleBackSpace(&pos);
-        default   : printChar(&pos, &msg_buff, key);
-      }
+      if (key == '\n')
+        handleEnterKey(&pos);
+      else if (key == '\b')
+        handleBackSpace(&pos);
+      else 
+        printChar(&pos, &msg_buff, key);
       fbputs(keystate, 6, 0);
     }
   }

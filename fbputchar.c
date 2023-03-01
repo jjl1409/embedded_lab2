@@ -143,6 +143,7 @@ void handleEnterKey(struct position *pos) {
     fbline(' ', MAX_ROWS - 2);
     pos->msg_buff_col_indx = 0;
     pos->msg_buff_row_indx = MAX_ROWS - 3;
+    pos->msg_buff_indx = 0; // Message is sent
 }
 
 void handleBackSpace(struct position *pos) {
@@ -155,6 +156,7 @@ void handleBackSpace(struct position *pos) {
       return;
     }
     fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
     pos->msg_buff_col_indx--;
 }
 
