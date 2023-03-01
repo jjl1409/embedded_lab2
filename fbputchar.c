@@ -129,7 +129,7 @@ void fbscroll()
 }
 
 void clearTextBox() {
-  for (int i = 0; i < MESSAGE_BOX_ROWS_START; i++) {
+  for (int i = 0; i < MESSAGE_BOX_START_ROWS; i++) {
     fbline(' ', i);
   }
 }
@@ -153,27 +153,27 @@ void fbPutString(const char *s, struct position *text_pos) {
     if (c == 0)
       return;
     else if (c == '\n') {
-      text_pos->msg_buff_col_indx = 0;
+      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
       newLined = true;
     } else {
       fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
       text_pos->msg_buff_col_indx++;
     }
-    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START)) {
+    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS - 1)) { // So we dont get rid of keys 
       printf("Screen is being cleared!\n");
-      text_pos->msg_buff_col_indx = 0;
-      text_pos->msg_buff_row_indx = 0;
+      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
       clearTextBox();
       //fbscroll(); // Need to check
     } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
-      text_pos->msg_buff_col_indx = 0;
+      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
     }
   }
   if (!newLined) {
     text_pos->msg_buff_row_indx++;
-    text_pos->msg_buff_col_indx = 0;
+    text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
   }
 }
 
@@ -181,8 +181,8 @@ void fbPutString(const char *s, struct position *text_pos) {
 void handleEnterKey(struct position *pos) {
     sendMsg();
     pos->isBackSpacing = false;
-    pos->msg_buff_col_indx = 0;
-    pos->msg_buff_row_indx = MAX_ROWS - 3;
+    pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
+    pos->msg_buff_row_indx = MESSAGE_BOX_START_ROWS;
     pos->msg_buff_indx = 0; // Message is sent
     fbline(' ', MAX_ROWS - 3);
     fbline(' ', MAX_ROWS - 2);
@@ -191,7 +191,7 @@ void handleEnterKey(struct position *pos) {
 void handleBackSpace(struct position *pos) {
     printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     pos->isBackSpacing = true;
-    if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) {
+    if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS) {
       fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
       return;
     } else if (pos->msg_buff_col_indx == 0) {
@@ -217,7 +217,7 @@ void printChar(struct position *pos, char *msg_buff, char key) {
     /* if we hit the end of the screen go to the next row and reset colun index*/
     if (pos->msg_buff_col_indx == MAX_COLS)
     {
-      pos->msg_buff_col_indx = 0;
+      pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
       pos->msg_buff_row_indx++;
     }
 }

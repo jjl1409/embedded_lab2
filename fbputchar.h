@@ -9,8 +9,11 @@
 #define FBOPEN_BPP -5         /* Unexpected bits-per-pixel */
 #define MAX_ROWS 24
 #define MAX_COLS 64
-#define MESSAGE_BOX_ROWS_START MAX_ROWS - 3
+#define MESSAGE_BOX_START_ROWS MAX_ROWS - 3
+#define MESSAGE_BOX_START_COLS 0
 #define MESSAGE_SIZE 128
+#define TEXT_BOX_START_ROWS 8
+#define TEXT_BOX_START_COLS 0
 
 struct position {
   uint8_t msg_buff_col_indx;

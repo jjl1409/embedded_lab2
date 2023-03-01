@@ -49,18 +49,18 @@ void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
 struct position text_pos = {
-  .cursor_col_indx = 0,
-  .cursor_row_indx = 0,
-  .msg_buff_col_indx = 0,
-  .msg_buff_row_indx = 8,
+  .cursor_col_indx = TEXT_BOX_START_COLS,
+  .cursor_row_indx = TEXT_BOX_START_ROWS,
+  .msg_buff_col_indx = TEXT_BOX_START_COLS,
+  .msg_buff_row_indx = TEXT_BOX_START_ROWS,
   .msg_buff_indx = 0,
 };
 
 struct position message_pos = {
-  .cursor_col_indx = 0,
-  .cursor_row_indx = MESSAGE_BOX_ROWS_START,
-  .msg_buff_col_indx = 0,
-  .msg_buff_row_indx = MESSAGE_BOX_ROWS_START,
+  .cursor_col_indx = MESSAGE_BOX_START_COLS,
+  .cursor_row_indx = MESSAGE_BOX_START_ROWS,
+  .msg_buff_col_indx = MESSAGE_BOX_START_COLS,
+  .msg_buff_row_indx = MESSAGE_BOX_START_ROWS,
   .msg_buff_indx = 0,
   .isBackSpacing = false
 };
