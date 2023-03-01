@@ -151,8 +151,9 @@ void handleBackSpace(struct position *pos) {
     if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_ROWS) {
       return;
     } else if (pos->msg_buff_col_indx == 0) {
-      pos->msg_buff_col_indx = MAX_COLS - 1;
-      pos->cursor_row_indx--;
+      pos->msg_buff_col_indx = MAX_COLS;
+      pos->msg_buff_row_indx--;
+      pos->msg_buff_indx--;
       return;
     }
     fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
