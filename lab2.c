@@ -153,7 +153,7 @@ int main()
     //libusb_interrupt_transfer(keyboard, endpoint_address,
     //                          (unsigned char *)&packet, sizeof(packet),
     //                          &transferred, 0);
-    if (transferred == sizeof(packet) && packet != NULL)
+    if (transferred == sizeof(packet))
     {
       pthread_mutex_lock(&keyboard_lock);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
