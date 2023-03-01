@@ -73,7 +73,6 @@ int main()
   struct usb_keyboard_packet packet;
   int transferred;
   char keystate[12];
-  caps_lock = false;
 
   if ((err = fbopen()) != 0)
   {
@@ -169,8 +168,8 @@ int main()
           printChar(&message_pos, &msg_buff, key);
         fbputs(keystate, 6, 0);
       }
-    } else if (message_pos.isBackSpacing) // Doesn't work because libusb_interrupt_transfer is blocking
-      handleBackSpace(&message_pos);
+    } //else if (message_pos.isBackSpacing) // Doesn't work because libusb_interrupt_transfer is blocking
+      //handleBackSpace(&message_pos);
   }
 
   /* Terminate the network thread */
