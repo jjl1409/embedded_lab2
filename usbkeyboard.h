@@ -18,13 +18,6 @@
 #define USB_SHIFT_PRESSED(X) ((X & (USB_LSHIFT | USB_RSHIFT)) > 0)
 #define USB_ESC_PRESSED (X) ((X[0] == 0x29) || (X[1] == 0x29) || (X[2] == 0x29) || (X[3] == 0x29) || (X[4] == 0x29) || (X[5] == 0x29)) // Assumes MAX_KEYS_PRESSED == 6
 
-#define MACRO(num, str) {\
-            printf("%d", num);\
-            printf(" is");\
-            printf(" %s number", str);\
-            printf("\n");\
-           }
-
 struct usb_keyboard_packet {
   uint8_t modifiers;
   uint8_t reserved;
@@ -38,5 +31,4 @@ struct usb_keyboard_packet {
 extern struct libusb_device_handle *openkeyboard(uint8_t *);
 extern char getCharFromKeyCode(uint8_t modifier, uint8_t keycode);
 extern void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys);
-
 #endif
