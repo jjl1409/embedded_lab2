@@ -190,34 +190,36 @@ int main()
 }
 
 void *keyboard_thread_f(void *ignored) {
-  sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-              packet.keycode[1]);
-  printf("%s\n", keystate);
-  libusb_interrupt_transfer(keyboard, endpoint_address,
-                              (unsigned char *)&packet, sizeof(packet),
-                              &transferred, 0);
-  if (transferred == sizeof(packet)) {
-    printf("Getting lock Thread\n");
-    pthread_mutex_lock(&keyboard_lock);
-    getCharsFromPacket(&packet, &keys);
-    setSpecialKeys(&keys, &s_keys);
-    for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
-      char key = keys[i];
-      if (!key)
-        continue;
-      /* write the char to the message buffer and print to the correct position on screen */
-      if (key == '\n')
-        handleEnterKey(&message_pos);
-      else if (key == '\b')
-        handleBackSpace(&message_pos);
-      else if (key == '\t') {
-        for (int i = 0; i < TAB_SPACING; i++) {
-          printChar(&message_pos, &msg_buff, ' ');
+  for (;;) {
+    sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
+                packet.keycode[1]);
+    printf("%s\n", keystate);
+    libusb_interrupt_transfer(keyboard, endpoint_address,
+                                (unsigned char *)&packet, sizeof(packet),
+                                &transferred, 0);
+    if (transferred == sizeof(packet)) {
+      printf("Getting lock Thread\n");
+      pthread_mutex_lock(&keyboard_lock);
+      getCharsFromPacket(&packet, &keys);
+      setSpecialKeys(&keys, &s_keys);
+      for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
+        char key = keys[i];
+        if (!key)
+          continue;
+        /* write the char to the message buffer and print to the correct position on screen */
+        if (key == '\n')
+          handleEnterKey(&message_pos);
+        else if (key == '\b')
+          handleBackSpace(&message_pos);
+        else if (key == '\t') {
+          for (int i = 0; i < TAB_SPACING; i++) {
+            printChar(&message_pos, &msg_buff, ' ');
+          }
         }
+        else 
+          printChar(&message_pos, &msg_buff, key);
+        fbputs(keystate, 6, 0);
       }
-      else 
-        printChar(&message_pos, &msg_buff, key);
-      fbputs(keystate, 6, 0);
     }
     printf("Unlocking Thread\n");
     pthread_mutex_unlock(&keyboard_lock);
