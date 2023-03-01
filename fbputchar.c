@@ -269,21 +269,21 @@ void handleCursorBlink(struct position *pos, char *buffer) {
 }
 
 void printChar(struct position *pos, char *msg_buff, char key) {
-    if (pos->msg_buff_indx >= MESSAGE_SIZE) {
-      return;
-    }
     msg_buff[pos->msg_buff_indx] = key;
-    fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    pos->msg_buff_indx++;
-    pos->msg_buff_col_indx++;
-    pos->cursor_col_indx++;
     /* if we hit the end of the screen go to the next row and reset colun index*/
-    if (pos->msg_buff_col_indx == MAX_COLS)
+    if (pos->msg_buff_col_indx == MAX_COLS && pos->msg_buff_row_indx == MAX_ROWS) {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    } else if (pos->msg_buff_col_indx == MAX_COLS)
     {
       pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
       pos->msg_buff_row_indx++;
       pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
       pos->cursor_row_indx++;
+    } else {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+      pos->msg_buff_indx++;
+      pos->msg_buff_col_indx++;
+      pos->cursor_col_indx++;
     }
 }
 
