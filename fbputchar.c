@@ -121,7 +121,7 @@ void fbline(char c, int row)
   }
 }
 
-void fbscroll()
+void fbscroll(struct position *pos)
 {
   unsigned char *textBox = framebuffer + \
                       (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
@@ -130,12 +130,16 @@ void fbscroll()
                       ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                       (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
   // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
-  ssize_t textBoxSize = ((MESSAGE_BOX_START_ROWS - (TEXT_BOX_START_ROWS + 1) - 1) * \
+  ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1) - 1) * \
                         FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
-                        ((MESSAGE_BOX_START_COLS - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+                        ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
   memmove(textBox, newTextBox, textBoxSize);
-  //fbline(' ', 24 - 4);
+  for (int i = pos->msg_buff_col_indx; i < MAX_COLS; i++) {
+    fbputchar(' ', pos->msg_buff_row_indx, i);
+  }
+  pos->msg_buff_row_indx--;
+  pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
 }
 
 void clearTextBox() {
@@ -175,9 +179,7 @@ void fbPutString(const char *s, struct position *text_pos) {
       //text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       //text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
       //clearTextBox();
-      fbscroll(); // Need to check
-      text_pos->msg_buff_row_indx--;
-      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      fbscroll(text_pos); // Need to check
     } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
