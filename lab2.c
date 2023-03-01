@@ -55,7 +55,13 @@ int main()
   int err, col;
   struct sockaddr_in serv_addr;
   struct usb_keyboard_packet packet;
-  struct position pos;
+  struct position pos = {
+    .cursor_col_indx = 0,
+    .cursor_row_indx = MESSAGE_BOX_ROWS,
+    .msg_buff_col_indx = 0,
+    .msg_buff_row_indx = MESSAGE_BOX_ROWS,
+    .msg_buff_indx = 0
+  };
   int transferred;
   char keystate[12];
 
@@ -131,7 +137,6 @@ int main()
         break;
       }
       char key = getCharFromKeyCode(packet.modifiers, packet.keycode[0]);
-      printf("%d\n", key);
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen */
