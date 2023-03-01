@@ -93,7 +93,6 @@ void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys) {
   for (uint8_t i = 0; i < 6; i++) {
     keys[i] = getCharFromKeyCode(packet->modifiers, packet->keycode[i]);
   }
-  return keys;
 }
 
 char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
