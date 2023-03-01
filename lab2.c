@@ -56,11 +56,19 @@ int main()
   int err, col;
   struct sockaddr_in serv_addr;
   struct usb_keyboard_packet packet;
-  struct position pos = {
+  struct position message_pos = {
     .cursor_col_indx = 0,
     .cursor_row_indx = MESSAGE_BOX_ROWS,
     .msg_buff_col_indx = 0,
     .msg_buff_row_indx = MESSAGE_BOX_ROWS,
+    .msg_buff_indx = 0,
+    .isBackSpacing = false
+  };
+  struct position text_pos = {
+    .cursor_col_indx = 0,
+    .cursor_row_indx = 0,
+    .msg_buff_col_indx = 0,
+    .msg_buff_row_indx = 0,
     .msg_buff_indx = 0,
     .isBackSpacing = false
   };
@@ -142,20 +150,20 @@ int main()
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
         if (!key) {
-          pos.isBackSpacing = false;
+          message_pos.isBackSpacing = false;
           continue;
         }
         /* write the char to the message buffer and print to the correct position on screen */
         if (key == '\n')
-          handleEnterKey(&pos);
+          handleEnterKey(&message_pos);
         else if (key == '\b')
-          handleBackSpace(&pos);
+          handleBackSpace(&message_pos);
         else 
-          printChar(&pos, &msg_buff, key);
+          printChar(&message_pos, &msg_buff, key);
         fbputs(keystate, 6, 0);
       }
-    } else if (pos.isBackSpacing)
-      handleBackSpace(&pos);
+    } else if (message_pos.isBackSpacing) // Doesn't work because libusb_interrupt_transfer is blocking
+      handleBackSpace(&message_pos);
   }
 
   /* Terminate the network thread */
@@ -178,7 +186,8 @@ void *network_thread_f_r(void *ignored)
   {
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
-    fbputs(recvBuf, 8, 0);
+    printString(recvBuf, &text_pos)
+    //fbputs(recvBuf, 8, 0);
   }
 
   return NULL;

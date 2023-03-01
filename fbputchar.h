@@ -9,7 +9,7 @@
 #define FBOPEN_BPP -5         /* Unexpected bits-per-pixel */
 #define MAX_ROWS 24
 #define MAX_COLS 64
-#define MESSAGE_BOX_ROWS MAX_ROWS - 3
+#define MESSAGE_BOX_ROWS_START MAX_ROWS - 3
 #define MESSAGE_SIZE 128
 
 struct position {
