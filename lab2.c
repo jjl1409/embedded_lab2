@@ -156,9 +156,6 @@ int main()
     if (transferred == sizeof(packet))
     {
       pthread_mutex_lock(&keyboard_lock);
-      sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-              packet.keycode[1]);
-      printf("%s\n", keystate);
       //RESET_BACKSPACE(s_keys);
       //RESET_ARROW_KEYS(s_keys)
       if (USB_NOTHING_PRESSED(keys)) {
@@ -196,6 +193,9 @@ int main()
 }
 
 void *keyboard_thread_f(void *ignored) {
+  sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
+              packet.keycode[1]);
+  printf("%s\n", keystate);
   libusb_interrupt_transfer(keyboard, endpoint_address,
                               (unsigned char *)&packet, sizeof(packet),
                               &transferred, 0);
