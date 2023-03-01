@@ -139,15 +139,17 @@ void fbputs(const char *s, int row, int col)
 }
 
 void handleEnterKey(struct position *pos) {
-    fbline(' ', MAX_ROWS - 3);
-    fbline(' ', MAX_ROWS - 2);
+    pos->isBackSpacing = false;
     pos->msg_buff_col_indx = 0;
     pos->msg_buff_row_indx = MAX_ROWS - 3;
     pos->msg_buff_indx = 0; // Message is sent
+    fbline(' ', MAX_ROWS - 3);
+    fbline(' ', MAX_ROWS - 2);
 }
 
 void handleBackSpace(struct position *pos) {
     printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    pos->isBackSpacing = true;
     if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_ROWS) {
       fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
       return;

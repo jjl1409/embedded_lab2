@@ -61,7 +61,8 @@ int main()
     .cursor_row_indx = MESSAGE_BOX_ROWS,
     .msg_buff_col_indx = 0,
     .msg_buff_row_indx = MESSAGE_BOX_ROWS,
-    .msg_buff_indx = 0
+    .msg_buff_indx = 0,
+    .isBackSpacing = false
   };
   int transferred;
   char keystate[12];
@@ -140,12 +141,14 @@ int main()
       }
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
-        if (!key)
+        if (!key) {
+          pos.isBackSpacing = false;
           continue;
+        }
         /* write the char to the message buffer and print to the correct position on screen */
         if (key == '\n')
           handleEnterKey(&pos);
-        else if (key == '\b')
+        else if (key == '\b' || pos.isBackSpacing)
           handleBackSpace(&pos);
         else 
           printChar(&pos, &msg_buff, key);

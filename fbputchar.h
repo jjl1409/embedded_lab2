@@ -1,6 +1,7 @@
 #ifndef _FBPUTCHAR_H
 #define _FBPUTCHAR_H
 #include <stdint.h>
+#include <stdbool.h>
 #define FBOPEN_DEV -1         /* Couldn't open the device */
 #define FBOPEN_FSCREENINFO -2 /* Couldn't read the fixed info */
 #define FBOPEN_VSCREENINFO -3 /* Couldn't read the variable info */
@@ -17,6 +18,7 @@ struct position {
   uint8_t cursor_col_indx;
   uint8_t cursor_row_indx;
   uint8_t msg_buff_indx;
+  bool isBackSpacing;
 };
 
 extern int fbopen(void);
