@@ -64,7 +64,7 @@ struct position message_pos = {
   .msg_buff_indx = 0,
 };
 
-s_keys = {\
+struct special_keys s_keys = {\
           .caps_lock = false,\
           .down_arrow = false,\
           .up_arrow = false,\
