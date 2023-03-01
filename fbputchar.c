@@ -130,12 +130,12 @@ void fbscroll()
                       ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                       (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
   // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
-  ssize_t textBoxSize = ((MESSAGE_BOX_START_ROWS - (TEXT_BOX_START_ROWS + 1) - 4) * \
+  ssize_t textBoxSize = ((MESSAGE_BOX_START_ROWS - (TEXT_BOX_START_ROWS + 1) - 1) * \
                         FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                         ((MESSAGE_BOX_START_COLS - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
   memmove(textBox, newTextBox, textBoxSize);
-  fbline(' ', 24 - 4);
+  //fbline(' ', 24 - 4);
 }
 
 void clearTextBox() {
