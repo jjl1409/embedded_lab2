@@ -48,7 +48,7 @@ pthread_mutex_t keyboard_lock;
 
 void *network_thread_f_r(void *);
 void *network_thread_f_w(void *);
-void *keyboard_thread_f(void *)
+void *keyboard_thread_f(void *);
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
