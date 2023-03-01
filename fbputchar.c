@@ -148,12 +148,14 @@ void fbputs(const char *s, int row, int col)
 // Handles wrap around
 void fbPutString(const char *s, struct position *text_pos) {
   char c;
+  bool newLined = false;
   while ((c = *s++) != 0) {
     if (c == 0)
       return;
     else if (c == '\n') {
       text_pos->msg_buff_col_indx = 0;
       text_pos->msg_buff_row_indx++;
+      newLined = true;
     } else {
       fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
       text_pos->msg_buff_col_indx++;
@@ -168,6 +170,8 @@ void fbPutString(const char *s, struct position *text_pos) {
       text_pos->msg_buff_row_indx++;
     }
   }
+  if (!newLined)
+    text_pos->msg_buff_row_indx++;
 }
 
 
