@@ -282,7 +282,7 @@ void handleCursorBlink(struct position *pos, char *buffer) {
     printf("Printing char\n");
     fbputchar(buffer[pos->cursor_buff_indx], pos->cursor_row_indx, pos->cursor_col_indx);
   }
-  elsef
+  else
     fbputchar(' ', pos->cursor_row_indx, pos->cursor_col_indx);
   pos->blinking = false;
 }
