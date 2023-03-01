@@ -273,7 +273,7 @@ void printChar(struct position *pos, char *msg_buff, char key) {
     /* if we hit the end of the screen go to the next row and reset colun index*/
     if (pos->msg_buff_col_indx == MAX_COLS && pos->msg_buff_row_indx == MAX_ROWS) {
       fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    } else if (pos->msg_buff_col_indx == MAX_COLS)
+    } else if (pos->msg_buff_col_indx == MAX_COLS - 1)
     {
       pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
       pos->msg_buff_row_indx++;
