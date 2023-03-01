@@ -221,7 +221,7 @@ void *keyboard_thread_f(void *ignored) {
           }
         }
         else 
-          printChar(&message_pos, &msg_buff, key);
+          printChar(&message_pos, &s_keys, &msg_buff, key);
       }
     }
     printf("Unlocking Thread\n");
