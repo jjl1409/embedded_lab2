@@ -54,7 +54,6 @@ void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
-char caps_insert[15];
 
 struct position text_pos = {
   .cursor_col_indx = TEXT_BOX_START_COLS,
@@ -205,11 +204,7 @@ void *keyboard_thread_f(void *ignored) {
       pthread_mutex_lock(&keyboard_lock);
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
-      sprintf(caps_insert, "CAPS LOCK %d", s_keys.caps_lock);
-      fbputs(caps_insert, 2, 40);
-      sprintf(caps_insert, "INSERT %d", s_keys.insert);
-      fbputs(caps_insert, 3, 40);
-      fbputs(keystate, 6, 0);
+      printSpecialKeys(&s_keys);
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
         if (!key)
@@ -264,4 +259,43 @@ void sendMsg () {
   }
   printf("%d %s", message_pos.msg_buff_indx, msg_buff);
   write(sockfd, msg_buff, message_pos.msg_buff_indx);
+}
+
+void printSpecialKeys(struct special_keys *s_keys) {
+
+        /*
+        bool caps_lock;
+  bool left_arrow;
+  bool up_arrow;
+  bool right_arrow;
+  bool down_arrow;
+  bool shift_pressed;
+  bool backspace_pressed;
+  bool escape_pressed;
+  bool insert;
+  */
+  char caps_insert[15];
+  sprintf(caps_insert, "CAPS LOCK %d", s_keys->caps_lock);
+  fbputs(caps_insert, 0, 50);
+
+  sprintf(caps_insert, "INSERT %d", s_keys->insert);
+  fbputs(caps_insert, 1, 50);
+
+  sprintf(caps_insert, "BACKSPACE %d", s_keys->backspace_pressed);
+  fbputs(caps_insert, 2, 50);
+
+  sprintf(caps_insert, "LEFT ARROW %d", s_keys->left_arrow);
+  fbputs(caps_insert, 3, 50);
+
+  sprintf(caps_insert, "UP ARROW %d", s_keys->up_arrow);
+  fbputs(caps_insert, 4, 50);
+
+  sprintf(caps_insert, "DOWN_ARROW %d", s_keys->down_arrow);
+  fbputs(caps_insert, 5, 50);
+
+  sprintf(caps_insert, "RIGHT ARROW %d", s_keys->right_arrow);
+  fbputs(caps_insert, 6, 50);
+
+  sprintf(caps_insert, "SHIFT_PRESSED %d", s_keys->shift_pressed);
+  fbputs(caps_insert, 7, 50);
 }
