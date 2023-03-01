@@ -200,7 +200,7 @@ void *keyboard_thread_f(void *ignored) {
                                 (unsigned char *)&packet, sizeof(packet),
                                 &transferred, 0);
     if (transferred == sizeof(packet)) {
-      //printf("Getting lock Thread\n");
+      printf("Getting lock Thread\n");
       pthread_mutex_lock(&keyboard_lock);
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
@@ -223,7 +223,7 @@ void *keyboard_thread_f(void *ignored) {
         fbputs(keystate, 6, 0);
       }
     }
-    //printf("Unlocking Thread\n");
+    printf("Unlocking Thread\n");
     pthread_mutex_unlock(&keyboard_lock);
   }
 }
