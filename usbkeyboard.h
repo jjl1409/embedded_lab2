@@ -31,5 +31,5 @@ struct usb_keyboard_packet {
 extern struct libusb_device_handle *openkeyboard(uint8_t *);
 extern char getCharFromKeyCode(uint8_t modifier, uint8_t keycode);
 extern void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys);
-bool caps_lock = false;
+bool caps_lock;
 #endif

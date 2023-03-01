@@ -72,6 +72,7 @@ int main()
   struct usb_keyboard_packet packet;
   int transferred;
   char keystate[12];
+  caps_lock = false;
 
   if ((err = fbopen()) != 0)
   {
