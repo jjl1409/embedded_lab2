@@ -155,6 +155,7 @@ int main()
     //                          &transferred, 0);
     if (transferred == sizeof(packet))
     {
+      printf("Locking\n");
       pthread_mutex_lock(&keyboard_lock);
       //RESET_BACKSPACE(s_keys);
       //RESET_ARROW_KEYS(s_keys)
@@ -164,6 +165,7 @@ int main()
       }
       else if (ESC_PRESSED(s_keys))
       { /* ESC pressed? */
+        printf("Unlocking Thread\n");
         pthread_mutex_unlock(&keyboard_lock);
         break;
       } else if (ARROW_KEYS_PRESSED(s_keys)) {
@@ -174,6 +176,7 @@ int main()
         goto fail;
       }
     fail:
+    printf("Unlocking\n");
     pthread_mutex_unlock(&keyboard_lock);
     }
     usleep(DELAY);
@@ -199,6 +202,7 @@ void *keyboard_thread_f(void *ignored) {
   libusb_interrupt_transfer(keyboard, endpoint_address,
                               (unsigned char *)&packet, sizeof(packet),
                               &transferred, 0);
+  printf("Getting lock Thread\n");
   pthread_mutex_lock(&keyboard_lock);
   getCharsFromPacket(&packet, &keys);
   setSpecialKeys(&keys, &s_keys);
@@ -220,6 +224,7 @@ void *keyboard_thread_f(void *ignored) {
       printChar(&message_pos, &msg_buff, key);
     fbputs(keystate, 6, 0);
   }
+  printf("Unlocking Thread\n");
   pthread_mutex_unlock(&keyboard_lock);
 }
 
