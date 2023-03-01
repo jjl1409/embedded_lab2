@@ -164,20 +164,17 @@ int main()
       break;
     } else if (ARROW_KEYS_PRESSED(s_keys)) {
         handleArrowKeys(&message_pos, &s_keys);
-        goto fail;
     } else if (BACKSPACE_PRESSED(s_keys)) {
       handleBackSpace(&message_pos);
-      goto fail;
     } else if (USB_NOTHING_PRESSED(keys)) {
       printf("RESETING KEYS\n");
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
-      handleCursorBlink(&message_pos, &msg_buff);
-      usleep(DELAY);
-      handleCursorBlink(&message_pos, &msg_buff);
     }
+  handleCursorBlink(&message_pos, &msg_buff);
   fail:
   printf("Unlocking\n");
   usleep(DELAY);
+  handleCursorBlink(&message_pos, &msg_buff);
   pthread_mutex_unlock(&keyboard_lock);
   }
 
