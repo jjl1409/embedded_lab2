@@ -321,7 +321,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     } else if (s_keys->insert) {
       printf("Insert\n");
       memmove(msg_buff + pos->cursor_buff_indx + 1, 
-      msg_buff + pos->cursor_buff_indx + 1,
+      msg_buff + pos->cursor_buff_indx,
       MESSAGE_SIZE - pos->cursor_buff_indx + 1);
       msg_buff[pos->cursor_buff_indx] = key;
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
