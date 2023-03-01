@@ -275,12 +275,12 @@ void printChar(struct position *pos, char *msg_buff, char key) {
       fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     } else if (pos->msg_buff_col_indx == MAX_COLS - 1)
     {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
       pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
       pos->msg_buff_row_indx++;
       pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
       pos->cursor_row_indx++;
     } else {
-      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
       pos->msg_buff_indx++;
       pos->msg_buff_col_indx++;
       pos->cursor_col_indx++;
