@@ -30,7 +30,6 @@
             X.left_arrow = false;\
             }
 #define RESET_BACKSPACE(X) X.backspace_pressed = false
-#define BUFF_POS(ROWS, COLS) (((ROWS - 1) * MAX_COLS) + COLS)
 
 struct position {
   uint8_t msg_buff_col_indx;
@@ -38,6 +37,7 @@ struct position {
   uint8_t cursor_col_indx;
   uint8_t cursor_row_indx;
   uint8_t msg_buff_indx;
+  uint8_t cursor_buff_indx;
   bool blinking;
 };
 

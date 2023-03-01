@@ -235,6 +235,7 @@ void handleEnterKey(struct position *pos) {
     pos->msg_buff_indx = 0; // Message is sent
     pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
     pos->cursor_row_indx = MESSAGE_BOX_START_ROWS;
+    pos->cursor_buff_indx = 0;
     fbline(' ', MAX_ROWS - 3);
     fbline(' ', MAX_ROWS - 2);
 }
@@ -252,23 +253,24 @@ void handleBackSpace(struct position *pos) {
       pos->msg_buff_indx--;
       pos->cursor_col_indx = MAX_COLS - 1;
       pos->cursor_row_indx--;
+      pos->cursor_buff_indx--;
       return;
     }
     fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
     pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
     pos->msg_buff_col_indx--;
     pos->cursor_col_indx--;
+    pos->cursor_buff_indx--;
 }
 
 void handleCursorBlink(struct position *pos, char *buffer) {
-  uint8_t cursor_pos = BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx);
   if (!pos->blinking) {
     fbputchar('_', pos->cursor_row_indx, pos->cursor_col_indx);
     pos->blinking = true;
     return;
   }
-  else if (pos->msg_buff_indx > cursor_pos)
-    fbputchar(buffer[cursor_pos], pos->cursor_row_indx, pos->cursor_col_indx);
+  else if (pos->msg_buff_indx > pos->cursor_buff_indx)
+    fbputchar(buffer[pos->cursor_buff_indx], pos->cursor_row_indx, pos->cursor_col_indx);
   else
     fbputchar(' ', pos->cursor_row_indx, pos->cursor_col_indx);
   pos->blinking = false;
@@ -293,18 +295,19 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
         pos->msg_buff_indx++;
         pos->msg_buff_col_indx++;
         pos->cursor_col_indx++;
+        pos->cursor_buff_indx++;
       }
       msg_buff[pos->msg_buff_indx] = key;
     } else if (s_keys->insert) {
       printf("Insert\n");
-      memmove(msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1, 
-      msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1,
-      MESSAGE_SIZE - BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1);
-      msg_buff[BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx)] = key;
+      memmove(msg_buff + pos->cursor_buff_indx + 1, 
+      msg_buff + pos->cursor_buff_indx + 1,
+      MESSAGE_SIZE - pos->cursor_buff_indx + 1);
+      msg_buff[pos->cursor_buff_indx] = key;
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     } else {
       printf("Yolo replace\n");
-      msg_buff[BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx)] = key;
+      msg_buff[pos->cursor_buff_indx] = key;
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     }
 }
