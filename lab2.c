@@ -50,28 +50,29 @@ char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
 uint8_t msg_buff_col_indx = 0;
 uint8_t msg_buff_row_indx = MESSAGE_BOX_ROWS;
+struct position text_pos = {
+  .cursor_col_indx = 0,
+  .cursor_row_indx = 0,
+  .msg_buff_col_indx = 0,
+  .msg_buff_row_indx = 0,
+  .msg_buff_indx = 0,
+  .isBackSpacing = false
+};
+
+struct position message_pos = {
+  .cursor_col_indx = 0,
+  .cursor_row_indx = MESSAGE_BOX_ROWS_START,
+  .msg_buff_col_indx = 0,
+  .msg_buff_row_indx = MESSAGE_BOX_ROWS_START,
+  .msg_buff_indx = 0,
+  .isBackSpacing = false
+};
 
 int main()
 {
   int err, col;
   struct sockaddr_in serv_addr;
   struct usb_keyboard_packet packet;
-  struct position message_pos = {
-    .cursor_col_indx = 0,
-    .cursor_row_indx = MESSAGE_BOX_ROWS,
-    .msg_buff_col_indx = 0,
-    .msg_buff_row_indx = MESSAGE_BOX_ROWS,
-    .msg_buff_indx = 0,
-    .isBackSpacing = false
-  };
-  struct position text_pos = {
-    .cursor_col_indx = 0,
-    .cursor_row_indx = 0,
-    .msg_buff_col_indx = 0,
-    .msg_buff_row_indx = 0,
-    .msg_buff_indx = 0,
-    .isBackSpacing = false
-  };
   int transferred;
   char keystate[12];
 
