@@ -318,13 +318,28 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
         pos->cursor_col_indx++;
         pos->cursor_buff_indx++;
       }
-    } else if (s_keys->insert) {
-      printf("Insert\n");
-      memmove(msg_buff + pos->cursor_buff_indx + 1, 
-      msg_buff + pos->cursor_buff_indx,
-      MESSAGE_SIZE - pos->cursor_buff_indx + 1);
-      msg_buff[pos->cursor_buff_indx] = key;
-      fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
+    } else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1) ) {
+      printf("Insert Unimplemented\n");
+      // Too hard lmao
+      /* 
+      unsigned char *afterCursor = framebuffer + \
+                          (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                          (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+      unsigned char *newAfterCursor = framebuffer + \
+                          ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                          (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+                          
+      // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
+      ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) * \
+                            FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                            ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
+      memmove(textBox, newTextBox, textBoxSize);
+
+      framebuffer +
+                                (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+                                (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+      */
     } else {
       printf("Yolo replace\n");
       msg_buff[pos->cursor_buff_indx] = key;
