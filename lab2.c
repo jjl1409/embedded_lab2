@@ -263,18 +263,6 @@ void sendMsg () {
 }
 
 void printSpecialKeys(struct special_keys *s_keys) {
-
-        /*
-        bool caps_lock;
-  bool left_arrow;
-  bool up_arrow;
-  bool right_arrow;
-  bool down_arrow;
-  bool shift_pressed;
-  bool backspace_pressed;
-  bool escape_pressed;
-  bool insert;
-  */
   char caps_insert[15];
   sprintf(caps_insert, "CAPS LOCK %d", s_keys->caps_lock);
   fbputs(caps_insert, 1, 50);
