@@ -296,11 +296,13 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
         pos->cursor_col_indx++;
       }
     } else if (s_keys->insert) {
+      printf("Insert\n");
       memmove(msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1, 
       msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1,
       MESSAGE_SIZE - BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1);
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     } else {
+      printf("Yolo replace\n");
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     }
 }
