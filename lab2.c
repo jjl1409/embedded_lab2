@@ -151,7 +151,7 @@ int main()
       printf("%s\n", keystate);
       getCharsFromPacket(&packet, &keys);
       if (USB_NOTHING_PRESSED(keys)) {
-        s_keys = {
+        s_keys = (struct special_keys) {\
           .caps_lock = false,\
           .down_arrow = false,\
           .up_arrow = false,\
