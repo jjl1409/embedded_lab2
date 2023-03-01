@@ -24,8 +24,20 @@ struct position {
   uint8_t msg_buff_indx;
 };
 
+struct special_keys {
+  bool caps_lock;
+  bool left_arrow;
+  bool up_arrow;
+  bool right_arrow;
+  bool down_arrow;
+  bool shift_pressed;
+  bool backspace_pressed;
+  bool escape_pressed;
+};
+
 extern int fbopen(void);
 extern void fbputchar(char, int, int);
 extern void fbputs(const char *, int, int);
+struct special_keys s_keys;
 
 #endif
