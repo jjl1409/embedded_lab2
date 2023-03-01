@@ -130,7 +130,7 @@ void fbscroll(struct position *pos)
                       ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                       (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
   // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
-  ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1) - 1) * \
+  ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) * \
                         FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                         ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
