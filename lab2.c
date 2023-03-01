@@ -276,26 +276,23 @@ void printSpecialKeys(struct special_keys *s_keys) {
   */
   char caps_insert[15];
   sprintf(caps_insert, "CAPS LOCK %d", s_keys->caps_lock);
-  fbputs(caps_insert, 0, 50);
-
-  sprintf(caps_insert, "INSERT %d", s_keys->insert);
   fbputs(caps_insert, 1, 50);
 
-  sprintf(caps_insert, "BACKSPACE %d", s_keys->backspace_pressed);
+  sprintf(caps_insert, "INSERT %d", s_keys->insert);
   fbputs(caps_insert, 2, 50);
 
-  sprintf(caps_insert, "LEFT ARROW %d", s_keys->left_arrow);
+  sprintf(caps_insert, "BACKSPACE %d", s_keys->backspace_pressed);
   fbputs(caps_insert, 3, 50);
 
-  sprintf(caps_insert, "UP ARROW %d", s_keys->up_arrow);
+  sprintf(caps_insert, "LEFT ARROW %d", s_keys->left_arrow);
   fbputs(caps_insert, 4, 50);
 
-  sprintf(caps_insert, "DOWN_ARROW %d", s_keys->down_arrow);
+  sprintf(caps_insert, "UP ARROW %d", s_keys->up_arrow);
   fbputs(caps_insert, 5, 50);
 
-  sprintf(caps_insert, "RIGHT ARROW %d", s_keys->right_arrow);
+  sprintf(caps_insert, "DOWN_ARROW %d", s_keys->down_arrow);
   fbputs(caps_insert, 6, 50);
 
-  sprintf(caps_insert, "SHIFT_PRESSED %d", s_keys->shift_pressed);
+  sprintf(caps_insert, "RIGHT ARROW %d", s_keys->right_arrow);
   fbputs(caps_insert, 7, 50);
 }
