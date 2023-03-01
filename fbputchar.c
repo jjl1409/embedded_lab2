@@ -180,10 +180,9 @@ void fbPutString(const char *s, struct position *text_pos) {
     } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
-    } else {
-      fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
-      text_pos->msg_buff_col_indx++;
     }
+    fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
+    text_pos->msg_buff_col_indx++;
   }
   if (!newLined) {
     text_pos->msg_buff_row_indx++;
