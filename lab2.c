@@ -159,47 +159,26 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
-      RESET_BACKSPACE(s_keys);
-      RESET_ARROW_KEYS(s_keys)
-      getCharsFromPacket(&packet, &keys);
+      //RESET_BACKSPACE(s_keys);
+      //RESET_ARROW_KEYS(s_keys)
       if (USB_NOTHING_PRESSED(keys)) {
         RESET_SPECIAL_KEYS(s_keys);
         goto fail;
       }
-      else if (USB_ESC_PRESSED(s_keys))
+      else if (ESC_PRESSED(s_keys))
       { /* ESC pressed? */
         pthread_mutex_unlock(&keyboard_lock);
         break;
-      } else if (USB_ARROW_KEYS_PRESSED(s_keys)) {
+      } else if (ARROW_KEYS_PRESSED(s_keys)) {
           handleArrowKeys(&message_pos, &s_keys);
-          //RESET_ARROW_KEYS(s_keys); // Need to modify to
           goto fail;
-      } else if (USB_BACKSPACE_PRESSED(s_keys)) {
+      } else if (BACKSPACE_PRESSED(s_keys)) {
         handleBackSpace(&message_pos);
         goto fail;
       }
-      for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
-        char key = keys[i];
-        if (!key)
-          continue;
-        /* write the char to the message buffer and print to the correct position on screen */
-        if (key == '\n')
-          handleEnterKey(&message_pos);
-        else if (key == '\b')
-          handleBackSpace(&message_pos);
-        else if (key == '\t') {
-          for (int i = 0; i < TAB_SPACING; i++) {
-            printChar(&message_pos, &msg_buff, ' ');
-          }
-        }
-        else 
-          printChar(&message_pos, &msg_buff, key);
-        fbputs(keystate, 6, 0);
-      }
-    }
     fail:
-    usleep(DELAY);
     pthread_mutex_unlock(&keyboard_lock);
+    }
     usleep(DELAY);
   }
 
@@ -217,10 +196,30 @@ int main()
 }
 
 void *keyboard_thread_f(void *ignored) {
-  pthread_mutex_lock(&keyboard_lock);
   libusb_interrupt_transfer(keyboard, endpoint_address,
                               (unsigned char *)&packet, sizeof(packet),
                               &transferred, 0);
+  pthread_mutex_lock(&keyboard_lock);
+  getCharsFromPacket(&packet, &keys);
+  setSpecialKeys(&keys, &s_keys);
+  for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
+    char key = keys[i];
+    if (!key)
+      continue;
+    /* write the char to the message buffer and print to the correct position on screen */
+    if (key == '\n')
+      handleEnterKey(&message_pos);
+    else if (key == '\b')
+      handleBackSpace(&message_pos);
+    else if (key == '\t') {
+      for (int i = 0; i < TAB_SPACING; i++) {
+        printChar(&message_pos, &msg_buff, ' ');
+      }
+    }
+    else 
+      printChar(&message_pos, &msg_buff, key);
+    fbputs(keystate, 6, 0);
+  }
   pthread_mutex_unlock(&keyboard_lock);
 }
 

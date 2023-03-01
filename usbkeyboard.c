@@ -89,6 +89,31 @@ found:
   return keyboard;
 }
 
+void setSpecialKeys(struct usb_keyboard_packet *packet, struct special_keys *s_keys) {
+  if (USB_LEFT_ARROW_KEY_PRESSED(packet->keycode))
+    s_keys->left_arrow = true;
+  else
+    s_keys->left_arrow = false;
+  if (USB_RIGHT_ARROW_KEY_PRESSED(packet->keycode))
+    s_keys->right_arrow = true;
+  else
+    s_keys->right_arrow = false;
+  if (USB_UP_ARROW_KEY_PRESSED(packet->keycode))
+    s_keys->up_arrow = true;
+  else
+    s_keys->up_arrow = false;
+  if (USB_DOWN_ARROW_KEY_PRESSED(packet->keycode))
+    s_keys->down_arrow = true;
+  else
+    s_keys->down_arrow = false;
+  if (USB_BACKSPACE_PRESSED(packet->keycode))
+    s_keys->backspace_pressed = true;
+  else
+    s_keys->backspace_pressed = false;
+  if (USB_CAPS_LOCK_PRESSED(packet->keycode))
+    s_keys->caps_lock = !s_keys->caps_lock;
+}
+
 void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys) {
   for (uint8_t i = 0; i < 6; i++) {
     keys[i] = getCharFromKeyCode(packet->modifiers, packet->keycode[i]);
@@ -118,7 +143,7 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x27: return ')';
           case 0x28: return '\n';
           case 0x29: s_keys.escape_pressed = true; return 0;
-          case 0x2a: s_keys.backspace_pressed = true; return '\b';
+          //case 0x2a: return '\b';
           case 0x2b: return '\t';
           case 0x2c: return ' ';
           case 0x2d: return '_';
@@ -132,11 +157,7 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x36: return "<";
           case 0x37: return ">";
           case 0x38: return "?";
-          case 0x39: s_keys.caps_lock = !s_keys.caps_lock; return 0;
-          case 0x4f: s_keys.right_arrow = true; return 0;
-          case 0x50: s_keys.left_arrow = true; return 0;
-          case 0x51: s_keys.down_arrow = true; return 0;
-          case 0x52: s_keys.up_arrow = true; return 0;
+          //case 0x39: s_keys.caps_lock = !s_keys.caps_lock; return 0;
           default: return 0;
       }
   } else {
@@ -153,7 +174,7 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x27: return '0';
           case 0x28: return '\n';
           case 0x29: s_keys.escape_pressed = true; return 0;
-          case 0x2a: s_keys.backspace_pressed = true; return '\b';
+          //case 0x2a: s_keys.backspace_pressed = true; return '\b';
           case 0x2b: return '\t';
           case 0x2c: return ' ';
           case 0x2d: return '-';
@@ -167,11 +188,7 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x36: return ",";
           case 0x37: return ".";
           case 0x38: return "/";
-          case 0x39: s_keys.caps_lock = !s_keys.caps_lock; return 0;
-          case 0x4f: s_keys.right_arrow = true; return 0;
-          case 0x50: s_keys.left_arrow = true; return 0;
-          case 0x51: s_keys.down_arrow = true; return 0;
-          case 0x52: s_keys.up_arrow = true; return 0;
+          //case 0x39: s_keys.caps_lock = !s_keys.caps_lock; return 0;
           default: return 0;
       }
   }
