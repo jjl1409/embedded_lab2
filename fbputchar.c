@@ -135,7 +135,7 @@ void fbscroll(struct position *pos)
                         ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
   memmove(textBox, newTextBox, textBoxSize);
-  fbline(' ', pos->msg_buff_row_indx);
+  fbline(' ', pos->msg_buff_row_indx - 1);
   //for (int i = pos->msg_buff_col_indx; i < MAX_COLS; i++) {
   //  fbputchar(' ', pos->msg_buff_row_indx - 1, i);
   //}
