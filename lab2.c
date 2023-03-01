@@ -169,11 +169,12 @@ int main()
     } else if (USB_NOTHING_PRESSED(keys)) {
       printf("RESETING KEYS\n");
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
+      handleCursorBlink(&message_pos, &msg_buff);
+      usleep(DELAY);
+      handleCursorBlink(&message_pos, &msg_buff);
     }
-  handleCursorBlink(&message_pos, &msg_buff);
-  usleep(DELAY);
-  handleCursorBlink(&message_pos, &msg_buff);
   printf("Unlocking\n");
+  usleep(DELAY);
   pthread_mutex_unlock(&keyboard_lock);
   }
 
