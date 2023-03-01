@@ -64,7 +64,16 @@ struct position message_pos = {
   .msg_buff_indx = 0,
 };
 
-struct special_keys s_keys = USB_DECLARE_SPECIAL_KEYS();
+struct special_keys s_keys = {\
+          .caps_lock = false,\
+          .down_arrow = false,\
+          .up_arrow = false,\
+          .right_arrow = false,\
+          .left_arrow = false,\
+          .shift_pressed = false,\
+          .backspace_pressed = false,\
+          .escape_pressed = false\
+        };//#USB_DECLARE_SPECIAL_KEYS();
 
 int main()
 {
