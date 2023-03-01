@@ -136,7 +136,7 @@ void fbscroll(struct position *pos)
 
   memmove(textBox, newTextBox, textBoxSize);
   for (int i = pos->msg_buff_col_indx; i < MAX_COLS; i++) {
-    fbputchar(' ', pos->msg_buff_row_indx, i);
+    fbputchar(' ', pos->msg_buff_row_indx - 1, i);
   }
   pos->msg_buff_row_indx--;
   pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
@@ -170,9 +170,6 @@ void fbPutString(const char *s, struct position *text_pos) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
       newLined = true;
-    } else {
-      fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
-      text_pos->msg_buff_col_indx++;
     }
     if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS - 1)) { // So we dont get rid of keys 
       printf("Screen is being cleared!\n");
@@ -183,6 +180,9 @@ void fbPutString(const char *s, struct position *text_pos) {
     } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
+    } else {
+      fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
+      text_pos->msg_buff_col_indx++;
     }
   }
   if (!newLined) {
