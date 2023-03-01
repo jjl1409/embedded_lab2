@@ -185,6 +185,8 @@ void printChar(struct position *pos, char *msg_buff, char key) {
 void printString(const char *s, struct position *text_pos) {
   char c;
   while ((c = *s++) != 0) {
+    if (c == 0)
+      return;
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
     if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
