@@ -124,7 +124,7 @@ int main()
     fprintf(stderr, "Error: connect() failed.  Is the server running?\n");
     exit(1);
   }
-
+  clearTextBox();
   /* Start the network thread */
   pthread_create(&network_thread_r, NULL, network_thread_f_r, NULL);
   // pthread_create(&network_thread_w, NULL, network_thread_f_w, NULL);
@@ -185,7 +185,7 @@ void *network_thread_f_r(void *ignored)
   {
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
-    printString(recvBuf, &text_pos);
+    fbPutString(recvBuf, &text_pos);
     //fbputs(recvBuf, 8, 0);
   }
 

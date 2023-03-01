@@ -127,6 +127,13 @@ void fbscroll()
           (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (24 - 3));
   fbline(' ', 24 - 4);
 }
+
+void clearTextBox() {
+  for (int i = 0; i < MESSAGE_BOX_ROWS_START; i++) {
+    fbline(' ', i);
+  }
+}
+
 /*
  * Draw the given string at the given row/column.
  * String must fit on a single line: wrap-around is not handled.
@@ -137,6 +144,27 @@ void fbputs(const char *s, int row, int col)
   while ((c = *s++) != 0)
     fbputchar(c, row, col++);
 }
+
+// Handles wrap around
+void fbPutString(const char *s, struct position *text_pos) {
+  char c;
+  while ((c = *s++) != 0) {
+    if (c == 0)
+      return;
+    fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
+    text_pos->msg_buff_col_indx++;
+    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
+      printf("Screen is being cleared!\n");
+      text_pos->msg_buff_col_indx = 0;
+      text_pos->msg_buff_row_indx = 0;
+      fbscroll(); // Need to check
+    } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
+      text_pos->msg_buff_col_indx = 0;
+      text_pos->msg_buff_row_indx++;
+    }
+  }
+}
+
 
 void handleEnterKey(struct position *pos) {
     pos->isBackSpacing = false;
@@ -179,26 +207,6 @@ void printChar(struct position *pos, char *msg_buff, char key) {
       pos->msg_buff_col_indx = 0;
       pos->msg_buff_row_indx++;
     }
-}
-
-// Handles wrap around
-void printString(const char *s, struct position *text_pos) {
-  char c;
-  while ((c = *s++) != 0) {
-    if (c == 0)
-      return;
-    fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
-    text_pos->msg_buff_col_indx++;
-    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
-      printf("Screen is being cleared!\n");
-      text_pos->msg_buff_col_indx = 0;
-      text_pos->msg_buff_row_indx = 0;
-      fbscroll(); // Need to check
-    } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
-      text_pos->msg_buff_col_indx = 0;
-      text_pos->msg_buff_row_indx++;
-    }
-  }
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
