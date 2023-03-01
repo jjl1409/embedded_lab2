@@ -277,7 +277,6 @@ void handleCursorBlink(struct position *pos, char *buffer) {
 void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key) {
     printf("Buffer_indx: %d, Rows %d, Cols: %d\n", pos->msg_buff_indx, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", pos->cursor_row_indx, pos->cursor_col_indx, pos->blinking);
-    msg_buff[pos->msg_buff_indx] = key;
     /* if we hit the end of the screen go to the next row and reset colun index*/
     if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->cursor_row_indx) {
       if (pos->msg_buff_col_indx == MAX_COLS - 1 && pos->msg_buff_row_indx == MESSAGE_BOX_END_ROWS) {
@@ -295,14 +294,17 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
         pos->msg_buff_col_indx++;
         pos->cursor_col_indx++;
       }
+      msg_buff[pos->msg_buff_indx] = key;
     } else if (s_keys->insert) {
       printf("Insert\n");
       memmove(msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1, 
       msg_buff + BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1,
       MESSAGE_SIZE - BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx) + 1);
+      msg_buff[BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx)] = key;
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     } else {
       printf("Yolo replace\n");
+      msg_buff[BUFF_POS(pos->cursor_row_indx, pos->cursor_col_indx)] = key;
       fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
     }
 }
