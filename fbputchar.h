@@ -16,7 +16,6 @@
 #define TEXT_BOX_START_COLS 0
 #define TAB_SPACING 4
 #define RESET_SPECIAL_KEYS(X) {\
-            X.caps_lock = false;\
             X.shift_pressed = false;\
             X.escape_pressed = false;\
             RESET_BACKSPACE(X);\
