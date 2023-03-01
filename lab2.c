@@ -152,14 +152,14 @@ int main()
   /* Look for and handle keypresses */
   for (;;)
   {
-    printf("Locking\n");
+    //printf("Locking\n");
     pthread_mutex_lock(&keyboard_lock);
     //RESET_BACKSPACE(s_keys);
     //RESET_ARROW_KEYS(s_keys)
     printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", message_pos.cursor_row_indx, message_pos.cursor_col_indx, message_pos.blinking);
     if (ESC_PRESSED(s_keys))
     { /* ESC pressed? */
-      printf("Unlocking Thread\n");
+      //printf("Unlocking Thread\n");
       pthread_mutex_unlock(&keyboard_lock);
       break;
     } else if (ARROW_KEYS_PRESSED(s_keys)) {
@@ -173,7 +173,7 @@ int main()
       usleep(DELAY);
       handleCursorBlink(&message_pos, &msg_buff);
     }
-  printf("Unlocking\n");
+  //printf("Unlocking\n");
   usleep(DELAY);
   pthread_mutex_unlock(&keyboard_lock);
   }
@@ -200,7 +200,7 @@ void *keyboard_thread_f(void *ignored) {
                                 (unsigned char *)&packet, sizeof(packet),
                                 &transferred, 0);
     if (transferred == sizeof(packet)) {
-      printf("Getting lock Thread\n");
+      //printf("Getting lock Thread\n");
       pthread_mutex_lock(&keyboard_lock);
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
@@ -223,7 +223,7 @@ void *keyboard_thread_f(void *ignored) {
         fbputs(keystate, 6, 0);
       }
     }
-    printf("Unlocking Thread\n");
+    //printf("Unlocking Thread\n");
     pthread_mutex_unlock(&keyboard_lock);
   }
 }
