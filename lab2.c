@@ -131,7 +131,7 @@ int main()
         break;
       }
       char key = getCharFromKeyCode(packet.modifiers, packet.keycode[0]);
-      printf("%c\n", key);
+      printf("%d\n", key);
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen */

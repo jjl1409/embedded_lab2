@@ -101,8 +101,6 @@ char *getCharsFromPacket(struct usb_keyboard_packet *packet) {
 
 char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
 {
-  if (!modifier || !keycode)
-    return 0;
   if (keycode >= 0x04 && keycode <= 0x1d) {
       if (USB_SHIFT_PRESSED(modifier)) {
           return 'A' + (keycode - 0x04);
