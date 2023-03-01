@@ -123,9 +123,9 @@ int main()
     if (transferred == sizeof(packet))
     {
 
-      //sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-      //        packet.keycode[1]);
-      //printf("%s\n", keystate);
+      sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
+              packet.keycode[1]);
+      printf("%s\n", keystate);
       if (packet.keycode[0] == 0x29)
       { /* ESC pressed? */
         break;
@@ -133,6 +133,7 @@ int main()
       char key = getCharFromKeyCode(packet.modifiers, packet.keycode[0]);
       if (!key)
         continue;
+      printf("%c\n", char);
       /* write the char to the message buffer and print to the correct position on screen */
       switch (key) {
         case '\n' : handleEnterKey(&pos);
