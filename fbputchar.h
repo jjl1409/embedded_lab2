@@ -11,9 +11,11 @@
 #define MAX_COLS 64
 #define MESSAGE_BOX_START_ROWS MAX_ROWS - 3
 #define MESSAGE_BOX_START_COLS 0
+#define MESSAGE_BOX_END_ROWS MAX_ROWS - 2
 #define MESSAGE_SIZE 128
 #define TEXT_BOX_START_ROWS 8
 #define TEXT_BOX_START_COLS 0
+#define TEXT_BOX_END_ROWS MESSAGE_BOX_START_ROWS - 1
 #define TAB_SPACING 4
 #define RESET_SPECIAL_KEYS(X) {\
             X.shift_pressed = false;\
@@ -47,6 +49,7 @@ struct special_keys {
   bool shift_pressed;
   bool backspace_pressed;
   bool escape_pressed;
+  bool insert;
 };
 
 extern int fbopen(void);

@@ -34,6 +34,7 @@
 #define USB_UP_ARROW_KEY_PRESSED(X) \
                     ((X[0] == 0x52) || (X[1] == 0x52) || (X[2] == 0x52) || (X[3] == 0x52) || (X[4] == 0x52) || (X[5] == 0x52))
 #define USB_BACKSPACE_PRESSED(X) ((X[0] == 0x2a) || (X[1] == 0x2a) || (X[2] == 0x2a) || (X[3] == 0x2a) || (X[4] == 0x2a) || (X[5] == 0x2a))
+#define USB_INSERT_PRESSED(X) ((X[0] == 0x49) || (X[1] == 0x49) || (X[2] == 0x49) || (X[3] == 0x49) || (X[4] == 0x49) || (X[5] == 0x49))
 #define ARROW_KEYS_PRESSED(X) ((X.left_arrow) || (X.right_arrow) || (X.up_arrow) || (X.down_arrow))
 #define ESC_PRESSED(X) (X.escape_pressed) // Assumes MAX_KEYS_PRESSED == 6
 #define BACKSPACE_PRESSED(X) ((X.backspace_pressed))

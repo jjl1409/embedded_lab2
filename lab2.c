@@ -54,6 +54,7 @@ void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
+char caps_insert[15];
 
 struct position text_pos = {
   .cursor_col_indx = TEXT_BOX_START_COLS,
@@ -81,7 +82,8 @@ struct special_keys s_keys = {\
           .left_arrow = false,\
           .shift_pressed = false,\
           .backspace_pressed = false,\
-          .escape_pressed = false\
+          .escape_pressed = false,\
+          .insert = false\
         };
 
 int main()
@@ -220,6 +222,10 @@ void *keyboard_thread_f(void *ignored) {
         }
         else 
           printChar(&message_pos, &msg_buff, key);
+        sprintf(caps_insert, "CAPS LOCK %d", s_keys.caps_lock);
+        fbputs(caps_insert, 4, 0);
+        sprintf(caps_insert, "INSERT %d", s_keys.insert);
+        fbputs(caps_insert, 5, 0);
         fbputs(keystate, 6, 0);
       }
     }

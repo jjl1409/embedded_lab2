@@ -112,6 +112,8 @@ void setSpecialKeys(struct usb_keyboard_packet *packet, struct special_keys *s_k
     s_keys->backspace_pressed = false;
   if (USB_CAPS_LOCK_PRESSED(packet->keycode))
     s_keys->caps_lock = !s_keys->caps_lock;
+  if (USB_INSERT_PRESSED(packet->keycode))
+    s_keys->insert = !s_keys->insert;
 }
 
 void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys) {
