@@ -202,7 +202,7 @@ void *keyboard_thread_f(void *ignored) {
       printf("Getting lock Thread\n");
       pthread_mutex_lock(&keyboard_lock);
       getCharsFromPacket(&packet, &keys);
-      setSpecialKeys(&keys, &s_keys);
+      setSpecialKeys(&packet, &s_keys);
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
         if (!key)
