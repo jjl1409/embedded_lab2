@@ -151,7 +151,16 @@ int main()
       printf("%s\n", keystate);
       getCharsFromPacket(&packet, &keys);
       if (USB_NOTHING_PRESSED(keys))
-        s_keys = USB_DECLARE_SPECIAL_KEYS();
+        s_keys = {\
+          .caps_lock = false,\
+          .down_arrow = false,\
+          .up_arrow = false,\
+          .right_arrow = false,\
+          .left_arrow = false,\
+          .shift_pressed = false,\
+          .backspace_pressed = false,\
+          .escape_pressed = false\
+        };
       else if (USB_ESC_PRESSED(s_keys))
       { /* ESC pressed? */
         break;
