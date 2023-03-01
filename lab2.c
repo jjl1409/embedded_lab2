@@ -187,7 +187,7 @@ void *network_thread_f_r(void *ignored)
   {
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
-    printString(recvBuf, &text_pos)
+    printString(recvBuf, &text_pos);
     //fbputs(recvBuf, 8, 0);
   }
 
