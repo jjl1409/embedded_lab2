@@ -3,6 +3,7 @@
 
 #include <libusb-1.0/libusb.h>
 #include <stdbool.h>
+#include "fbputchar.h"
 //#include "/opt/homebrew/Cellar/libusb/1.0.26/include/libusb-1.0/libusb.h"
 #define USB_HID_KEYBOARD_PROTOCOL 1
 #define MAX_KEYS_PRESSED 6
@@ -36,17 +37,6 @@ struct usb_keyboard_packet {
   uint8_t modifiers;
   uint8_t reserved;
   uint8_t keycode[MAX_KEYS_PRESSED];
-};
-
-struct special_keys {
-  bool caps_lock;
-  bool left_arrow;
-  bool up_arrow;
-  bool right_arrow;
-  bool down_arrow;
-  bool shift_pressed;
-  bool backspace_pressed;
-  bool escape_pressed;
 };
 
 /* Find and open a USB keyboard device.  Argument should point to
