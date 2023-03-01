@@ -150,7 +150,7 @@ int main()
               packet.keycode[1]);
       printf("%s\n", keystate);
       getCharsFromPacket(&packet, &keys);
-      if (USB_NOTHING_PRESSED(keys))
+      if (USB_NOTHING_PRESSED(keys)) {
         s_keys = {\
           .caps_lock = false,\
           .down_arrow = false,\
@@ -161,6 +161,7 @@ int main()
           .backspace_pressed = false,\
           .escape_pressed = false\
         };
+      }
       else if (USB_ESC_PRESSED(s_keys))
       { /* ESC pressed? */
         break;
