@@ -166,8 +166,6 @@ int main()
     } else if (BACKSPACE_PRESSED(s_keys)) {
       handleBackSpace(&message_pos);
       goto fail;
-    } else if () {
-
     } else if (USB_NOTHING_PRESSED(keys)) {
       printf("RESETING KEYS\n");
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
