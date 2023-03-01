@@ -199,11 +199,12 @@ void *keyboard_thread_f(void *ignored) {
   sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
   printf("%s\n", keystate);
+  pthread_mutex_lock(&keyboard_lock);
   libusb_interrupt_transfer(keyboard, endpoint_address,
                               (unsigned char *)&packet, sizeof(packet),
                               &transferred, 0);
   printf("Getting lock Thread\n");
-  pthread_mutex_lock(&keyboard_lock);
+  //pthread_mutex_lock(&keyboard_lock);
   getCharsFromPacket(&packet, &keys);
   setSpecialKeys(&keys, &s_keys);
   for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
