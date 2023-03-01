@@ -256,10 +256,14 @@ void handleBackSpace(struct position *pos) {
 
 void handleCursorBlink(struct position *pos, char *buffer) {
   uint8_t cursor_pos = ((pos->cursor_row_indx - 1) * MAX_COLS) + pos->cursor_col_indx;
-  if (!pos->blinking)
+  if (!pos->blinking) {
     fbputchar('_', pos->cursor_row_indx, pos->cursor_col_indx);
-  else
-      fbputchar(buffer[cursor_pos], pos->cursor_row_indx, pos->cursor_col_indx);
+    pos->blinking = true;
+  }
+  else {
+    fbputchar(buffer[cursor_pos], pos->cursor_row_indx, pos->cursor_col_indx);
+    pos->blinking = false;
+  }
 }
 
 void printChar(struct position *pos, char *msg_buff, char key) {
