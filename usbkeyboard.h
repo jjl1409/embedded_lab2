@@ -27,5 +27,6 @@ struct usb_keyboard_packet {
    space to store an endpoint address.  Returns NULL if no keyboard
    device was found. */
 extern struct libusb_device_handle *openkeyboard(uint8_t *);
+extern char getCharFromKeyCode(uint8_t modifier, uint8_t keycode);
 
 #endif
