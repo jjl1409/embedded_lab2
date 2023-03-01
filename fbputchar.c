@@ -227,6 +227,8 @@ void handleEnterKey(struct position *pos) {
     pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
     pos->msg_buff_row_indx = MESSAGE_BOX_START_ROWS;
     pos->msg_buff_indx = 0; // Message is sent
+    pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
+    pos->cursor_row_indx = MESSAGE_BOX_START_ROWS;
     fbline(' ', MAX_ROWS - 3);
     fbline(' ', MAX_ROWS - 2);
 }
@@ -242,11 +244,14 @@ void handleBackSpace(struct position *pos) {
       pos->msg_buff_col_indx = MAX_COLS - 1;
       pos->msg_buff_row_indx--;
       pos->msg_buff_indx--;
+      pos->cursor_col_indx = MAX_COLS - 1;
+      pos->cursor_row_indx--;
       return;
     }
     fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
     pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
     pos->msg_buff_col_indx--;
+    pos->cursor_col_indx--;
 }
 
 void handleCursorBlink(struct position *pos, char *buffer) {
@@ -265,11 +270,14 @@ void printChar(struct position *pos, char *msg_buff, char key) {
     fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     pos->msg_buff_indx++;
     pos->msg_buff_col_indx++;
+    pos->cursor_col_indx++;
     /* if we hit the end of the screen go to the next row and reset colun index*/
     if (pos->msg_buff_col_indx == MAX_COLS)
     {
       pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
       pos->msg_buff_row_indx++;
+      pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
+      pos->cursor_row_indx++;
     }
 }
 
