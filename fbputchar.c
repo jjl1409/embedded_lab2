@@ -278,11 +278,11 @@ void handleCursorBlink(struct position *pos, char *buffer) {
     pos->blinking = true;
     return;
   }
-  else if (pos->msg_buff_indx > pos->cursor_buff_indx) {
+  else if (pos->msg_buff_indx >= pos->cursor_buff_indx) {
     printf("Printing char\n");
     fbputchar(buffer[pos->cursor_buff_indx], pos->cursor_row_indx, pos->cursor_col_indx);
   }
-  else
+  elsef
     fbputchar(' ', pos->cursor_row_indx, pos->cursor_col_indx);
   pos->blinking = false;
 }
