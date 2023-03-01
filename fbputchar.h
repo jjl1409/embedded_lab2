@@ -28,7 +28,7 @@
             X.right_arrow = false;\
             X.left_arrow = false;\
             }
-#define RESET_BACKSPACE(X) X.backspace_pressed = false;
+#define RESET_BACKSPACE(X) X.backspace_pressed = false
 
 struct position {
   uint8_t msg_buff_col_indx;
