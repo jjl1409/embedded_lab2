@@ -151,8 +151,13 @@ void fbPutString(const char *s, struct position *text_pos) {
   while ((c = *s++) != 0) {
     if (c == 0)
       return;
-    fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
-    text_pos->msg_buff_col_indx++;
+    else if (c == '\n') {
+      text_pos->msg_buff_col_indx = 0;
+      text_pos->msg_buff_row_indx++;
+    } else {
+      fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
+      text_pos->msg_buff_col_indx++;
+    }
     if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
       printf("Screen is being cleared!\n");
       text_pos->msg_buff_col_indx = 0;
