@@ -16,7 +16,7 @@
 #define USB_RALT   (1 << 6) 
 #define USB_RGUI   (1 << 7)
 #define USB_SHIFT_PRESSED(X) ((X & (USB_LSHIFT | USB_RSHIFT)) > 0)
-#define USB_ESC_PRESSED (X) ((X[0] == 0x29) || (X[1] == 0x29) || (X[2] == 0x29) || (X[3] == 0x29) || (X[4] == 0x29) || (X[5] == 0x29)) // Assumes MAX_KEYS_PRESSED == 6
+#define USB_ESC_PRESSED(X) ((X[0] == 0x29) || (X[1] == 0x29) || (X[2] == 0x29) || (X[3] == 0x29) || (X[4] == 0x29) || (X[5] == 0x29)) // Assumes MAX_KEYS_PRESSED == 6
 
 struct usb_keyboard_packet {
   uint8_t modifiers;
