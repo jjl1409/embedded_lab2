@@ -146,6 +146,7 @@ void handleEnterKey(struct position *pos) {
 }
 
 void handleBackSpace(struct position *pos) {
+    printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_ROWS) {
       return;
     } else if (pos->msg_buff_col_indx == 0) {
