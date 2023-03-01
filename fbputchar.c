@@ -172,6 +172,7 @@ void fbPutString(const char *s, struct position *text_pos) {
   }
   if (!newLined)
     text_pos->msg_buff_row_indx++;
+    text_pos->msg_buff_col_indx = 0;
 }
 
 
