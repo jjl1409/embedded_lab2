@@ -47,6 +47,7 @@ void *network_thread_f_w(void *);
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
+char keys[MAX_KEYS_PRESSED];
 uint8_t msg_buff_col_indx = 0;
 uint8_t msg_buff_row_indx = MESSAGE_BOX_ROWS;
 
@@ -132,21 +133,24 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
-      if (packet.keycode[0] == 0x29)
+      getCharsFromPacket(&packet, &keys);
+      if (USB_ESC_PRESSED(keys))
       { /* ESC pressed? */
         break;
       }
-      char key = getCharFromKeyCode(packet.modifiers, packet.keycode[0]);
-      if (!key)
-        continue;
-      /* write the char to the message buffer and print to the correct position on screen */
-      if (key == '\n')
-        handleEnterKey(&pos);
-      else if (key == '\b')
-        handleBackSpace(&pos);
-      else 
-        printChar(&pos, &msg_buff, key);
-      fbputs(keystate, 6, 0);
+      for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
+        char key = keys[i];
+        if (!key)
+          continue;
+        /* write the char to the message buffer and print to the correct position on screen */
+        if (key == '\n')
+          handleEnterKey(&pos);
+        else if (key == '\b')
+          handleBackSpace(&pos);
+        else 
+          printChar(&pos, &msg_buff, key);
+        fbputs(keystate, 6, 0);
+      }
     }
   }
 

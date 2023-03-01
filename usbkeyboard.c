@@ -89,10 +89,7 @@ found:
   return keyboard;
 }
 
-char *getCharsFromPacket(struct usb_keyboard_packet *packet) {
-  char *keys = malloc(6);
-  if (!keys)
-    return NULL;
+void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys) {
   for (int i = 0; i < 6; i++) {
     keys[i] = getCharFromKeyCode(packet->modifiers, packet->keycode[i]);
   }
