@@ -52,5 +52,5 @@ struct special_keys {
 extern int fbopen(void);
 extern void fbputchar(char, int, int);
 extern void fbputs(const char *, int, int);
-struct special_keys s_keys
+struct special_keys s_keys;
 #endif
