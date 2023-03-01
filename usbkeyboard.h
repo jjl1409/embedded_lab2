@@ -28,7 +28,7 @@
 struct usb_keyboard_packet {
   uint8_t modifiers;
   uint8_t reserved;
-  uint8_t keycode[6];
+  uint8_t keycode[MAX_KEYS_PRESSED];
 };
 
 

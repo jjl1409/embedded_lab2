@@ -90,7 +90,7 @@ found:
 }
 
 void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys) {
-  for (int i = 0; i < 6; i++) {
+  for (uint8_t i = 0; i < 6; i++) {
     keys[i] = getCharFromKeyCode(packet->modifiers, packet->keycode[i]);
   }
   return keys;
