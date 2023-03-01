@@ -192,10 +192,38 @@ void fbPutString(const char *s, struct position *text_pos) {
   }
 }
 
+void handleArrowKeys(struct position *pos, struct special_keys *s_keys) {
+  if (s_keys->left_arrow) {
+    if (pos->cursor_col_indx == 0 && pos->cursor_row_indx == MESSAGE_BOX_START_ROWS) {
+      return;
+    } else if (pos->cursor_col_indx == 0) {
+      pos->cursor_col_indx = MAX_COLS - 1;
+      pos->cursor_row_indx--;
+    } else 
+        pos->cursor_col_indx--;
+  } else if (s_keys->right_arrow) {
+    if (pos->cursor_col_indx == MAX_COLS && pos->cursor_row_indx == MAX_ROWS)
+      return;
+    else if (pos->cursor_col_indx == MAX_COLS) {
+      pos->cursor_col_indx = 0;
+      pos->cursor_row_indx++;
+    }
+  } else if (s_keys->down_arrow) {
+    if (pos->cursor_row_indx == MAX_ROWS)
+      pos->cursor_col_indx = MAX_COLS;
+    else
+      pos->cursor_row_indx++;
+  } else if (s_keys->up_arrow) {
+    if (pos->cursor_row_indx == MESSAGE_BOX_START_ROWS)
+      pos->cursor_col_indx = 0;
+    else
+      pos->cursor_row_indx--;
+  }
+}
 
 void handleEnterKey(struct position *pos) {
     sendMsg();
-    pos->isBackSpacing = false;
+    //pos->isBackSpacing = false;
     pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
     pos->msg_buff_row_indx = MESSAGE_BOX_START_ROWS;
     pos->msg_buff_indx = 0; // Message is sent
@@ -205,7 +233,7 @@ void handleEnterKey(struct position *pos) {
 
 void handleBackSpace(struct position *pos) {
     printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    pos->isBackSpacing = true;
+    //pos->isBackSpacing = true;
     if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS) {
       fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
       return;

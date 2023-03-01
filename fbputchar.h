@@ -14,6 +14,7 @@
 #define MESSAGE_SIZE 128
 #define TEXT_BOX_START_ROWS 8
 #define TEXT_BOX_START_COLS 0
+#define TAB_SPACING 4
 
 struct position {
   uint8_t msg_buff_col_indx;
@@ -21,7 +22,6 @@ struct position {
   uint8_t cursor_col_indx;
   uint8_t cursor_row_indx;
   uint8_t msg_buff_indx;
-  bool isBackSpacing;
 };
 
 extern int fbopen(void);

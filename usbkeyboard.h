@@ -16,8 +16,21 @@
 #define USB_RSHIFT (1 << 5)
 #define USB_RALT   (1 << 6) 
 #define USB_RGUI   (1 << 7)
-#define USB_SHIFT_PRESSED(X) (( (X & (USB_LSHIFT | USB_RSHIFT)) > 0) || caps_lock)
-#define USB_ESC_PRESSED(X) ((X[0] == 0x29) || (X[1] == 0x29) || (X[2] == 0x29) || (X[3] == 0x29) || (X[4] == 0x29) || (X[5] == 0x29)) // Assumes MAX_KEYS_PRESSED == 6
+/* Fun stuff to make program work */
+#define USB_SHIFT_PRESSED(X) (( (X & (USB_LSHIFT | USB_RSHIFT)) > 0) || s_keys.caps_lock)
+#define USB_ESC_PRESSED(X) (X.escape_pressed) // Assumes MAX_KEYS_PRESSED == 6
+#define USB_NOTHING_PRESSED(X) ((!X[0]) && (!X[1]) && (!X[2]) && (!X[3]) && (!X[4]) && (!X[5]))
+#define USB_ARROW_KEYS_PRESSED(X) ((X.left_arrow) || (X.right_arrow) || (X.up_arrow) || (X.down_arrow))
+#define USB_DECLARE_SPECIAL_KEYS(X) {\
+          .caps_lock = false,\
+          .down_arrow = false,\
+          .up_arrow = false,\
+          .right_arrow = false,\
+          .left_arrow = false,\
+          .shift_pressed = false,\
+          .backspace_pressed = false,\
+          .escape_pressed = false\
+        }\
 
 struct usb_keyboard_packet {
   uint8_t modifiers;
@@ -25,12 +38,22 @@ struct usb_keyboard_packet {
   uint8_t keycode[MAX_KEYS_PRESSED];
 };
 
+struct special_keys {
+  bool caps_lock;
+  bool left_arrow;
+  bool up_arrow;
+  bool right_arrow;
+  bool down_arrow;
+  bool shift_pressed;
+  bool backspace_pressed;
+  bool escape_pressed;
+};
 
 /* Find and open a USB keyboard device.  Argument should point to
    space to store an endpoint address.  Returns NULL if no keyboard
    device was found. */
+struct special_keys s_keys;
 extern struct libusb_device_handle *openkeyboard(uint8_t *);
 extern char getCharFromKeyCode(uint8_t modifier, uint8_t keycode);
 extern void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys);
-bool caps_lock;
 #endif

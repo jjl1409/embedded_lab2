@@ -62,8 +62,9 @@ struct position message_pos = {
   .msg_buff_col_indx = MESSAGE_BOX_START_COLS,
   .msg_buff_row_indx = MESSAGE_BOX_START_ROWS,
   .msg_buff_indx = 0,
-  .isBackSpacing = false
 };
+
+struct special_keys s_keys = USB_DECLARE_SPECIAL_KEYS();
 
 int main()
 {
@@ -141,21 +142,29 @@ int main()
               packet.keycode[1]);
       printf("%s\n", keystate);
       getCharsFromPacket(&packet, &keys);
-      if (USB_ESC_PRESSED(keys))
+      if (USB_NOTHING_PRESSED(keys))
+        s_keys = USB_DECLARE_SPECIAL_KEYS();
+      else if (USB_ESC_PRESSED(s_keys))
       { /* ESC pressed? */
         break;
+      } else if (USB_ARROW_KEYS_PRESSED(s_keys)) {
+          handleArrowKeys(&message_pos, &s_keys);
+          continue;
       }
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
-        if (!key) {
-          message_pos.isBackSpacing = false;
+        if (!key)
           continue;
-        }
         /* write the char to the message buffer and print to the correct position on screen */
         if (key == '\n')
           handleEnterKey(&message_pos);
         else if (key == '\b')
           handleBackSpace(&message_pos);
+        else if (key == '\t') {
+          for (int i = 0; i < TAB_SPACING; i++) {
+            printChar(&message_pos, &msg_buff, ' ');
+          }
+        }
         else 
           printChar(&message_pos, &msg_buff, key);
         fbputs(keystate, 6, 0);
