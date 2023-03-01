@@ -38,17 +38,22 @@ int sockfd; /* Socket file descriptor */
 
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
+struct usb_keyboard_packet packet;
+int transferred;
 
 pthread_t network_thread_r;
 pthread_t network_thread_w;
 pthread_t keyboard_thread;
 pthread_mutex_t keyboard_lock;
+
 void *network_thread_f_r(void *);
 void *network_thread_f_w(void *);
+void *network_thread_f_r(void *ignored)
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
+
 struct position text_pos = {
   .cursor_col_indx = TEXT_BOX_START_COLS,
   .cursor_row_indx = TEXT_BOX_START_ROWS,
@@ -80,8 +85,6 @@ int main()
 {
   int err, col;
   struct sockaddr_in serv_addr;
-  struct usb_keyboard_packet packet;
-  int transferred;
   char keystate[12];
 
   if ((err = fbopen()) != 0)
