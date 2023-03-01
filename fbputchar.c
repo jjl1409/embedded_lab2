@@ -149,6 +149,12 @@ void clearTextBox() {
   }
 }
 
+void clearScreen() {
+  for (int i = 0; i < MAX_ROWS; i++) {
+    fbline(' ', i);
+  }
+}
+
 /*
  * Draw the given string at the given row/column.
  * String must fit on a single line: wrap-around is not handled.

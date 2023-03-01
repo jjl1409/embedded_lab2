@@ -96,14 +96,13 @@ int main()
     fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
     exit(1);
   }
-
+  clearScreen();
   /* Draw MAX_ROWS of asterisks across the top and bottom of the screen */
   for (col = 0; col < MAX_COLS; col++)
   {
     fbputchar('*', 0, col);
     fbputchar('*', MAX_ROWS - 1, col);
   }
-  clearTextBox();
   fbputs("Hello CSEE 4840 World!", 4, 10);
   fbline('-', MAX_ROWS - 4);
 
@@ -207,9 +206,9 @@ void *keyboard_thread_f(void *ignored) {
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
       sprintf(caps_insert, "CAPS LOCK %d", s_keys.caps_lock);
-      fbputs(caps_insert, 2, 20);
+      fbputs(caps_insert, 2, 40);
       sprintf(caps_insert, "INSERT %d", s_keys.insert);
-      fbputs(caps_insert, 3, 20);
+      fbputs(caps_insert, 3, 40);
       fbputs(keystate, 6, 0);
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
