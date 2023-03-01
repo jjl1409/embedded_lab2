@@ -20,7 +20,7 @@
             X.shift_pressed = false;\
             X.escape_pressed = false;\
             RESET_BACKSPACE(X);\
-            RESET_ARROW_KEYS(X);\
+            RESET_ARROW_KEYS(X)\
             }
 #define RESET_ARROW_KEYS(X) {\
             X.down_arrow = false;\
