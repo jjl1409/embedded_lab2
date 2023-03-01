@@ -115,7 +115,7 @@ void fbputchar(char c, int row, int col)
 void fbline(char c, int row)
 {
   int i;
-  for (i = 0; i < COLS; i++)
+  for (i = 0; i < MAX_COLS; i++)
   {
     fbputchar(c, row, i);
   }
