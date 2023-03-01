@@ -86,7 +86,7 @@ int main()
     fbputchar('*', 0, col);
     fbputchar('*', MAX_ROWS - 1, col);
   }
-
+  clearTextBox();
   fbputs("Hello CSEE 4840 World!", 4, 10);
   fbline('-', MAX_ROWS - 4);
 
@@ -124,7 +124,6 @@ int main()
     fprintf(stderr, "Error: connect() failed.  Is the server running?\n");
     exit(1);
   }
-  clearTextBox();
   /* Start the network thread */
   pthread_create(&network_thread_r, NULL, network_thread_f_r, NULL);
   // pthread_create(&network_thread_w, NULL, network_thread_f_w, NULL);
