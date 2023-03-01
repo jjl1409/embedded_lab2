@@ -202,17 +202,17 @@ void handleArrowKeys(struct position *pos, struct special_keys *s_keys) {
     } else 
         pos->cursor_col_indx--;
   } else if (s_keys->right_arrow) {
-    if (pos->cursor_col_indx == MAX_COLS && pos->cursor_row_indx == MAX_ROWS)
+    if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->msg_buff_row_indx)
       return;
-    else if (pos->cursor_col_indx == MAX_COLS) {
+    else if (pos->cursor_col_indx == pos->msg_buff_col_indx) {
       pos->cursor_col_indx = 0;
       pos->cursor_row_indx++;
     }
   } else if (s_keys->down_arrow) {
-    if (pos->cursor_row_indx == MAX_ROWS)
-      pos->cursor_col_indx = MAX_COLS;
+    if (pos->cursor_row_indx == pos->msg_buff_row_indx)
+      pos->cursor_col_indx = pos->msg_buff_col_indx;
     else
-      pos->cursor_row_indx++;
+      pos->cursor_row_indx = pos->msg_buff_row_indx;
   } else if (s_keys->up_arrow) {
     if (pos->cursor_row_indx == MESSAGE_BOX_START_ROWS)
       pos->cursor_col_indx = 0;

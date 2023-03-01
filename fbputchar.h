@@ -18,8 +18,8 @@
 #define RESET_SPECIAL_KEYS(X) {\
             X.caps_lock = false;\
             X.shift_pressed = false;\
-            X.backspace_pressed = false;\
             X.escape_pressed = false;\
+            RESET_BACKSPACE(X);
             RESET_ARROW_KEYS(X);\
             }
 #define RESET_ARROW_KEYS(X) {\
@@ -27,6 +27,9 @@
             X.up_arrow = false;\
             X.right_arrow = false;\
             X.left_arrow = false;\
+            }
+#define RESET_BACKSPACE(X) {\
+            X.backspace_pressed = false;\
             }
 
 struct position {

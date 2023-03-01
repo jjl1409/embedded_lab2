@@ -41,7 +41,8 @@ uint8_t endpoint_address;
 
 pthread_t network_thread_r;
 pthread_t network_thread_w;
-pthread_mutex_t lock;
+pthread_t keyboard_thread;
+pthread_mutex_t keyboard_lock;
 void *network_thread_f_r(void *);
 void *network_thread_f_w(void *);
 void fbline(char c, int row);
@@ -133,33 +134,46 @@ int main()
     fprintf(stderr, "Error: connect() failed.  Is the server running?\n");
     exit(1);
   }
+  if (pthread_mutex_init(&keyboard_lock, NULL) != 0) {
+        printf("\n mutex init has failed\n");
+        return 1;
+    }
+  
   /* Start the network thread */
   pthread_create(&network_thread_r, NULL, network_thread_f_r, NULL);
+  pthread_create(&keyboard_thread, NULL, keyboard_thread_f, NULL);
   // pthread_create(&network_thread_w, NULL, network_thread_f_w, NULL);
 
   /* Look for and handle keypresses */
   for (;;)
   {
-    libusb_interrupt_transfer(keyboard, endpoint_address,
-                              (unsigned char *)&packet, sizeof(packet),
-                              &transferred, 0);
+    //libusb_interrupt_transfer(keyboard, endpoint_address,
+    //                          (unsigned char *)&packet, sizeof(packet),
+    //                          &transferred, 0);
+    pthread_mutex_lock(&keyboard_lock);
     if (transferred == sizeof(packet))
     {
 
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
+      RESET_BACKSPACE(s_keys);
+      RESET_ARROW_KEYS(s_keys)
       getCharsFromPacket(&packet, &keys);
       if (USB_NOTHING_PRESSED(keys)) {
         RESET_SPECIAL_KEYS(s_keys);
+        continue;
       }
       else if (USB_ESC_PRESSED(s_keys))
       { /* ESC pressed? */
         break;
       } else if (USB_ARROW_KEYS_PRESSED(s_keys)) {
-          RESET_ARROW_KEYS(s_keys);
           handleArrowKeys(&message_pos, &s_keys);
+          //RESET_ARROW_KEYS(s_keys); // Need to modify to
           continue;
+      } else if (USB_BACKSPACE_PRESSED(s_keys)) {
+        handleBackSpace(&message_pos);
+        continue;
       }
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
@@ -179,19 +193,30 @@ int main()
           printChar(&message_pos, &msg_buff, key);
         fbputs(keystate, 6, 0);
       }
-    } //else if (message_pos.isBackSpacing) // Doesn't work because libusb_interrupt_transfer is blocking
-      //handleBackSpace(&message_pos);
+    }
+    usleep(DELAY);
+    pthread_mutex_unlock(&keyboard_lock);
   }
 
   /* Terminate the network thread */
   pthread_cancel(network_thread_r);
+  pthread_cancel(keyboard_thread);
   // pthread_cancel(network_thread_w);
 
   /* Wait for the network thread to finish */
   pthread_join(network_thread_r, NULL);
+  pthread_join(keyboard_thread, NULL);
   // pthread_join(network_thread_w, NULL);
-
+  pthread_mutex_destroy(&keyboard_lock);
   return 0;
+}
+
+void *keyboard_thread_f(void *ignored) {
+  pthread_mutex_lock(&keyboard_lock);
+  libusb_interrupt_transfer(keyboard, endpoint_address,
+                              (unsigned char *)&packet, sizeof(packet),
+                              &transferred, 0);
+  pthread_mutex_unlock(&keyboard_lock);
 }
 
 void *network_thread_f_r(void *ignored)
