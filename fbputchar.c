@@ -281,6 +281,7 @@ void printChar(struct position *pos, char *msg_buff, char key) {
       pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
       pos->cursor_row_indx++;
     } else {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
       pos->msg_buff_indx++;
       pos->msg_buff_col_indx++;
       pos->cursor_col_indx++;
