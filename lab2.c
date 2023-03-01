@@ -206,6 +206,11 @@ void *keyboard_thread_f(void *ignored) {
       pthread_mutex_lock(&keyboard_lock);
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
+      sprintf(caps_insert, "CAPS LOCK %d", s_keys.caps_lock);
+      fbputs(caps_insert, 2, 20);
+      sprintf(caps_insert, "INSERT %d", s_keys.insert);
+      fbputs(caps_insert, 3, 20);
+      fbputs(keystate, 6, 0);
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
         if (!key)
@@ -222,11 +227,6 @@ void *keyboard_thread_f(void *ignored) {
         }
         else 
           printChar(&message_pos, &msg_buff, key);
-        sprintf(caps_insert, "CAPS LOCK %d", s_keys.caps_lock);
-        fbputs(caps_insert, 4, 0);
-        sprintf(caps_insert, "INSERT %d", s_keys.insert);
-        fbputs(caps_insert, 5, 0);
-        fbputs(keystate, 6, 0);
       }
     }
     printf("Unlocking Thread\n");
