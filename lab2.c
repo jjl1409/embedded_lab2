@@ -197,5 +197,5 @@ void *network_thread_f_w(void *ignored)
 }
 
 void sendMsg () {
-  send(sockfd, *msg_buff, message_pos->msg_buff_indx, 0);
+  send(sockfd, *msg_buff, message_pos.msg_buff_indx, 0);
 }
