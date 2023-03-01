@@ -48,7 +48,7 @@ void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
 uint8_t msg_buff_col_indx = 0;
-uint8_t msg_buff_row_indx = MAX_ROWS - 3;
+uint8_t msg_buff_row_indx = MESSAGE_BOX_ROWS
 
 int main()
 {
