@@ -206,8 +206,10 @@ void handleArrowKeys(struct position *pos, struct special_keys *s_keys) {
       pos->cursor_col_indx = MAX_COLS - 1;
       pos->cursor_row_indx--;
       pos->cursor_buff_indx--;
-    } else 
+    } else {
         pos->cursor_col_indx--;
+        pos->cursor_buff_indx--;
+    }
   } else if (s_keys->right_arrow) {
     if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->msg_buff_row_indx)
       return;
