@@ -123,8 +123,18 @@ void fbline(char c, int row)
 
 void fbscroll()
 {
-  memmove(framebuffer, framebuffer + (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length,
-          (FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length * (24 - 3));
+  unsigned char *textBox = framebuffer + \
+                      (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                      (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  unsigned char *newTextBox = framebuffer + \
+                      ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                      (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
+  ssize_t textBoxSize = ((MESSAGE_BOX_START_ROWS - TEXT_BOX_START_ROWS + 1) * \
+                        FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                        ((MESSAGE_BOX_START_COLS - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
+  memmove(textBox, newTextBox, textBoxSize);
   fbline(' ', 24 - 4);
 }
 
@@ -162,10 +172,12 @@ void fbPutString(const char *s, struct position *text_pos) {
     }
     if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS - 1)) { // So we dont get rid of keys 
       printf("Screen is being cleared!\n");
+      //text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      //text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
+      //clearTextBox();
+      fbscroll(); // Need to check
+      text_pos->msg_buff_row_indx--;
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-      text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
-      clearTextBox();
-      //fbscroll(); // Need to check
     } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
