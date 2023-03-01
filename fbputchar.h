@@ -6,8 +6,17 @@
 #define FBOPEN_VSCREENINFO -3 /* Couldn't read the variable info */
 #define FBOPEN_MMAP -4        /* Couldn't mmap the framebuffer memory */
 #define FBOPEN_BPP -5         /* Unexpected bits-per-pixel */
-#define ROWS 24
-#define COLS 64
+#define MAX_ROWS 24
+#define MAX_COLS 64
+#define MESSAGE_SIZE 128
+
+struct position {
+  uint8_t msg_buff_col_indx;
+  uint8_t msg_buff_row_indx;
+  uint8_t cursor_col_indx;
+  uint8_t cursor_row_indx;
+  uint8_t msg_buff_indx = 0;
+};
 
 extern int fbopen(void);
 extern void fbputchar(char, int, int);

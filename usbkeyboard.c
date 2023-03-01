@@ -89,20 +89,29 @@ found:
   return keyboard;
 }
 
-char getCharFromKeyCode(struct usb_keyboard_packet *packet)
-{
-  if (!packet)
+char *getCharsFromPacket(struct usb_keyboard_packet *packet) {
+  char *keys = malloc(6);
+  if (!keys)
     return NULL;
-  uint8_t keycode = packet->keycode[0];
+  for (int i = 0; i < 6; i++) {
+    keys[i] = getCharFromKeyCode(packet->modifiers, packet->keycode[i]);
+  }
+  return keys;
+}
+
+char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
+{
+  if (!modifier || !keycode)
+    return 0;
   if (keycode >= 0x04 && keycode <= 0x1d) {
-      if (USB_SHIFT_PRESSED(packet)) {
+      if (USB_SHIFT_PRESSED(modifier)) {
           return 'A' + (keycode - 0x04);
       } else {
           return 'a' + (keycode - 0x04);
       }
   }
   if (keycode >= 0x1e && keycode <= 0x38) {
-      if (USB_SHIFT_PRESSED(packet)) {
+      if (USB_SHIFT_PRESSED(modifier)) {
           switch (keycode) {
               case 0x1e: return '!';
               case 0x1f: return '@';

@@ -15,9 +15,8 @@
 #include <pthread.h>
 #include <sys/ioctl.h>
 #define FBDEV "/dev/fb0"
-#define MESSAGE_SIZE 128
 struct winsize w;
-// hardcoded max rows and cols; 64 * 24
+// hardcoded max MAX_ROWS and MAX_COLS; 64 * 24
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -42,22 +41,21 @@ uint8_t endpoint_address;
 
 pthread_t network_thread_r;
 pthread_t network_thread_w;
+pthread_mutex_t lock;
 void *network_thread_f_r(void *);
 void *network_thread_f_w(void *);
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
-int msg_buff_indx = 0;
-int msg_buff_col_indx = 0;
-int msg_buff_row_indx = ROWS - 3;
+uint8_t msg_buff_col_indx = 0;
+uint8_t msg_buff_row_indx = MAX_ROWS - 3;
 
 int main()
 {
   int err, col;
-
   struct sockaddr_in serv_addr;
-
   struct usb_keyboard_packet packet;
+  struct position pos;
   int transferred;
   char keystate[12];
 
@@ -67,19 +65,19 @@ int main()
     exit(1);
   }
 
-  /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0; col < COLS; col++)
+  /* Draw MAX_ROWS of asterisks across the top and bottom of the screen */
+  for (col = 0; col < MAX_COLS; col++)
   {
     fbputchar('*', 0, col);
-    fbputchar('*', ROWS - 1, col);
+    fbputchar('*', MAX_ROWS - 1, col);
   }
 
   fbputs("Hello CSEE 4840 World!", 4, 10);
-  fbline('-', ROWS - 4);
+  fbline('-', MAX_ROWS - 4);
 
   /*reset message buffers*/
-  fbline(' ', ROWS - 3);
-  fbline(' ', ROWS - 2);
+  fbline(' ', MAX_ROWS - 3);
+  fbline(' ', MAX_ROWS - 2);
 
   /* Open the keyboard */
   if ((keyboard = openkeyboard(&endpoint_address)) == NULL)
@@ -128,43 +126,20 @@ int main()
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
-      char key = getCharFromKeyCode(&packet);
-      if (!key)
-        continue;
-      /* write the char to the message buffer and print to the correct position on screen*/
-      if (key == '\n') // enter key
-      {
-        /*Reset message buffer if enter key pressed*/
-        fbline(' ', ROWS - 3);
-        fbline(' ', ROWS - 2);
-        msg_buff_col_indx = 0;
-        msg_buff_row_indx = ROWS - 3;
-        continue;
-      }
-      else if (key == '\b') // back space
-      {
-        /*Back space index*/
-        fbputchar(' ', msg_buff_row_indx, msg_buff_col_indx);
-        msg_buff_col_indx--;
-      }
-      else if (msg_buff_indx < MESSAGE_SIZE)
-      {
-        msg_buff[msg_buff_indx] = key;
-        fbputchar(key, msg_buff_row_indx, msg_buff_col_indx);
-        msg_buff_indx++;
-        msg_buff_col_indx++;
-        /* if we hit the end of the screen go to the next row and reset colun index*/
-        if (msg_buff_col_indx == COLS)
-        {
-          msg_buff_col_indx = 0;
-          msg_buff_row_indx++;
-        }
-      }
-      fbputs(keystate, 6, 0);
       if (packet.keycode[0] == 0x29)
       { /* ESC pressed? */
         break;
       }
+      char key = getCharFromKeyCode(packet.modifiers, packet.keycode[0]);
+      if (!key)
+        continue;
+      /* write the char to the message buffer and print to the correct position on screen */
+      switch (key) {
+        case '\n' : handleEnterKey(&pos);
+        case '\b' : handleBackSpace(&pos);
+        default   : printChar(&pos, &msg_buff, key);
+      }
+      fbputs(keystate, 6, 0);
     }
   }
 

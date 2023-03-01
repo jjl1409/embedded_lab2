@@ -14,13 +14,14 @@
 #define USB_RSHIFT (1 << 5)
 #define USB_RALT   (1 << 6) 
 #define USB_RGUI   (1 << 7)
-#define USB_SHIFT_PRESSED(X) ((X->modifiers & (USB_LSHIFT | USB_RSHIFT)) > 0)
+#define USB_SHIFT_PRESSED(X) ((X & (USB_LSHIFT | USB_RSHIFT)) > 0)
 
 struct usb_keyboard_packet {
   uint8_t modifiers;
   uint8_t reserved;
   uint8_t keycode[6];
 };
+
 
 /* Find and open a USB keyboard device.  Argument should point to
    space to store an endpoint address.  Returns NULL if no keyboard

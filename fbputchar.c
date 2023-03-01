@@ -138,6 +138,41 @@ void fbputs(const char *s, int row, int col)
     fbputchar(c, row, col++);
 }
 
+void handleEnterKey(struct position *pos) {
+    fbline(' ', MAX_ROWS - 3);
+    fbline(' ', MAX_ROWS - 2);
+    pos->msg_buff_col_indx = 0;
+    pos->msg_buff_row_indx = MAX_ROWS - 3;
+}
+
+void handleBackSpace(struct position *pos) {
+    if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == 0) {
+      return;
+    } else if (pos->msg_buff_col_indx == 0) {
+      pos->msg_buff_col_indx = MAX_COLS - 1;
+      pos->cursor_row_indx--;
+      return;
+    }
+    fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    pos->msg_buff_col_indx--;
+}
+
+void printChar(struct position *pos, char *msg_buff, char key) {
+    if (pos->msg_buff_indx >= MESSAGE_SIZE) {
+      return;
+    }
+    msg_buff[pos->msg_buff_indx] = key;
+    fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    pos->msg_buff_indx++;
+    pos->msg_buff_col_indx++;
+    /* if we hit the end of the screen go to the next row and reset colun index*/
+    if (pos->msg_buff_col_indx == MAX_COLS)
+    {
+      pos->msg_buff_col_indx = 0;
+      pos->msg_buff_row_indx++;
+    }
+}
+
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
 
 od --address-radix=n --width=16 -v -t x1 -j 4 -N 2048 lat0-16.psfu
