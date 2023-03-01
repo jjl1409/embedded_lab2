@@ -156,7 +156,7 @@ int main()
     pthread_mutex_lock(&keyboard_lock);
     //RESET_BACKSPACE(s_keys);
     //RESET_ARROW_KEYS(s_keys)
-    printf("Backspace: %d, Caps Lock: %d\n", s_keys.backspace_pressed, s_keys.caps_lock);
+    printf("Cursor pos: (rows, cols): (%d, %d)\n", message_pos->cursor_row_indx, message_pos->cursor_col_indx);
     if (ESC_PRESSED(s_keys))
     { /* ESC pressed? */
       printf("Unlocking Thread\n");
