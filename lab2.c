@@ -171,10 +171,9 @@ int main()
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
     }
   handleCursorBlink(&message_pos, &msg_buff);
-  fail:
-  printf("Unlocking\n");
   usleep(DELAY);
   handleCursorBlink(&message_pos, &msg_buff);
+  printf("Unlocking\n");
   pthread_mutex_unlock(&keyboard_lock);
   }
 
