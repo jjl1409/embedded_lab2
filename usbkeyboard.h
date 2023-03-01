@@ -37,7 +37,7 @@
 #define ARROW_KEYS_PRESSED(X) ((X.left_arrow) || (X.right_arrow) || (X.up_arrow) || (X.down_arrow))
 #define ESC_PRESSED(X) (X.escape_pressed) // Assumes MAX_KEYS_PRESSED == 6
 #define BACKSPACE_PRESSED(X) ((X.backspace_pressed))
-#define DELAY 1000 * 250 // 250 millseconds
+#define DELAY 1000 * 50 // 50 millseconds
 
 struct usb_keyboard_packet {
   uint8_t modifiers;

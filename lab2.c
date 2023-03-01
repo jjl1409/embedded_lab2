@@ -238,7 +238,6 @@ void *network_thread_f_r(void *ignored)
     recvBuf[n] = '\0';
     printf("%s", recvBuf);
     fbPutString(recvBuf, &text_pos);
-    //fbputs(recvBuf, 8, 0);
   }
 
   return NULL;
