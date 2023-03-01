@@ -15,7 +15,7 @@
 #define USB_RSHIFT (1 << 5)
 #define USB_RALT   (1 << 6) 
 #define USB_RGUI   (1 << 7)
-#define USB_SHIFT_PRESSED(X) ((X & (USB_LSHIFT | USB_RSHIFT)) > 0)
+#define USB_SHIFT_PRESSED(X) (( (X & (USB_LSHIFT | USB_RSHIFT)) > 0) || caps_lock)
 #define USB_ESC_PRESSED(X) ((X[0] == 0x29) || (X[1] == 0x29) || (X[2] == 0x29) || (X[3] == 0x29) || (X[4] == 0x29) || (X[5] == 0x29)) // Assumes MAX_KEYS_PRESSED == 6
 
 struct usb_keyboard_packet {
@@ -31,4 +31,5 @@ struct usb_keyboard_packet {
 extern struct libusb_device_handle *openkeyboard(uint8_t *);
 extern char getCharFromKeyCode(uint8_t modifier, uint8_t keycode);
 extern void getCharsFromPacket(struct usb_keyboard_packet *packet, char *keys);
+bool caps_lock = false;
 #endif
