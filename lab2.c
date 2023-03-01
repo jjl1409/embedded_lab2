@@ -198,6 +198,7 @@ int main()
       }
     }
     fail:
+    usleep(DELAY);
     pthread_mutex_unlock(&keyboard_lock);
     usleep(DELAY);
   }
