@@ -181,10 +181,10 @@ void fbPutString(const char *s, struct position *text_pos) {
     }
     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS)) { // Check TEXT_BOX_END_ROWS
       printf("Screen is being cleared!\n");
-      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-      text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
-      clearTextBox();
-      //fbscroll(text_pos); // Need to check
+      //text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      //text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
+      //clearTextBox();
+      fbscroll(text_pos); // Need to check
     } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
