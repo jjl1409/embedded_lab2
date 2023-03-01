@@ -150,36 +150,30 @@ int main()
   /* Look for and handle keypresses */
   for (;;)
   {
-    //libusb_interrupt_transfer(keyboard, endpoint_address,
-    //                          (unsigned char *)&packet, sizeof(packet),
-    //                          &transferred, 0);
-    if (transferred == sizeof(packet))
-    {
-      printf("Locking\n");
-      pthread_mutex_lock(&keyboard_lock);
-      //RESET_BACKSPACE(s_keys);
-      //RESET_ARROW_KEYS(s_keys)
-      if (USB_NOTHING_PRESSED(keys)) {
-        RESET_SPECIAL_KEYS(s_keys);
-        goto fail;
-      }
-      else if (ESC_PRESSED(s_keys))
-      { /* ESC pressed? */
-        printf("Unlocking Thread\n");
-        pthread_mutex_unlock(&keyboard_lock);
-        break;
-      } else if (ARROW_KEYS_PRESSED(s_keys)) {
-          handleArrowKeys(&message_pos, &s_keys);
-          goto fail;
-      } else if (BACKSPACE_PRESSED(s_keys)) {
-        handleBackSpace(&message_pos);
-        goto fail;
-      }
-    fail:
-    printf("Unlocking\n");
-    pthread_mutex_unlock(&keyboard_lock);
+    printf("Locking\n");
+    pthread_mutex_lock(&keyboard_lock);
+    //RESET_BACKSPACE(s_keys);
+    //RESET_ARROW_KEYS(s_keys)
+    if (USB_NOTHING_PRESSED(keys)) {
+      RESET_SPECIAL_KEYS(s_keys);
+      goto fail;
     }
-    usleep(DELAY);
+    else if (ESC_PRESSED(s_keys))
+    { /* ESC pressed? */
+      printf("Unlocking Thread\n");
+      pthread_mutex_unlock(&keyboard_lock);
+      break;
+    } else if (ARROW_KEYS_PRESSED(s_keys)) {
+        handleArrowKeys(&message_pos, &s_keys);
+        goto fail;
+    } else if (BACKSPACE_PRESSED(s_keys)) {
+      handleBackSpace(&message_pos);
+      goto fail;
+    }
+  fail:
+  printf("Unlocking\n");
+  pthread_mutex_unlock(&keyboard_lock);
+  usleep(DELAY);
   }
 
   /* Terminate the network thread */
@@ -199,34 +193,35 @@ void *keyboard_thread_f(void *ignored) {
   sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
   printf("%s\n", keystate);
-  pthread_mutex_lock(&keyboard_lock);
   libusb_interrupt_transfer(keyboard, endpoint_address,
                               (unsigned char *)&packet, sizeof(packet),
                               &transferred, 0);
-  printf("Getting lock Thread\n");
-  //pthread_mutex_lock(&keyboard_lock);
-  getCharsFromPacket(&packet, &keys);
-  setSpecialKeys(&keys, &s_keys);
-  for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
-    char key = keys[i];
-    if (!key)
-      continue;
-    /* write the char to the message buffer and print to the correct position on screen */
-    if (key == '\n')
-      handleEnterKey(&message_pos);
-    else if (key == '\b')
-      handleBackSpace(&message_pos);
-    else if (key == '\t') {
-      for (int i = 0; i < TAB_SPACING; i++) {
-        printChar(&message_pos, &msg_buff, ' ');
+  if (transferred == sizeof(packet)) {
+    printf("Getting lock Thread\n");
+    pthread_mutex_lock(&keyboard_lock);
+    getCharsFromPacket(&packet, &keys);
+    setSpecialKeys(&keys, &s_keys);
+    for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
+      char key = keys[i];
+      if (!key)
+        continue;
+      /* write the char to the message buffer and print to the correct position on screen */
+      if (key == '\n')
+        handleEnterKey(&message_pos);
+      else if (key == '\b')
+        handleBackSpace(&message_pos);
+      else if (key == '\t') {
+        for (int i = 0; i < TAB_SPACING; i++) {
+          printChar(&message_pos, &msg_buff, ' ');
+        }
       }
+      else 
+        printChar(&message_pos, &msg_buff, key);
+      fbputs(keystate, 6, 0);
     }
-    else 
-      printChar(&message_pos, &msg_buff, key);
-    fbputs(keystate, 6, 0);
+    printf("Unlocking Thread\n");
+    pthread_mutex_unlock(&keyboard_lock);
   }
-  printf("Unlocking Thread\n");
-  pthread_mutex_unlock(&keyboard_lock);
 }
 
 void *network_thread_f_r(void *ignored)
