@@ -259,11 +259,13 @@ void handleCursorBlink(struct position *pos, char *buffer) {
   if (!pos->blinking) {
     fbputchar('_', pos->cursor_row_indx, pos->cursor_col_indx);
     pos->blinking = true;
+    return;
   }
-  else {
+  else if (pos->msg_buff_indx >= cursor_pos)
     fbputchar(buffer[cursor_pos], pos->cursor_row_indx, pos->cursor_col_indx);
+  else
+    fbputchar(' ', pos->cursor_row_indx, pos->cursor_col_indx);
     pos->blinking = false;
-  }
 }
 
 void printChar(struct position *pos, char *msg_buff, char key) {
