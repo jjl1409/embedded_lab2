@@ -160,7 +160,7 @@ void fbPutString(const char *s, struct position *text_pos) {
       fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
       text_pos->msg_buff_col_indx++;
     }
-    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
+    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START)) {
       printf("Screen is being cleared!\n");
       text_pos->msg_buff_col_indx = 0;
       text_pos->msg_buff_row_indx = 0;
