@@ -258,7 +258,7 @@ void sendMsg () {
     msg_buff[MESSAGE_SIZE - 2] = '\n';
     msg_buff[MESSAGE_SIZE - 1] = '\0';
   }
-  printf("%d %s", message_pos.msg_buff_indx, msg_buff);
+  printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
   write(sockfd, msg_buff, message_pos.msg_buff_indx);
 }
 
