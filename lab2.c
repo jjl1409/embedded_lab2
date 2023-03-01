@@ -155,12 +155,7 @@ int main()
     //RESET_BACKSPACE(s_keys);
     //RESET_ARROW_KEYS(s_keys)
     printf("Backspace: %d, Caps Lock: %d\n", s_keys.backspace_pressed, s_keys.caps_lock);
-    if (USB_NOTHING_PRESSED(keys)) {
-      printf("RESETING KEYS\n");
-      RESET_SPECIAL_KEYS(s_keys);
-      goto fail;
-    }
-    else if (ESC_PRESSED(s_keys))
+    if (ESC_PRESSED(s_keys))
     { /* ESC pressed? */
       printf("Unlocking Thread\n");
       pthread_mutex_unlock(&keyboard_lock);
@@ -170,6 +165,10 @@ int main()
         goto fail;
     } else if (BACKSPACE_PRESSED(s_keys)) {
       handleBackSpace(&message_pos);
+      goto fail;
+    } else if (USB_NOTHING_PRESSED(keys)) {
+      printf("RESETING KEYS\n");
+      RESET_SPECIAL_KEYS(s_keys);
       goto fail;
     }
   fail:
