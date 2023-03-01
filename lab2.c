@@ -156,7 +156,7 @@ int main()
     //RESET_ARROW_KEYS(s_keys)
     printf("Backspace: %d, Caps Lock: %d\n", s_keys.backspace_pressed, s_keys.caps_lock);
     if (USB_NOTHING_PRESSED(keys)) {
-      print('RESETING KEYS\n');
+      printf('RESETING KEYS\n');
       RESET_SPECIAL_KEYS(s_keys);
       goto fail;
     }
