@@ -231,10 +231,14 @@ void handleArrowKeys(struct position *pos, struct special_keys *s_keys) {
       pos->cursor_row_indx = pos->msg_buff_row_indx;
     }
   } else if (s_keys->up_arrow) {
-    if (pos->cursor_row_indx == MESSAGE_BOX_START_ROWS)
+    if (pos->cursor_row_indx == MESSAGE_BOX_START_ROWS) {
       pos->cursor_col_indx = 0;
-    else
+      pos->cursor_buff_indx = 0;
+    }
+    else {
       pos->cursor_row_indx--;
+      pos->cursor_buff_indx -= MAX_COLS;
+    }
   }
 }
 
