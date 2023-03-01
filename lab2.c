@@ -154,6 +154,7 @@ int main()
     pthread_mutex_lock(&keyboard_lock);
     //RESET_BACKSPACE(s_keys);
     //RESET_ARROW_KEYS(s_keys)
+    printf("Backspace: %d, Caps Lock: %d\n", s_keys.backspace_pressed, s_keys.caps_lock);
     if (USB_NOTHING_PRESSED(keys)) {
       RESET_SPECIAL_KEYS(s_keys);
       goto fail;
