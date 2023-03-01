@@ -199,6 +199,6 @@ void *network_thread_f_w(void *ignored)
 void sendMsg () {
   msg_buff[message_pos.msg_buff_indx - 2] = '\n';
   msg_buff[message_pos.msg_buff_indx - 1] = '\0';
-  printf("%d %s\n", message_pos.msg_buff_indx, msg_buff);
-  write(sockfd, *msg_buff, message_pos.msg_buff_indx);
+  printf("%d %s", message_pos.msg_buff_indx, msg_buff);
+  write(sockfd, msg_buff, message_pos.msg_buff_indx);
 }
