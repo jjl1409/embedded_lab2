@@ -20,14 +20,14 @@
             X.shift_pressed = false;\
             X.backspace_pressed = false;\
             X.escape_pressed = false;\
-            RESET_ARROW_KEYS(X);
-        }
+            RESET_ARROW_KEYS(X);\
+            }
 #define RESET_ARROW_KEYS(X) {\
             X.down_arrow = false;\
             X.up_arrow = false;\
             X.right_arrow = false;\
             X.left_arrow = false;\
-}
+            }
 
 struct position {
   uint8_t msg_buff_col_indx;

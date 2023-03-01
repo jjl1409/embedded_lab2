@@ -157,6 +157,7 @@ int main()
       { /* ESC pressed? */
         break;
       } else if (USB_ARROW_KEYS_PRESSED(s_keys)) {
+          RESET_ARROW_KEYS(s_keys);
           handleArrowKeys(&message_pos, &s_keys);
           continue;
       }
