@@ -53,6 +53,7 @@ void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE];
 char keys[MAX_KEYS_PRESSED];
+char keystate[12];
 
 struct position text_pos = {
   .cursor_col_indx = TEXT_BOX_START_COLS,
@@ -85,7 +86,6 @@ int main()
 {
   int err, col;
   struct sockaddr_in serv_addr;
-  char keystate[12];
 
   if ((err = fbopen()) != 0)
   {
