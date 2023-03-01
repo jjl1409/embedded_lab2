@@ -185,18 +185,17 @@ void printChar(struct position *pos, char *msg_buff, char key) {
 void printString(const char *s, struct position *text_pos) {
   char c;
   while ((c = *s++) != 0) {
-    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
-      // Clear screen
-      text_pos->msg_buff_row_indx = 0;
-      text_pos->msg_buff_col_indx = 0;
-      fbscroll(); // Need to check
-    }
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
-    if (text_pos->msg_buff_col_indx == MAX_COLS && text_pos->msg_buff_row_indx != MESSAGE_BOX_ROWS_START) {
+    text_pos->msg_buff_col_indx++;
+    if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_ROWS_START) && (text_pos->msg_buff_col_indx == MAX_COLS)) {
+      printf("Screen is being cleared!\n");
+      text_pos->msg_buff_col_indx = 0;
+      text_pos->msg_buff_row_indx = 0;
+      fbscroll(); // Need to check
+    } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
       text_pos->msg_buff_col_indx = 0;
       text_pos->msg_buff_row_indx++;
-    } else
-      text_pos->msg_buff_col_indx++;
+    }
   }
 }
 
