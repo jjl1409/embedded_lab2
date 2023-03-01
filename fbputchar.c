@@ -185,6 +185,7 @@ void handleEnterKey(struct position *pos) {
     pos->msg_buff_indx = 0; // Message is sent
     fbline(' ', MAX_ROWS - 3);
     fbline(' ', MAX_ROWS - 2);
+    sendMsg();
 }
 
 void handleBackSpace(struct position *pos) {

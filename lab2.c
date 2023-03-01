@@ -54,7 +54,6 @@ struct position text_pos = {
   .msg_buff_col_indx = 0,
   .msg_buff_row_indx = 8,
   .msg_buff_indx = 0,
-  .isBackSpacing = false
 };
 
 struct position message_pos = {
@@ -195,4 +194,8 @@ void *network_thread_f_w(void *ignored)
 {
 
   return NULL;
+}
+
+void sendMsg () {
+  send(sockfd, *msg_buff, message_pos->msg_buff_indx, 0);
 }
