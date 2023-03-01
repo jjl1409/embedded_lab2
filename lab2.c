@@ -153,10 +153,9 @@ int main()
     //libusb_interrupt_transfer(keyboard, endpoint_address,
     //                          (unsigned char *)&packet, sizeof(packet),
     //                          &transferred, 0);
-    pthread_mutex_lock(&keyboard_lock);
-    if (transferred == sizeof(packet))
+    if (transferred == sizeof(packet) && packet != NULL)
     {
-
+      pthread_mutex_lock(&keyboard_lock);
       sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
               packet.keycode[1]);
       printf("%s\n", keystate);
@@ -165,18 +164,19 @@ int main()
       getCharsFromPacket(&packet, &keys);
       if (USB_NOTHING_PRESSED(keys)) {
         RESET_SPECIAL_KEYS(s_keys);
-        continue;
+        goto fail;
       }
       else if (USB_ESC_PRESSED(s_keys))
       { /* ESC pressed? */
+        pthread_mutex_unlock(&keyboard_lock);
         break;
       } else if (USB_ARROW_KEYS_PRESSED(s_keys)) {
           handleArrowKeys(&message_pos, &s_keys);
           //RESET_ARROW_KEYS(s_keys); // Need to modify to
-          continue;
+          goto fail;
       } else if (USB_BACKSPACE_PRESSED(s_keys)) {
         handleBackSpace(&message_pos);
-        continue;
+        goto fail;
       }
       for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
         char key = keys[i];
@@ -197,6 +197,7 @@ int main()
         fbputs(keystate, 6, 0);
       }
     }
+    fail:
     usleep(DELAY);
     pthread_mutex_unlock(&keyboard_lock);
   }
