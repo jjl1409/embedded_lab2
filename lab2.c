@@ -148,13 +148,14 @@ int main()
         /* write the char to the message buffer and print to the correct position on screen */
         if (key == '\n')
           handleEnterKey(&pos);
-        else if (key == '\b' || pos.isBackSpacing)
+        else if (key == '\b')
           handleBackSpace(&pos);
         else 
           printChar(&pos, &msg_buff, key);
         fbputs(keystate, 6, 0);
       }
-    }
+    } else if (pos.isBackSpacing)
+      handleBackSpace(&pos);
   }
 
   /* Terminate the network thread */
