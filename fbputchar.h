@@ -15,6 +15,19 @@
 #define TEXT_BOX_START_ROWS 8
 #define TEXT_BOX_START_COLS 0
 #define TAB_SPACING 4
+#define RESET_SPECIAL_KEYS(X) {\
+            X.caps_lock = false;\
+            X.shift_pressed = false;\
+            X.backspace_pressed = false;\
+            X.escape_pressed = false;\
+            RESET_ARROW_KEYS(X);
+        }
+#define RESET_ARROW_KEYS(X) {\
+            X.down_arrow = false;\
+            X.up_arrow = false;\
+            X.right_arrow = false;\
+            X.left_arrow = false;\
+}
 
 struct position {
   uint8_t msg_buff_col_indx;

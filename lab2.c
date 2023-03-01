@@ -73,7 +73,7 @@ struct special_keys s_keys = {\
           .shift_pressed = false,\
           .backspace_pressed = false,\
           .escape_pressed = false\
-        };//#USB_DECLARE_SPECIAL_KEYS();
+        };
 
 int main()
 {
@@ -151,16 +151,7 @@ int main()
       printf("%s\n", keystate);
       getCharsFromPacket(&packet, &keys);
       if (USB_NOTHING_PRESSED(keys)) {
-        s_keys = (struct special_keys) {\
-          .caps_lock = false,\
-          .down_arrow = false,\
-          .up_arrow = false,\
-          .right_arrow = false,\
-          .left_arrow = false,\
-          .shift_pressed = false,\
-          .backspace_pressed = false,\
-          .escape_pressed = false\
-        };
+        RESET_SPECIAL_KEYS(s_keys);
       }
       else if (USB_ESC_PRESSED(s_keys))
       { /* ESC pressed? */

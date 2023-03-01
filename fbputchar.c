@@ -193,6 +193,7 @@ void fbPutString(const char *s, struct position *text_pos) {
 }
 
 void handleArrowKeys(struct position *pos, struct special_keys *s_keys) {
+  RESET_ARROW_KEYS(*s_keys);
   if (s_keys->left_arrow) {
     if (pos->cursor_col_indx == 0 && pos->cursor_row_indx == MESSAGE_BOX_START_ROWS) {
       return;

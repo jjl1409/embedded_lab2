@@ -22,16 +22,6 @@
 #define USB_ESC_PRESSED(X) (X.escape_pressed) // Assumes MAX_KEYS_PRESSED == 6
 #define USB_NOTHING_PRESSED(X) ((!X[0]) && (!X[1]) && (!X[2]) && (!X[3]) && (!X[4]) && (!X[5]))
 #define USB_ARROW_KEYS_PRESSED(X) ((X.left_arrow) || (X.right_arrow) || (X.up_arrow) || (X.down_arrow))
-//#define USB_DECLARE_SPECIAL_KEYS(X) {\
-          .caps_lock = false,\
-          .down_arrow = false,\
-          .up_arrow = false,\
-          .right_arrow = false,\
-          .left_arrow = false,\
-          .shift_pressed = false,\
-          .backspace_pressed = false,\
-          .escape_pressed = false\
-        }\
 
 struct usb_keyboard_packet {
   uint8_t modifiers;
