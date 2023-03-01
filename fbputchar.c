@@ -170,6 +170,7 @@ void fbPutString(const char *s, struct position *text_pos) {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
       newLined = true;
+      continue;
     }
     if ((text_pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS - 1)) { // So we dont get rid of keys 
       printf("Screen is being cleared!\n");
