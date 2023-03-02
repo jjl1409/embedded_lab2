@@ -222,16 +222,16 @@ void *keyboard_thread_f(void *ignored)
       int seen = 0;
       for (int cur_index = 0; cur_index < 3; cur_index++)
       {
-        printf("Key %c\n", packet.keystate[key_index]);
+        printf("Key %c\n", packet.keycode[key_index]);
         for (int old_index = 0; old_index < 3; old_index++)
         {
-          if (packet.keystate[cur_index] == old_keys[old_index])
+          if (packet.keycode[cur_index] == old_keys[old_index])
           {
-            printf("Key debug: %c, %c\n", packet.keystate[cur_index], old_keys[old_index]);
+            printf("Key debug: %c, %c\n", packet.keycode[cur_index], old_keys[old_index]);
             seen = 1;
           }
         }
-        if (!seen && packet.keystate[cur_index] != '\0') {
+        if (!seen && packet.keycode[cur_index] != '\0') {
           printf("Seen %d\n", cur_index);
           key_index = cur_index;
         }
@@ -240,7 +240,7 @@ void *keyboard_thread_f(void *ignored)
       if (packet.modifiers)
       char key;
       if (key_index == -1) key = '\0';
-      else key = getCharFromKeyCode(packet.modifiers, packet.keystate[key_index]);
+      else key = getCharFromKeyCode(packet.modifiers, packet.keycode[key_index]);
 
       printf("%c: %d %d\n", key, key_index, seen);
       if (!key)
@@ -262,7 +262,7 @@ void *keyboard_thread_f(void *ignored)
       }
     }
     fail:
-      memcpy(old_keys, packet.keystate, sizeof(packet.keystate));
+      memcpy(old_keys, packet.keystate, sizeof(packet.keycode));
       //memcpy(old_keys, keys, sizeof(keys));
       printf("Unlocking Thread\n");
       pthread_mutex_unlock(&keyboard_lock);
