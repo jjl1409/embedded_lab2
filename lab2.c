@@ -223,7 +223,7 @@ void *keyboard_thread_f(void *ignored)
       {
         for (int old_index = 0; old_index < 6; old_index++)
         {
-          if (keystate[cur_index] != 0 && keystate[cur_index] == old_keystate[old_index])
+          if (keystate[cur_index] == old_keystate[old_index])
           {
             printf("Key debug: %c, %c\n", keystate[cur_index], old_keystate[old_index]);
             seen = 1;
