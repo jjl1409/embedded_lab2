@@ -51,39 +51,38 @@ void *network_thread_f_w(void *);
 void *keyboard_thread_f(void *);
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
-char msg_buff[MESSAGE_SIZE];
+char msg_buff[MESSAGE_SIZE + 2]; // +2 because we want to append \n \0
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
 
 struct position text_pos = {
-  .cursor_col_indx = TEXT_BOX_START_COLS,
-  .cursor_row_indx = TEXT_BOX_START_ROWS,
-  .msg_buff_col_indx = TEXT_BOX_START_COLS,
-  .msg_buff_row_indx = TEXT_BOX_START_ROWS,
-  .msg_buff_indx = 0,
-  .blinking = false,
+    .cursor_col_indx = TEXT_BOX_START_COLS,
+    .cursor_row_indx = TEXT_BOX_START_ROWS,
+    .msg_buff_col_indx = TEXT_BOX_START_COLS,
+    .msg_buff_row_indx = TEXT_BOX_START_ROWS,
+    .msg_buff_indx = 0,
+    .blinking = false,
 };
 
 struct position message_pos = {
-  .cursor_col_indx = MESSAGE_BOX_START_COLS,
-  .cursor_row_indx = MESSAGE_BOX_START_ROWS,
-  .msg_buff_col_indx = MESSAGE_BOX_START_COLS,
-  .msg_buff_row_indx = MESSAGE_BOX_START_ROWS,
-  .msg_buff_indx = 0,
-  .blinking = false,
+    .cursor_col_indx = MESSAGE_BOX_START_COLS,
+    .cursor_row_indx = MESSAGE_BOX_START_ROWS,
+    .msg_buff_col_indx = MESSAGE_BOX_START_COLS,
+    .msg_buff_row_indx = MESSAGE_BOX_START_ROWS,
+    .msg_buff_indx = 0,
+    .blinking = false,
 };
 
-struct special_keys s_keys = {\
-          .caps_lock = false,\
-          .down_arrow = false,\
-          .up_arrow = false,\
-          .right_arrow = false,\
-          .left_arrow = false,\
-          .shift_pressed = false,\
-          .backspace_pressed = false,\
-          .escape_pressed = false,\
-          .insert = false\
-        };
+struct special_keys s_keys = {
+    .caps_lock = false,
+    .down_arrow = false,
+    .up_arrow = false,
+    .right_arrow = false,
+    .left_arrow = false,
+    .shift_pressed = false,
+    .backspace_pressed = false,
+    .escape_pressed = false,
+    .insert = false};
 
 int main()
 {
@@ -139,11 +138,12 @@ int main()
     fprintf(stderr, "Error: connect() failed.  Is the server running?\n");
     exit(1);
   }
-  if (pthread_mutex_init(&keyboard_lock, NULL) != 0) {
-        printf("\n mutex init has failed\n");
-        return 1;
-    }
-  
+  if (pthread_mutex_init(&keyboard_lock, NULL) != 0)
+  {
+    printf("\n mutex init has failed\n");
+    return 1;
+  }
+
   /* Start the network thread */
   pthread_create(&network_thread_r, NULL, network_thread_f_r, NULL);
   pthread_create(&keyboard_thread, NULL, keyboard_thread_f, NULL);
@@ -152,30 +152,36 @@ int main()
   /* Look for and handle keypresses */
   for (;;)
   {
-    //printf("Locking\n");
+    // printf("Locking\n");
     pthread_mutex_lock(&keyboard_lock);
-    //RESET_BACKSPACE(s_keys);
-    //RESET_ARROW_KEYS(s_keys)
-    //printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", message_pos.cursor_row_indx, message_pos.cursor_col_indx, message_pos.blinking);
+    // RESET_BACKSPACE(s_keys);
+    // RESET_ARROW_KEYS(s_keys)
+    // printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", message_pos.cursor_row_indx, message_pos.cursor_col_indx, message_pos.blinking);
     if (ESC_PRESSED(s_keys))
     { /* ESC pressed? */
-      //printf("Unlocking Thread\n");
+      // printf("Unlocking Thread\n");
       pthread_mutex_unlock(&keyboard_lock);
       break;
-    } else if (ARROW_KEYS_PRESSED(s_keys)) {
-        handleArrowKeys(&message_pos, &s_keys);
-    } else if (BACKSPACE_PRESSED(s_keys)) {
+    }
+    else if (ARROW_KEYS_PRESSED(s_keys))
+    {
+      handleArrowKeys(&message_pos, &s_keys);
+    }
+    else if (BACKSPACE_PRESSED(s_keys))
+    {
       handleBackSpace(&message_pos);
-    } else if (USB_NOTHING_PRESSED(keys)) {
-      //printf("RESETING KEYS\n");
+    }
+    else if (USB_NOTHING_PRESSED(keys))
+    {
+      // printf("RESETING KEYS\n");
       RESET_SPECIAL_KEYS(s_keys); // Keeps caps lock intact
       handleCursorBlink(&message_pos, &msg_buff);
       usleep(DELAY);
       handleCursorBlink(&message_pos, &msg_buff);
     }
-  //printf("Unlocking\n");
-  pthread_mutex_unlock(&keyboard_lock);
-  usleep(DELAY);
+    // printf("Unlocking\n");
+    pthread_mutex_unlock(&keyboard_lock);
+    usleep(DELAY);
   }
 
   /* Terminate the network thread */
@@ -191,22 +197,26 @@ int main()
   return 0;
 }
 
-void *keyboard_thread_f(void *ignored) {
-  for (;;) {
+void *keyboard_thread_f(void *ignored)
+{
+  for (;;)
+  {
     sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-                packet.keycode[1]);
+            packet.keycode[1]);
     printf("%s\n", keystate);
     libusb_interrupt_transfer(keyboard, endpoint_address,
-                                (unsigned char *)&packet, sizeof(packet),
-                                &transferred, 0);
-    if (transferred == sizeof(packet)) {
+                              (unsigned char *)&packet, sizeof(packet),
+                              &transferred, 0);
+    if (transferred == sizeof(packet))
+    {
       printf("Getting lock Thread\n");
       pthread_mutex_lock(&keyboard_lock);
       getCharsFromPacket(&packet, &keys);
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
       fbputs(keystate, 6, 0);
-      for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++) {
+      for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++)
+      {
         char key = keys[i];
         if (!key)
           continue;
@@ -215,12 +225,14 @@ void *keyboard_thread_f(void *ignored) {
           handleEnterKey(&message_pos);
         else if (key == '\b')
           handleBackSpace(&message_pos);
-        else if (key == '\t') {
-          for (int i = 0; i < TAB_SPACING; i++) {
+        else if (key == '\t')
+        {
+          for (int i = 0; i < TAB_SPACING; i++)
+          {
             printChar(&message_pos, &s_keys, &msg_buff, ' ');
           }
         }
-        else 
+        else
           printChar(&message_pos, &s_keys, &msg_buff, key);
       }
     }
@@ -237,7 +249,7 @@ void *network_thread_f_r(void *ignored)
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0)
   {
     recvBuf[n] = '\0';
-    //printf("%s", recvBuf);
+    // printf("%s", recvBuf);
     fbPutString(recvBuf, &text_pos);
   }
 
@@ -250,19 +262,26 @@ void *network_thread_f_w(void *ignored)
   return NULL;
 }
 
-void sendMsg () {
-  if (message_pos.msg_buff_indx <= MESSAGE_SIZE - 2) {
+void sendMsg()
+{
+  if (message_pos.msg_buff_indx <= MESSAGE_SIZE - 2)
+  {
     msg_buff[message_pos.msg_buff_indx] = '\n';
     msg_buff[message_pos.msg_buff_indx + 1] = '\0';
-  } else {
-    msg_buff[MESSAGE_SIZE - 2] = '\n';
-    msg_buff[MESSAGE_SIZE - 1] = '\0';
+    printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
+    write(sockfd, msg_buff, message_pos.msg_buff_indx);
   }
-  printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
-  write(sockfd, msg_buff, message_pos.msg_buff_indx);
+  else
+  {
+    msg_buff[MESSAGE_SIZE + 1] = '\n';
+    msg_buff[MESSAGE_SIZE + 2] = '\0';
+    printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
+    write(sockfd, msg_buff, message_pos.msg_buff_indx);
+  }
 }
 
-void printSpecialKeys(struct special_keys *s_keys) {
+void printSpecialKeys(struct special_keys *s_keys)
+{
   char caps_insert[15];
   sprintf(caps_insert, "CAPS LOCK %d", s_keys->caps_lock);
   fbputs(caps_insert, 1, 50);
