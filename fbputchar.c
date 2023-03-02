@@ -214,16 +214,21 @@ void fbPutString(const char *s, struct position *text_pos)
   {
     // return when we hit end of string
     // or f hit the end of the screen wrap around
-    if (c == '\n' || text_pos->msg_buff_col_indx == MAX_COLS)
+    if (c == '\n')
     {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
       continue;
     }
+    if (text_pos->msg_buff_col_indx == MAX_COLS)
+    {
+      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      text_pos->msg_buff_row_indx++;
+    }
     // if we reach the end of the text box call scroll
     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
     {
-      text_pos->msg_buff_row_indx = TEXT_BOX_END_ROWS;
+      // need to set text_pos->msg_buff_row_indx to not grab line
       fbscroll(text_pos); // Need to check... yup
     }
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
