@@ -273,14 +273,6 @@ void *keyboard_thread_f(void *ignored)
   Read message from the network and print it to the
   textbox screen
 */
-Demo Instructions:
-1. Type It is a period of civil war.
-2. Press the ‘enter’ key
-3. Type Rebel spaceships, striking from a hidden base, have won their
-first victory against the evil Galactic Empire.
-4. Press the ‘enter’ key
-5. Type During the battle, Rebel Spies managed to steal secret plans to
-the Empire’s ultimate weapon, an armor
 void *network_thread_f_r(void *ignored)
 {
   /*
