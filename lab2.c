@@ -54,6 +54,7 @@ void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE + 2]; // +2 because we want to append \n \0
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
+char old_keystate[12];
 
 struct position text_pos = {
     .cursor_col_indx = TEXT_BOX_START_COLS,
@@ -199,6 +200,7 @@ int main()
 
 void *keyboard_thread_f(void *ignored)
 {
+  
   for (;;)
   {
     sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
@@ -215,27 +217,41 @@ void *keyboard_thread_f(void *ignored)
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
       fbputs(keystate, 6, 0);
-      for (uint8_t i = 0; i < 1; i++)
+      uint_8 cur_index = 0;
+      boolean seen = false;
+      for (uint_8 i = 0; i < 6; i++)
       {
-        char key = keys[i];
-        if (!key)
-          continue;
-        /* write the char to the message buffer and print to the correct position on screen */
-        if (key == '\n')
-          handleEnterKey(&message_pos);
-        else if (key == '\b')
-          handleBackSpace(&message_pos);
-        else if (key == '\t')
+        for (uint_8 j = 0; j < 6; j++)
         {
-          for (int i = 0; i < TAB_SPACING; i++)
+          if keystate[i] == keystate[j]
           {
-            printChar(&message_pos, &s_keys, &msg_buff, ' ');
+            seen = true;
           }
         }
-        else
-          printChar(&message_pos, &s_keys, &msg_buff, key);
+        if (!seen) {
+          cur_index = i;
+        }
+      }
+      char key = keys[cur_index];
+      if (!key)
+        continue;
+      /* write the char to the message buffer and print to the correct position on screen */
+      if (key == '\n')
+        handleEnterKey(&message_pos);
+      else if (key == '\b')
+        handleBackSpace(&message_pos);
+      else if (key == '\t')
+      {
+        for (int i = 0; i < TAB_SPACING; i++)
+        {
+          printChar(&message_pos, &s_keys, &msg_buff, ' ');
+        }
+      }
+      else{
+        printChar(&message_pos, &s_keys, &msg_buff, key);
       }
     }
+    old_keystate = keystate;
     printf("Unlocking Thread\n");
     pthread_mutex_unlock(&keyboard_lock);
   }
