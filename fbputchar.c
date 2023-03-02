@@ -214,13 +214,7 @@ void fbPutString(const char *s, struct position *text_pos)
   {
     // return when we hit end of string
     // or f hit the end of the screen wrap around
-    if (c == '\n')
-    {
-      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-      text_pos->msg_buff_row_indx++;
-      continue;
-    }
-    if (text_pos->msg_buff_col_indx == MAX_COLS)
+    if (c == '\n' || text_pos->msg_buff_col_indx == MAX_COLS)
     {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
