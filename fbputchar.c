@@ -491,7 +491,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     for (int i = cursor_buff_index; i < MESSAGE_SIZE; i++){
       fbputchar(msg_buff[i], (i + 1) / 64, (i+1) % 64);
     }
-    i = cursor_buff_index;
+    int i = cursor_buff_index;
     memove(msg_buff[i + 1], msg_buff[i], (MESSAGE_SIZE - i) * sizeof(char));
     msg_buff[i + 1] = key;
 
