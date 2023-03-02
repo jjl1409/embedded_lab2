@@ -493,7 +493,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     }
     i = cursor_buff_index;
     memove(msg_buff[i + 1], msg_buff[i], (MESSAGE_SIZE - i) * sizeof(char));
-    msg_buf[i + 1] = key;
+    msg_buff[i + 1] = key;
 
     // Too hard lmao
     
