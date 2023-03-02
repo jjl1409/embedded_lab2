@@ -217,7 +217,7 @@ void *keyboard_thread_f(void *ignored)
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
       fbputs(keystate, 6, 0);
-      int key_index = 0;
+      int key_index = -1;
       int seen = 0;
       for (int cur_index = 0; cur_index < 3; cur_index++)
       {
@@ -230,13 +230,19 @@ void *keyboard_thread_f(void *ignored)
             seen = 1;
           }
         }
-        if (!seen && keys[cur_index] != '0') {
+        if (!seen && keys[cur_index] != '\0') {
           printf("Seen %d\n", cur_index);
           key_index = cur_index;
         }
         seen = 0;
       }
-      char key = keys[key_index];
+      if (key_index == -1){
+        char key = '\0'
+      }
+      else 
+      {
+        char key = keys[key_index];
+      }
       printf("%c: %d %d\n", key, key_index, seen);
       if (!key)
         goto fail;
