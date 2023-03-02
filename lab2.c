@@ -227,7 +227,7 @@ void *keyboard_thread_f(void *ignored)
           handleBackSpace(&message_pos);
         else if (key == '\t')
         {
-          for (int i = 0; i < TAB_SPACING; i++)ifup eth0
+          for (int i = 0; i < TAB_SPACING; i++)
           {
             printChar(&message_pos, &s_keys, &msg_buff, ' ');
           }
