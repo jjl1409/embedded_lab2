@@ -257,7 +257,7 @@ void *network_thread_f_r(void *ignored)
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE)) > 0) // leave the last index for end string
   {
     recvBuf[n] = '\n';
-    recvBuf[n + 1] = '\0';
+    // recvBuf[n + 1] = '\0';
     /*
       put the string in the frame buffer at the current text position
       :: text position is
@@ -287,14 +287,14 @@ void sendMsg()
   if (message_pos.msg_buff_indx <= MESSAGE_SIZE - 2)
   {
     msg_buff[message_pos.msg_buff_indx] = '\n';
-    msg_buff[message_pos.msg_buff_indx + 1] = '\0';
+    // msg_buff[message_pos.msg_buff_indx + 1] = '\0';
     printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
     write(sockfd, msg_buff, message_pos.msg_buff_indx + 1);
   }
   else
   {
     msg_buff[MESSAGE_SIZE + 1] = '\n';
-    msg_buff[MESSAGE_SIZE + 2] = '\0';
+    // msg_buff[MESSAGE_SIZE + 2] = '\0';
     printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
     write(sockfd, msg_buff, MESSAGE_SIZE + 2);
   }
