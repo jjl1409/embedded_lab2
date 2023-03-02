@@ -232,7 +232,7 @@ void *keyboard_thread_f(void *ignored)
           }
         }
         if (!seen && packet.keycode[cur_index] != '\0') {
-          // printf("Seen %d\n", cur_index);
+          printf("Seen %d\n", cur_index);
           key_index = cur_index;
         }
         seen = 0;
@@ -273,7 +273,7 @@ void *keyboard_thread_f(void *ignored)
   Read message from the network and print it to the
   textbox screen
 */
-//void *network_thread_f_r(void *ignored)
+void *network_thread_f_r(void *ignored)
 {
   /*
     buffer size = 128 charsKey 
@@ -283,10 +283,10 @@ void *keyboard_thread_f(void *ignored)
   function appears unused ask Tyler
   Done till here
 */
-// void *network_thread_f_w(void *ignored)
-// {
-//   return NULL;
-// }
+void *network_thread_f_w(void *ignored)
+{
+  return NULL;
+}
 
 /*
   Send message in message buffer to chatroom
