@@ -236,13 +236,11 @@ void *keyboard_thread_f(void *ignored)
         }
         seen = 0;
       }
-      if (key_index == -1){
-        char key = '\0'
-      }
-      else 
-      {
-        char key = keys[key_index];
-      }
+      char key;
+
+      if (key_index == -1) key = '\0'
+      else key = keys[key_index];
+      
       printf("%c: %d %d\n", key, key_index, seen);
       if (!key)
         goto fail;
