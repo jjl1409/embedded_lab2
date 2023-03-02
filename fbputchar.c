@@ -190,7 +190,7 @@ void fbPutString(const char *s, struct position *text_pos)
     {
       fbscroll(text_pos); // Need to check... yup
     }
-    printf(c);
+    printf("%c", c);
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
   }
