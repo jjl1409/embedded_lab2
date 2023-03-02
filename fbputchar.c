@@ -341,12 +341,18 @@ void handleCursorBlink(struct position *pos, char *buffer)
   }
   else if (pos->msg_buff_indx > pos->cursor_buff_indx)
   {
+    // when cursor reaches end of message buffer show last char
     printf("Printing char\n");
     fbputchar(buffer[pos->cursor_buff_indx], pos->cursor_row_indx, pos->cursor_col_indx);
   }
+  else if (pos->cursor_buff_indx == MESSAGE_SIZE - 1)
+  {
+    // when cursor reaches end of message buffer show last char
+    fbputchar(buffer[MESSAGE_SIZE - 1], pos->cursor_row_indx, pos->cursor_col_indx);
+  }
   else
   {
-    fbputchar(buffer[MESSAGE_SIZE - 1], pos->cursor_row_indx, pos->cursor_col_indx);
+    fbputchar(' ', pos->cursor_row_indx, pos->cursor_col_indx);
   }
   pos->blinking = false;
 }
