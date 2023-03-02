@@ -225,6 +225,7 @@ void *keyboard_thread_f(void *ignored)
         {
           if (keystate[cur_index] != 0 && keystate[cur_index] == old_keystate[old_index])
           {
+            printf("Key debug: %c, %c\n", keystate[cur_index], old_keystate[old_index]);
             seen = 1;
           }
         }
