@@ -223,6 +223,7 @@ void fbPutString(const char *s, struct position *text_pos)
     // if we reach the end of the text box call scroll
     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
     {
+      text_pos->msg_buff_row_indx = TEXT_BOX_END_ROWS;
       fbscroll(text_pos); // Need to check... yup
     }
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
