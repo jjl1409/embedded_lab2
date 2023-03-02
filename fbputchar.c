@@ -176,14 +176,11 @@ void fbputs(const char *s, int row, int col)
 void fbPutString(const char *s, struct position *text_pos)
 {
   char c;
-  // bool newLined = false;
   // for each char in the string
   while ((c = *s++) != 0)
   {
     // return when we hit end of string
-    if (c == 0)
-      return;
-    else if (c == '\n')
+    if (c == '\n')
     {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
@@ -193,10 +190,6 @@ void fbPutString(const char *s, struct position *text_pos)
     // if we reach the end of the text box call scroll
     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
     {
-      printf("Screen is being cleared!\n");
-      // text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-      // text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
-      // clearTextBox();
       fbscroll(text_pos); // Need to check... yup
     }
     else if (text_pos->msg_buff_col_indx == MAX_COLS)
@@ -207,11 +200,6 @@ void fbPutString(const char *s, struct position *text_pos)
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
   }
-  // if (!newLined)
-  // {
-  //   text_pos->msg_buff_row_indx++;
-  //   text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-  // }
 }
 
 /*
