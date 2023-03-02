@@ -301,16 +301,20 @@ void handleEnterKey(struct position *pos)
   fbline(' ', MAX_ROWS - 2);
 }
 
+/*
+  handles backspace event, with message box position as input
+*/
 void handleBackSpace(struct position *pos)
 {
-  printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-  // pos->isBackSpacing = true;
-  if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS)
-  {
-    fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    return;
-  }
-  else if (pos->msg_buff_col_indx == 0)
+  // printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+  // if at the start
+  // if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS)
+  // {
+  //   fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+  //   return;
+  // }
+  //
+  if (pos->msg_buff_col_indx == 0)
   {
     fbputchar(' ', pos->msg_buff_row_indx - 1, MAX_COLS - 1);
     pos->msg_buff_col_indx = MAX_COLS - 1;
