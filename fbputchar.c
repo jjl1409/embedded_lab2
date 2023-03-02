@@ -123,34 +123,40 @@ void fbline(char c, int row)
 
 void fbscroll(struct position *pos)
 {
-  unsigned char *textBox = framebuffer + \
-                      (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
-                      (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-  unsigned char *newTextBox = framebuffer + \
-                      ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
-                      (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  unsigned char *textBox = framebuffer +
+                           (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+                           (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  unsigned char *newTextBox = framebuffer +
+                              ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+                              (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
   // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
-  ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) * \
-                        FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+  ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) *
+                             FONT_HEIGHT * 2 +
+                         fb_vinfo.yoffset) *
+                            fb_finfo.line_length +
                         ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
   memmove(textBox, newTextBox, textBoxSize);
   fbline(' ', pos->msg_buff_row_indx - 1);
-  //for (int i = pos->msg_buff_col_indx; i < MAX_COLS; i++) {
-  //  fbputchar(' ', pos->msg_buff_row_indx - 1, i);
-  //}
+  // for (int i = pos->msg_buff_col_indx; i < MAX_COLS; i++) {
+  //   fbputchar(' ', pos->msg_buff_row_indx - 1, i);
+  // }
   pos->msg_buff_row_indx--;
   pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
 }
 
-void clearTextBox() {
-  for (int i = TEXT_BOX_START_ROWS; i < MESSAGE_BOX_START_ROWS - 1; i++) {
+void clearTextBox()
+{
+  for (int i = TEXT_BOX_START_ROWS; i < MESSAGE_BOX_START_ROWS - 1; i++)
+  {
     fbline(' ', i);
   }
 }
 
-void clearScreen() {
-  for (int i = 0; i < MAX_ROWS; i++) {
+void clearScreen()
+{
+  for (int i = 0; i < MAX_ROWS; i++)
+  {
     fbline(' ', i);
   }
 }
@@ -167,184 +173,245 @@ void fbputs(const char *s, int row, int col)
 }
 
 // Handles wrap around
-void fbPutString(const char *s, struct position *text_pos) {
+void fbPutString(const char *s, struct position *text_pos)
+{
   char c;
   bool newLined = false;
-  while ((c = *s++) != 0) {
+  /* read each char in the string*/
+  while ((c = *s++) != 0)
+  {
     if (c == 0)
       return;
-    else if (c == '\n') {
+    else if (c == '\n')
+    {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
       newLined = true;
       continue;
     }
-    if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS)) { // Check TEXT_BOX_END_ROWS
+    if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
+    { // Check TEXT_BOX_END_ROWS
       printf("Screen is being cleared!\n");
-      //text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-      //text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
-      //clearTextBox();
+      // text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      // text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
+      // clearTextBox();
       fbscroll(text_pos); // Need to check
-    } else if (text_pos->msg_buff_col_indx == MAX_COLS) {
+    }
+    else if (text_pos->msg_buff_col_indx == MAX_COLS)
+    {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
     }
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
   }
-  if (!newLined) {
+  if (!newLined)
+  {
     text_pos->msg_buff_row_indx++;
     text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
   }
 }
 
-void handleArrowKeys(struct position *pos, struct special_keys *s_keys) {
-  if (s_keys->left_arrow) {
-    if (pos->cursor_col_indx == 0 && pos->cursor_row_indx == MESSAGE_BOX_START_ROWS) {
+/*
+  handles arrow keys
+*/
+void handleArrowKeys(struct position *pos, struct special_keys *s_keys)
+{
+  if (s_keys->left_arrow)
+  {
+    if (pos->cursor_col_indx == 0 && pos->cursor_row_indx == MESSAGE_BOX_START_ROWS)
+    {
       return;
-    } else if (pos->cursor_col_indx == 0) {
+    }
+    else if (pos->cursor_col_indx == 0)
+    {
       pos->cursor_col_indx = MAX_COLS - 1;
       pos->cursor_row_indx--;
       pos->cursor_buff_indx--;
-    } else {
-        pos->cursor_col_indx--;
-        pos->cursor_buff_indx--;
     }
-  } else if (s_keys->right_arrow) {
+    else
+    {
+      pos->cursor_col_indx--;
+      pos->cursor_buff_indx--;
+    }
+  }
+  else if (s_keys->right_arrow)
+  {
     if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->msg_buff_row_indx)
       return;
-    else if (pos->cursor_col_indx == MAX_COLS) {
+    else if (pos->cursor_col_indx == MAX_COLS)
+    {
       pos->cursor_col_indx = 0;
       pos->cursor_row_indx++;
       pos->cursor_buff_indx++;
-    } else {
+    }
+    else
+    {
       pos->cursor_col_indx++;
       pos->cursor_buff_indx++;
     }
-  } else if (s_keys->down_arrow) {
-    if (pos->msg_buff_indx - pos->cursor_buff_indx >= MAX_COLS) {
+  }
+  else if (s_keys->down_arrow)
+  {
+    if (pos->msg_buff_indx - pos->cursor_buff_indx >= MAX_COLS)
+    {
       pos->cursor_buff_indx += MAX_COLS;
       pos->cursor_row_indx++;
-    } else {
+    }
+    else
+    {
       pos->cursor_buff_indx = pos->msg_buff_indx;
       pos->cursor_col_indx = pos->msg_buff_col_indx;
       pos->cursor_row_indx = pos->msg_buff_row_indx;
     }
-  } else if (s_keys->up_arrow) {
-    if (pos->cursor_row_indx == MESSAGE_BOX_START_ROWS) {
+  }
+  else if (s_keys->up_arrow)
+  {
+    if (pos->cursor_row_indx == MESSAGE_BOX_START_ROWS)
+    {
       pos->cursor_col_indx = 0;
       pos->cursor_buff_indx = 0;
     }
-    else {
+    else
+    {
       pos->cursor_row_indx--;
       pos->cursor_buff_indx -= MAX_COLS;
     }
   }
 }
 
-void handleEnterKey(struct position *pos) {
-    sendMsg();
-    //pos->isBackSpacing = false;
-    pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
-    pos->msg_buff_row_indx = MESSAGE_BOX_START_ROWS;
-    pos->msg_buff_indx = 0; // Message is sent
-    pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
-    pos->cursor_row_indx = MESSAGE_BOX_START_ROWS;
-    pos->cursor_buff_indx = 0;
-    fbline(' ', MAX_ROWS - 3);
-    fbline(' ', MAX_ROWS - 2);
+/*
+  Handles return pressed send message, reset cursor and clear message box
+*/
+void handleEnterKey(struct position *pos)
+{
+  // send message
+  sendMsg();
+
+  // reset message box and cursor
+  pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
+  pos->msg_buff_row_indx = MESSAGE_BOX_START_ROWS;
+  pos->msg_buff_indx = 0; // Message is sent
+  pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
+  pos->cursor_row_indx = MESSAGE_BOX_START_ROWS;
+  pos->cursor_buff_indx = 0;
+
+  // clear message box
+  fbline(' ', MAX_ROWS - 3);
+  fbline(' ', MAX_ROWS - 2);
 }
 
-void handleBackSpace(struct position *pos) {
-    printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    //pos->isBackSpacing = true;
-    if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS) {
-      fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-      return;
-    } else if (pos->msg_buff_col_indx == 0) {
-      fbputchar(' ', pos->msg_buff_row_indx - 1, MAX_COLS - 1);
-      pos->msg_buff_col_indx = MAX_COLS - 1;
-      pos->msg_buff_row_indx--;
-      pos->msg_buff_indx--;
-      pos->cursor_col_indx = MAX_COLS - 1;
-      pos->cursor_row_indx--;
-      pos->cursor_buff_indx--;
-      return;
-    }
-    fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
-    pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
-    pos->msg_buff_col_indx--;
-    pos->cursor_col_indx--;
+void handleBackSpace(struct position *pos)
+{
+  printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+  // pos->isBackSpacing = true;
+  if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS)
+  {
+    fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    return;
+  }
+  else if (pos->msg_buff_col_indx == 0)
+  {
+    fbputchar(' ', pos->msg_buff_row_indx - 1, MAX_COLS - 1);
+    pos->msg_buff_col_indx = MAX_COLS - 1;
+    pos->msg_buff_row_indx--;
+    pos->msg_buff_indx--;
+    pos->cursor_col_indx = MAX_COLS - 1;
+    pos->cursor_row_indx--;
     pos->cursor_buff_indx--;
+    return;
+  }
+  fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
+  pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
+  pos->msg_buff_col_indx--;
+  pos->cursor_col_indx--;
+  pos->cursor_buff_indx--;
 }
 
-void handleCursorBlink(struct position *pos, char *buffer) {
-  if (!pos->blinking) {
+/*
+  handle cursor blinking at given position
+*/
+void handleCursorBlink(struct position *pos, char *buffer)
+{
+  if (!pos->blinking)
+  {
     fbputchar('_', pos->cursor_row_indx, pos->cursor_col_indx);
     pos->blinking = true;
     return;
   }
-  else if (pos->msg_buff_indx > pos->cursor_buff_indx) {
+  else if (pos->msg_buff_indx > pos->cursor_buff_indx)
+  {
     printf("Printing char\n");
     fbputchar(buffer[pos->cursor_buff_indx], pos->cursor_row_indx, pos->cursor_col_indx);
   }
-  else {
-    fbputchar(' ', pos->cursor_row_indx, pos->cursor_col_indx);
+  else
+  {
+    fbputchar('0', pos->cursor_row_indx, pos->cursor_col_indx);
   }
   pos->blinking = false;
 }
 
-void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key) {
-    printf("Buffer_indx: %d, Rows %d, Cols: %d\n", pos->msg_buff_indx, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-    printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", pos->cursor_row_indx, pos->cursor_col_indx, pos->blinking);
-    /* if we hit the end of the screen go to the next row and reset colun index*/
-    if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->cursor_row_indx) {
-      msg_buff[pos->msg_buff_indx] = key;
-      if (pos->msg_buff_col_indx == MAX_COLS - 1 && pos->msg_buff_row_indx == MESSAGE_BOX_END_ROWS) {
-        fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-      } else if (pos->msg_buff_col_indx == MAX_COLS - 1)
-      {
-        fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-        pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
-        pos->msg_buff_row_indx++;
-        pos->msg_buff_indx++;
-        pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
-        pos->cursor_row_indx++;
-        pos->cursor_buff_indx++;
-      } else {
-        fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-        pos->msg_buff_indx++;
-        pos->msg_buff_col_indx++;
-        pos->cursor_col_indx++;
-        pos->cursor_buff_indx++;
-      }
-    } else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1) ) {
-      printf("Insert Unimplemented\n");
-      // Too hard lmao
-      /* 
-      unsigned char *afterCursor = framebuffer + \
-                          (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
-                          (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-      unsigned char *newAfterCursor = framebuffer + \
-                          ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
-                          (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-                          
-      // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
-      ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) * \
-                            FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
-                            ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-
-      memmove(textBox, newTextBox, textBoxSize);
-
-      framebuffer +
-                                (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
-                                (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-      */
-    } else {
-      printf("Yolo replace\n");
-      msg_buff[pos->cursor_buff_indx] = key;
-      fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
+void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key)
+{
+  printf("Buffer_indx: %d, Rows %d, Cols: %d\n", pos->msg_buff_indx, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+  printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", pos->cursor_row_indx, pos->cursor_col_indx, pos->blinking);
+  /* if we hit the end of the screen go to the next row and reset colun index*/
+  if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->cursor_row_indx)
+  {
+    msg_buff[pos->msg_buff_indx] = key;
+    if (pos->msg_buff_col_indx == MAX_COLS - 1 && pos->msg_buff_row_indx == MESSAGE_BOX_END_ROWS)
+    {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
     }
+    else if (pos->msg_buff_col_indx == MAX_COLS - 1)
+    {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+      pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
+      pos->msg_buff_row_indx++;
+      pos->msg_buff_indx++;
+      pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
+      pos->cursor_row_indx++;
+      pos->cursor_buff_indx++;
+    }
+    else
+    {
+      fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+      pos->msg_buff_indx++;
+      pos->msg_buff_col_indx++;
+      pos->cursor_col_indx++;
+      pos->cursor_buff_indx++;
+    }
+  }
+  else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1))
+  {
+    printf("Insert Unimplemented\n");
+    // Too hard lmao
+    /*
+    unsigned char *afterCursor = framebuffer + \
+                        (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                        (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+    unsigned char *newAfterCursor = framebuffer + \
+                        ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                        (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
+    // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
+    ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) * \
+                          FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                          ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
+    memmove(textBox, newTextBox, textBoxSize);
+
+    framebuffer +
+                              (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+                              (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+    */
+  }
+  else
+  {
+    printf("Yolo replace\n");
+    msg_buff[pos->cursor_buff_indx] = key;
+    fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
+  }
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz

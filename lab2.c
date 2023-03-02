@@ -241,29 +241,48 @@ void *keyboard_thread_f(void *ignored)
   }
 }
 
+/*
+  Read message from the network and print it to the
+  textbox screen
+*/
 void *network_thread_f_r(void *ignored)
 {
+  /*
+    buffer size = 128 chars
+  */
   char recvBuf[BUFFER_SIZE];
   int n;
   /* Receive data */
-  while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0)
+  while ((n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0) // leave the last index for end string
   {
     recvBuf[n] = '\0';
-    // printf("%s", recvBuf);
+    /*
+      put the string in the frame buffer at the current text position
+      :: text position is
+    */
     fbPutString(recvBuf, &text_pos);
   }
 
   return NULL;
 }
 
+/*
+  function appears unused ask Tyler
+  Done till here
+*/
 void *network_thread_f_w(void *ignored)
 {
-
   return NULL;
 }
 
+/*
+  Send message in message buffer to chatroom
+*/
 void sendMsg()
 {
+  /*
+    Append newline and end string before sending message
+  */
   if (message_pos.msg_buff_indx <= MESSAGE_SIZE - 2)
   {
     msg_buff[message_pos.msg_buff_indx] = '\n';
@@ -280,6 +299,9 @@ void sendMsg()
   }
 }
 
+/*
+  Debug print for special characters on screen
+*/
 void printSpecialKeys(struct special_keys *s_keys)
 {
   char caps_insert[15];
