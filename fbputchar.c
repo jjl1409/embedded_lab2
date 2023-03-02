@@ -307,28 +307,29 @@ void handleEnterKey(struct position *pos)
 void handleBackSpace(struct position *pos)
 {
   // printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-  // if at the start
-  // if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS)
-  // {
-  //   fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-  //   return;
-  // }
-  //
-  if (pos->msg_buff_col_indx == 0)
+
+  // if at the start replace char with a space and return
+  if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS)
+  {
+    fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+    return;
+  }
+  // check if i need to go up one line
+  else if (pos->msg_buff_col_indx == 0)
   {
     fbputchar(' ', pos->msg_buff_row_indx - 1, MAX_COLS - 1);
     pos->msg_buff_col_indx = MAX_COLS - 1;
     pos->msg_buff_row_indx--;
     pos->msg_buff_indx--;
     pos->cursor_col_indx = MAX_COLS - 1;
-    pos->cursor_row_indx--;
+    pos->cursor_row_indx = pos->msg_buff_row_indx;
     pos->cursor_buff_indx--;
     return;
   }
   fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
   pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
   pos->msg_buff_col_indx--;
-  pos->cursor_col_indx--;
+  pos->cursor_col_indx = pos->msg_buff_col_indx;
   pos->cursor_buff_indx--;
 }
 
