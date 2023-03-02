@@ -393,6 +393,69 @@ void handleCursorBlink(struct position *pos, char *buffer)
 /*
   Print message buffer to screen
 */
+// void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key)
+// {
+//   /* if we hit the end of the screen go to the next row and reset colun index*/
+//   if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->cursor_row_indx)
+//   {
+//     msg_buff[pos->msg_buff_indx] = key;
+//     if (pos->msg_buff_col_indx == MAX_COLS - 1 && pos->msg_buff_row_indx == MESSAGE_BOX_END_ROWS)
+//     {
+//       fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+//     }
+//     else if (pos->msg_buff_col_indx == MAX_COLS - 1)
+//     {
+//       fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+//       pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS;
+//       pos->msg_buff_row_indx++;
+//       pos->msg_buff_indx++;
+//       pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
+//       pos->cursor_row_indx++;
+//       pos->cursor_buff_indx++;
+//     }
+//     else
+//     {
+//       fbputchar(key, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
+//       pos->msg_buff_indx++;
+//       pos->msg_buff_col_indx++;
+//       pos->cursor_col_indx++;
+//       pos->cursor_buff_indx++;
+//     }
+//   }
+//   else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1))
+//   {
+//     printf("Insert Unimplemented\n");
+
+
+//     // Too hard lmao
+//     /*
+//     unsigned char *afterCursor = framebuffer + \
+//                         (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+//                         (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+//     unsigned char *newAfterCursor = framebuffer + \
+//                         ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+//                         (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
+//     // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
+//     ssize_t textBoxSize = ((pos->msg_buff_row_indx - (TEXT_BOX_START_ROWS + 1)) * \
+//                           FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+//                           ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
+//     memmove(textBox, newTextBox, textBoxSize);
+
+//     framebuffer +
+//                               (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+//                               (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+//     */
+//   }
+//   else
+//   {
+//     printf("Yolo replace\n");
+//     msg_buff[pos->cursor_buff_indx] = key;
+//     fbputchar(key, pos->cursor_row_indx, pos->cursor_col_indx);
+//   }
+// }
+
 void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key)
 {
   /* if we hit the end of the screen go to the next row and reset colun index*/
@@ -424,8 +487,16 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
   }
   else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1))
   {
-    printf("Insert Unimplemented\n");
+    printf("Insert Activated\n");
+    for (int i = cursor_buff_index; i < MESSAGE_SIZE; i++){
+      fbputchar(msg_buff[i], (i + 1) / 64, (i+1) % 64);
+    }
+    i = cursor_buff_index;
+    memove(msg_buff[i + 1], msg_buff[i], (MESSAGE_SIZE - i) * sizeof(char));
+    msg_buf[i + 1] = key;
+
     // Too hard lmao
+    
     /*
     framebuffer +
                                 (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
@@ -435,7 +506,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
                         (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                         (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
     unsigned char *newAfterCursor = framebuffer + \
-                        ((TEXT_BOX_START_ROWS + 1) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
+                        ((TEXT_BOX_START_ROWS) * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                         (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
     // Might break with different ROWS, COLS settings. Esp if MESSAGE_BOX_START_COLS > TEXT_BOX_START_BOLS
@@ -443,21 +514,22 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
                           FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                           ((pos->msg_buff_col_indx - TEXT_BOX_START_COLS) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
 
-    memmove(textBox, newTextBox, textBoxSize);
+    memmove(newAfterCursor, afterCursor, textBoxSize);
 
     framebuffer +
                               (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
                               (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+    
     */
-   if (pos->msg_buff_row_indx == pos->cursor_row_indx && pos->msg_buff_col_indx < MAX_COLS - 1) { // Same row no flowing to next line
-    unsigned char *Cursor = framebuffer + (pos->cursor_row_indx * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +\
-                                               ((pos->cursor_col_indx) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-    unsigned char *afterCursor = framebuffer + (pos->cursor_row_indx * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +\
-                                          ((pos->cursor_col_indx + 1) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-    ssize_t cursorToEndCols = ((MAX_COLS - (pos->cursor_buff_indx + 1)) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
-    memmove(afterCursor, Cursor, cursorToEndCols);
-    memmove(msg_buff + pos->cursor_buff_indx, msg_buff + pos->cursor_buff_indx + 1, pos->msg_buff_col_indx - pos->cursor_buff_indx);
-   }
+  //  if (pos->msg_buff_row_indx == pos->cursor_row_indx && pos->msg_buff_col_indx < MAX_COLS - 1) { // Same row no flowing to next line
+  //   unsigned char *Cursor = framebuffer + (pos->cursor_row_indx * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +\
+  //                                              ((pos->cursor_col_indx) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  //   unsigned char *afterCursor = framebuffer + (pos->cursor_row_indx * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +\
+  //                                         ((pos->cursor_col_indx + 1) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  //   ssize_t cursorToEndCols = ((MAX_COLS - (pos->cursor_buff_indx + 1)) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+  //   memmove(afterCursor, Cursor, cursorToEndCols);
+  //   memmove(msg_buff + pos->cursor_buff_indx, msg_buff + pos->cursor_buff_indx + 1, pos->msg_buff_col_indx - pos->cursor_buff_indx);
+  //  }
   }
   else
   {
