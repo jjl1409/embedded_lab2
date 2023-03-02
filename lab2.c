@@ -222,7 +222,7 @@ void *keyboard_thread_f(void *ignored)
       int seen = 0;
       for (int cur_index = 0; cur_index < 3; cur_index++)
       {
-        // printf("Key %c\n", packet.keycode[key_index]);
+        printf("Key %c\n", packet.keycode[key_index]);
         for (int old_index = 0; old_index < 3; old_index++)
         {
           if (packet.keycode[cur_index] == old_keys[old_index])
@@ -276,8 +276,23 @@ void *keyboard_thread_f(void *ignored)
 void *network_thread_f_r(void *ignored)
 {
   /*
-    buffer size = 128 charsKey 
-
+    buffer size = 128 chars
+  */
+  char recvBuf[BUFFER_SIZE + 2];
+  int n;
+  /* Receive data */
+  while ((n = read(sockfd, &recvBuf, BUFFER_SIZE)) > 0) // leave the last index for end string
+  {
+    recvBuf[n] = '\n';
+    recvBuf[n + 1] = '\0';
+    /*
+      put the string in the frame buffer at the current text position
+      :: text position is
+    */
+    fbPutString(recvBuf, &text_pos);
+  }
+  return NULL;
+}
 
 /*
   function appears unused ask Tyler
