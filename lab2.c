@@ -221,6 +221,7 @@ void *keyboard_thread_f(void *ignored)
       int seen = 0;
       for (int cur_index = 0; cur_index < 6; cur_index++)
       {
+        printf("Key %c\n", keystate[key_index]);
         for (int old_index = 0; old_index < 6; old_index++)
         {
           if (keystate[cur_index] == old_keystate[old_index])
