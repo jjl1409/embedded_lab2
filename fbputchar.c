@@ -326,7 +326,7 @@ void handleBackSpace(struct position *pos)
     pos->cursor_buff_indx = pos->msg_buff_indx;
     return;
   }
-  fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
+  fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
   pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
   pos->msg_buff_col_indx--;
   pos->cursor_col_indx = pos->msg_buff_col_indx;
