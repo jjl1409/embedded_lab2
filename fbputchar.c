@@ -495,8 +495,8 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     memove(msg_buff[i + 1], msg_buff[i], (MESSAGE_SIZE - i) * sizeof(char));
     msg_buff[i + 1] = key;
     pos->msg_buff_row_indx = (i + 1) / 64; 
-    pos->msg_buff_col_indx = (i+1) % 64);
-    pos->cursor_col_indx =  (i+1) % 64);
+    pos->msg_buff_col_indx = (i+1) % 64;
+    pos->cursor_col_indx =  (i+1) % 64;
     pos->cursor_row_indx = (i + 1) / 64; 
     pos->cursor_buff_indx++;
     pos->msg_buff_indx++;
