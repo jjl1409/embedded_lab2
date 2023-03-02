@@ -498,7 +498,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
       msg_buf[i + 1] = msg_buf[temp];
       temp = msg_buf[i];
     }
-    msg_buff[i + 1] = key;
+    msg_buff[pos->cursor_buff_index] = key;
     pos->msg_buff_row_indx = (i + 1) / 64;
     pos->msg_buff_col_indx = (i+1) % 64;
     pos->cursor_col_indx =  (i+1) % 64;
