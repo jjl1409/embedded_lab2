@@ -217,20 +217,21 @@ void *keyboard_thread_f(void *ignored)
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
       fbputs(keystate, 6, 0);
-      uint_8 cur_index = 0;
-      boolean seen = false;
-      for (uint_8 i = 0; i < 6; i++)
+      int cur_index = 0;
+      int seen = 0;
+      for (int i = 0; i < 6; i++)
       {
-        for (uint_8 j = 0; j < 6; j++)
+        for (int j = 0; j < 6; j++)
         {
           if keystate[i] == keystate[j]
           {
-            seen = true;
+            seen = 1;
           }
         }
         if (!seen) {
           cur_index = i;
         }
+        seen = 0;
       }
       char key = keys[cur_index];
       if (!key)
