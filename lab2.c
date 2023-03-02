@@ -227,7 +227,7 @@ void *keyboard_thread_f(void *ignored)
         {
           if (packet.keycode[cur_index] == old_keys[old_index])
           {
-            // printf("Key debug: %c, %c\n", packet.keycode[cur_index], old_keys[old_index]);
+            printf("Key debug: %c, %c\n", packet.keycode[cur_index], old_keys[old_index]);
             seen = 1;
           }
         }
@@ -283,10 +283,10 @@ void *keyboard_thread_f(void *ignored)
   function appears unused ask Tyler
   Done till here
 */
-void *network_thread_f_w(void *ignored)
-{
-  return NULL;
-}
+// void *network_thread_f_w(void *ignored)
+// {
+//   return NULL;
+// }
 
 /*
   Send message in message buffer to chatroom
