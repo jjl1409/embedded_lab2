@@ -245,6 +245,7 @@ void *keyboard_thread_f(void *ignored)
   Read message from the network and print it to the
   textbox screen
 */
+
 void *network_thread_f_r(void *ignored)
 {
   /*
