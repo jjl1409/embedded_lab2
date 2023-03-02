@@ -223,7 +223,7 @@ void *keyboard_thread_f(void *ignored)
       {
         for (int j = 0; j < 6; j++)
         {
-          if (keystate[i] != 0 && keystate[i] == keystate[j])
+          if (keystate[i] != 0 && keystate[i] == old_keystate[j])
           {
             seen = 1;
           }
