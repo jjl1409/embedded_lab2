@@ -251,7 +251,7 @@ void *keyboard_thread_f(void *ignored)
         printChar(&message_pos, &s_keys, &msg_buff, key);
       }
     }
-    old_keystate = keystate;
+    memcpy(old_keystate, keystate, sizeof(keystate));
     printf("Unlocking Thread\n");
     pthread_mutex_unlock(&keyboard_lock);
   }
