@@ -488,8 +488,8 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
   else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1))
   {
     printf("Insert Activated\n");
-    for (int i = pos->cursor_buff_indx; i < MESSAGE_SIZE; i++){
-      fbputchar(msg_buff[i], (i + 1) / 64, (i+1) % 64);
+    for (int i = pos->cursor_buff_indx; i < pos->msg_buff_indx; i++){
+      fbputchar(msg_buff[i], MESSAGE_BOX_START_COLS + (i + 1) / 64, (i+1) % 64);
     }
     int i = pos->cursor_buff_indx;
     memmove(msg_buff[i + 1], msg_buff[i], (MESSAGE_SIZE - i) * sizeof(char));
