@@ -215,7 +215,7 @@ void *keyboard_thread_f(void *ignored)
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
       fbputs(keystate, 6, 0);
-      for (uint8_t i = 0; i < MAX_KEYS_PRESSED; i++)
+      for (uint8_t i = 0; i < 1; i++)
       {
         char key = keys[i];
         if (!key)
