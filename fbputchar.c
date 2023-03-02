@@ -138,9 +138,6 @@ void fbscroll(struct position *pos)
 
   memmove(textBox, newTextBox, textBoxSize);
   fbline(' ', pos->msg_buff_row_indx - 1);
-  // for (int i = pos->msg_buff_col_indx; i < MAX_COLS; i++) {
-  //   fbputchar(' ', pos->msg_buff_row_indx - 1, i);
-  // }
   pos->msg_buff_row_indx--;
   pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
 }
@@ -193,6 +190,7 @@ void fbPutString(const char *s, struct position *text_pos)
     {
       fbscroll(text_pos); // Need to check... yup
     }
+    printf(c);
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
   }
