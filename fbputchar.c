@@ -499,10 +499,10 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
       temp = msg_buff[i];
     }
     msg_buff[pos->cursor_buff_indx] = key;
-    pos->msg_buff_row_indx = (i + 1) / 64;
-    pos->msg_buff_col_indx = (i+1) % 64;
-    pos->cursor_col_indx =  (i+1) % 64;
-    pos->cursor_row_indx = (i + 1) / 64; 
+    pos->msg_buff_row_indx = MESSAGE_BOX_START_ROWS + (i + 1) / 64;
+    pos->msg_buff_col_indx = MESSAGE_BOX_START_COLS + (i+1) % 64;
+    pos->cursor_col_indx =  MESSAGE_BOX_START_COLS + (i+1) % 64;
+    pos->cursor_row_indx = MESSAGE_BOX_START_ROWS + (i + 1) / 64; 
     pos->cursor_buff_indx++;
     pos->msg_buff_indx++;
 
