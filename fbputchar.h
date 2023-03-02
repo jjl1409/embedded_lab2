@@ -17,21 +17,24 @@
 #define TEXT_BOX_START_COLS 0
 #define TEXT_BOX_END_ROWS MESSAGE_BOX_START_ROWS - 1
 #define TAB_SPACING 4
-#define RESET_SPECIAL_KEYS(X) {\
-            X.shift_pressed = false;\
-            X.escape_pressed = false;\
-            RESET_BACKSPACE(X);\
-            RESET_ARROW_KEYS(X)\
-            }
-#define RESET_ARROW_KEYS(X) {\
-            X.down_arrow = false;\
-            X.up_arrow = false;\
-            X.right_arrow = false;\
-            X.left_arrow = false;\
-            }
+#define RESET_SPECIAL_KEYS(X) \
+  {                           \
+    X.shift_pressed = false;  \
+    X.escape_pressed = false; \
+    RESET_BACKSPACE(X);       \
+    RESET_ARROW_KEYS(X)       \
+  }
+#define RESET_ARROW_KEYS(X) \
+  {                         \
+    X.down_arrow = false;   \
+    X.up_arrow = false;     \
+    X.right_arrow = false;  \
+    X.left_arrow = false;   \
+  }
 #define RESET_BACKSPACE(X) X.backspace_pressed = false
 
-struct position {
+struct position
+{
   uint8_t msg_buff_col_indx;
   uint8_t msg_buff_row_indx;
   uint8_t cursor_col_indx;
@@ -41,7 +44,8 @@ struct position {
   bool blinking;
 };
 
-struct special_keys {
+struct special_keys
+{
   bool caps_lock;
   bool left_arrow;
   bool up_arrow;
