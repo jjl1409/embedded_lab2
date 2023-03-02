@@ -500,11 +500,11 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     }
     msg_buff[pos->cursor_buff_indx] = key;
     pos->msg_buff_col_index++;
-    if (pos->msg_buf_col_indx == MAX_COLS){
-      pos->msg_buf_col_indx = 0;
+    if (pos->msg_buff_col_indx == MAX_COLS){
+      pos->msg_buff_col_indx = 0;
       pos->msg_buff_row_indx++;
     }
-    pos->cursor_col_index++;
+    pos->cursor_col_indx++;
     if (pos->cursor_col_indx == MAX_COLS){
       pos->cursor_col_indx = 0;
       pos->cursor_row_indx++;
