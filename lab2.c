@@ -287,14 +287,14 @@ void sendMsg()
   if (message_pos.msg_buff_indx <= MESSAGE_SIZE - 2)
   {
     msg_buff[message_pos.msg_buff_indx] = '\n';
-    // msg_buff[message_pos.msg_buff_indx + 1] = '\0';
+    msg_buff[message_pos.msg_buff_indx + 1] = '\0';
     printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
     write(sockfd, msg_buff, message_pos.msg_buff_indx + 1);
   }
   else
   {
     msg_buff[MESSAGE_SIZE + 1] = '\n';
-    // msg_buff[MESSAGE_SIZE + 2] = '\0';
+    msg_buff[MESSAGE_SIZE + 2] = '\0';
     printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
     write(sockfd, msg_buff, MESSAGE_SIZE + 2);
   }
