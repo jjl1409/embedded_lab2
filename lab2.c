@@ -54,7 +54,7 @@ void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE + 2]; // +2 because we want to append \n \0
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
-char old_keys[MAX_KEYS_PRESSED]];
+char old_keys[MAX_KEYS_PRESSED];
 
 struct position text_pos = {
     .cursor_col_indx = TEXT_BOX_START_COLS,
@@ -256,7 +256,7 @@ void *keyboard_thread_f(void *ignored)
         printChar(&message_pos, &s_keys, &msg_buff, key);
       }
     }
-    memcpy(old_keystate, keystate, sizeof(keystate));
+    memcpy(old_keys, keys, sizeof(keystate));
     printf("Unlocking Thread\n");
     pthread_mutex_unlock(&keyboard_lock);
   }
