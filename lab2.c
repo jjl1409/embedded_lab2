@@ -262,7 +262,7 @@ void *keyboard_thread_f(void *ignored)
       }
     }
     fail:
-      memcpy(old_keys, packet.keystate, sizeof(packet.keycode));
+      memcpy(old_keys, packet.keycode, sizeof(packet.keycode));
       //memcpy(old_keys, keys, sizeof(keys));
       printf("Unlocking Thread\n");
       pthread_mutex_unlock(&keyboard_lock);
