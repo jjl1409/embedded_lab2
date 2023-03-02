@@ -487,7 +487,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
   }
   else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1))
   {
-    printf("Insert Activated %d\n". cursor_buff_indx);
+    printf("Insert Activated %d\n", pos->cursor_buff_indx);
     for (int i = pos->cursor_buff_indx; i < pos->msg_buff_indx; i++){
       fbputchar(msg_buff[i], MESSAGE_BOX_START_ROWS + (i + 1) / 64, (i+1) % 64);
     }
