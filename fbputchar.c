@@ -346,7 +346,7 @@ void handleCursorBlink(struct position *pos, char *buffer)
   }
   else
   {
-    fbputchar('0', pos->cursor_row_indx, pos->cursor_col_indx);
+    fbputchar(buffer[MESSAGE_SIZE - 1], pos->cursor_row_indx, pos->cursor_col_indx);
   }
   pos->blinking = false;
 }
