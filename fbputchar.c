@@ -317,7 +317,7 @@ void handleBackSpace(struct position *pos)
   // check if i need to go up one line
   else if (pos->msg_buff_col_indx == 0)
   {
-    fbputchar(' ', pos->msg_buff_row_indx - 1, MAX_COLS - 1);
+    fbputchar(' ', pos->msg_buff_row_indx, MAX_COLS - 1);
     pos->msg_buff_col_indx = MAX_COLS - 1;
     pos->msg_buff_row_indx--;
     pos->msg_buff_indx--;
@@ -327,7 +327,6 @@ void handleBackSpace(struct position *pos)
     return;
   }
   fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-  fbputchar(' ', pos->msg_buff_row_indx, pos->msg_buff_col_indx - 1);
   pos->msg_buff_indx--; // Might need to remove for Ctrl + Z
   pos->msg_buff_col_indx--;
   pos->cursor_col_indx = pos->msg_buff_col_indx;
