@@ -251,7 +251,7 @@ void *network_thread_f_r(void *ignored)
   /*
     buffer size = 128 chars
   */
-  char recvBuf[BUFFER_SIZE + 2];
+  char recvBuf[BUFFER_SIZE];
   int n;
   /* Receive data */
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE)) > 0) // leave the last index for end string
