@@ -235,7 +235,7 @@ void *keyboard_thread_f(void *ignored)
         seen = 0;
       }
       char key = keys[key_index];
-      printf("%c: %d\n", key, key_index);
+      printf("%c: %d %d\n", key, key_index, seen);
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen */
