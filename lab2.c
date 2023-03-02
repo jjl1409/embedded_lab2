@@ -54,7 +54,7 @@ void fbputs(const char *s, int row, int col);
 char msg_buff[MESSAGE_SIZE + 2]; // +2 because we want to append \n \0
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
-char old_keystate[12];
+char old_keys[MAX_KEYS_PRESSED]];
 
 struct position text_pos = {
     .cursor_col_indx = TEXT_BOX_START_COLS,
@@ -219,18 +219,18 @@ void *keyboard_thread_f(void *ignored)
       fbputs(keystate, 6, 0);
       int key_index = 0;
       int seen = 0;
-      for (int cur_index = 0; cur_index < 6; cur_index++)
+      for (int cur_index = 0; cur_index < 3; cur_index++)
       {
-        printf("Key %c\n", keystate[key_index]);
-        for (int old_index = 0; old_index < 6; old_index++)
+        printf("Key %c\n", keys[key_index]);
+        for (int old_index = 0; old_index < 3; old_index++)
         {
-          if (keystate[cur_index] == old_keystate[old_index])
+          if (keys[cur_index] == old_keys[old_index])
           {
-            printf("Key debug: %c, %c\n", keystate[cur_index], old_keystate[old_index]);
+            printf("Key debug: %c, %c\n", keys[cur_index], old_keys[old_index]);
             seen = 1;
           }
         }
-        if (!seen && keystate[cur_index] != '0') {
+        if (!seen && keys[cur_index] != '0') {
           printf("Seen %d\n", cur_index);
           key_index = cur_index;
         }
