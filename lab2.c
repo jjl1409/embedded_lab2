@@ -257,7 +257,7 @@ void *network_thread_f_r(void *ignored)
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE)) > 0) // leave the last index for end string
   {
     recvBuf[n] = '\n';
-    // recvBuf[n + 1] = '\0';
+    recvBuf[n + 1] = '\0';
     /*
       put the string in the frame buffer at the current text position
       :: text position is
@@ -284,7 +284,7 @@ void sendMsg()
   /*
     Append newline and end string before sending message
   */
-  if (message_pos.msg_buff_indx <= MESSAGE_SIZE - 2)
+  if (message_pos.msg_buff_indx <= MESSAGE_SIZE)
   {
     msg_buff[message_pos.msg_buff_indx] = '\n';
     msg_buff[message_pos.msg_buff_indx + 1] = '\0';
