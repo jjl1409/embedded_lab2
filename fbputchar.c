@@ -218,7 +218,6 @@ void fbPutString(const char *s, struct position *text_pos)
     {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
-      continue;
     }
     if (text_pos->msg_buff_col_indx == MAX_COLS)
     {
