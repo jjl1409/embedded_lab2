@@ -217,23 +217,24 @@ void *keyboard_thread_f(void *ignored)
       setSpecialKeys(&packet, &s_keys);
       printSpecialKeys(&s_keys);
       fbputs(keystate, 6, 0);
-      int cur_index = 0;
+      int key_index = 0;
       int seen = 0;
-      for (int i = 0; i < 6; i++)
+      for (int cur_index = 0; cur_index < 6; cur_index++)
       {
-        for (int j = 0; j < 6; j++)
+        for (int old_index = 0; old_index < 6; old_index++)
         {
-          if (keystate[i] != 0 && keystate[i] == old_keystate[j])
+          if (keystate[new_index] != 0 && keystate[new_index] == old_keystate[old_index])
           {
             seen = 1;
           }
         }
         if (!seen) {
-          cur_index = i;
+          key_index = cur_index;
         }
         seen = 0;
       }
-      char key = keys[cur_index];
+      char key = keys[key_index];
+      printf("%c\n", key);
       if (!key)
         continue;
       /* write the char to the message buffer and print to the correct position on screen */
