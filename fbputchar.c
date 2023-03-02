@@ -493,12 +493,12 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     }
     int i = pos->cursor_buff_indx;
     // memmove(msg_buff[i + 1], msg_buff[i], (pos->cursor_buff_indx - i - 1));
-    char temp = msg_buf[i];
-    for (i; i < msg_buff_indx; i++){
-      msg_buf[i + 1] = msg_buf[temp];
-      temp = msg_buf[i];
+    char temp = msg_buff[i];
+    for (i; i < pos->msg_buff_indx; i++){
+      msg_buff[i + 1] = msg_buff[temp];
+      temp = msg_buff[i];
     }
-    msg_buff[pos->cursor_buff_index] = key;
+    msg_buff[pos->cursor_buff_indx] = key;
     pos->msg_buff_row_indx = (i + 1) / 64;
     pos->msg_buff_col_indx = (i+1) % 64;
     pos->cursor_col_indx =  (i+1) % 64;
