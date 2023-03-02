@@ -237,7 +237,7 @@ void *keyboard_thread_f(void *ignored)
         }
         seen = 0;
       }
-      if (packet.modifiers)
+      //if (packet.modifiers)
       char key;
       if (key_index == -1) key = '\0';
       else key = getCharFromKeyCode(packet.modifiers, packet.keycode[key_index]);
