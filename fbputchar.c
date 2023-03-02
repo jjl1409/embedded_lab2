@@ -499,7 +499,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
       temp = msg_buff[i];
     }
     msg_buff[pos->cursor_buff_indx] = key;
-    pos->msg_buff_col_index++;
+    pos->msg_buff_col_indx++;
     if (pos->msg_buff_col_indx == MAX_COLS){
       pos->msg_buff_col_indx = 0;
       pos->msg_buff_row_indx++;
