@@ -225,8 +225,11 @@ void fbPutString(const char *s, struct position *text_pos)
       // need to set text_pos->msg_buff_row_indx to not grab line
       fbscroll(text_pos); // Need to check... yup
     }
-    fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
-    text_pos->msg_buff_col_indx++;
+    if (c != '\n')
+    {
+      fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
+      text_pos->msg_buff_col_indx++;
+    }
   }
 }
 
