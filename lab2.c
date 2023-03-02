@@ -230,6 +230,7 @@ void *keyboard_thread_f(void *ignored)
           }
         }
         if (!seen) {
+          printf("Seen %d\n", cur_index)
           key_index = cur_index;
         }
         seen = 0;
