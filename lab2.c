@@ -251,13 +251,12 @@ void *network_thread_f_r(void *ignored)
   /*
     buffer size = 128 chars
   */
-  char recvBuf[BUFFER_SIZE + 2];
+  char recvBuf[BUFFER_SIZE + 1];
   int n;
   /* Receive data */
   while ((n = read(sockfd, &recvBuf, BUFFER_SIZE)) > 0) // leave the last index for end string
   {
     recvBuf[n] = '\n';
-    recvBuf[n + 1] = '\0';
     /*
       put the string in the frame buffer at the current text position
       :: text position is
