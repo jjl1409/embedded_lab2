@@ -176,26 +176,28 @@ void fbputs(const char *s, int row, int col)
 void fbPutString(const char *s, struct position *text_pos)
 {
   char c;
-  bool newLined = false;
-  /* read each char in the string*/
+  // bool newLined = false;
+  // for each char in the string
   while ((c = *s++) != 0)
   {
+    // return when we hit end of string
     if (c == 0)
       return;
     else if (c == '\n')
     {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
-      newLined = true;
+      // newLined = true;
       continue;
     }
+    // if we reach the end of the text box call scroll
     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
-    { // Check TEXT_BOX_END_ROWS
+    {
       printf("Screen is being cleared!\n");
       // text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       // text_pos->msg_buff_row_indx = TEXT_BOX_START_ROWS;
       // clearTextBox();
-      fbscroll(text_pos); // Need to check
+      fbscroll(text_pos); // Need to check... yup
     }
     else if (text_pos->msg_buff_col_indx == MAX_COLS)
     {
@@ -205,15 +207,16 @@ void fbPutString(const char *s, struct position *text_pos)
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
   }
-  if (!newLined)
-  {
-    text_pos->msg_buff_row_indx++;
-    text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-  }
+  // if (!newLined)
+  // {
+  //   text_pos->msg_buff_row_indx++;
+  //   text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+  // }
 }
 
 /*
   handles arrow keys
+  (assumed safe)
 */
 void handleArrowKeys(struct position *pos, struct special_keys *s_keys)
 {
@@ -282,6 +285,7 @@ void handleArrowKeys(struct position *pos, struct special_keys *s_keys)
 
 /*
   Handles return pressed send message, reset cursor and clear message box
+  (safe)
 */
 void handleEnterKey(struct position *pos)
 {
@@ -303,11 +307,10 @@ void handleEnterKey(struct position *pos)
 
 /*
   handles backspace event, with message box position as input
+  (safe)
 */
 void handleBackSpace(struct position *pos)
 {
-  // printf("%d %d\n", pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-
   // if at the start replace char with a space and return
   if (pos->msg_buff_col_indx == 0 && pos->msg_buff_row_indx == MESSAGE_BOX_START_ROWS)
   {
@@ -335,6 +338,7 @@ void handleBackSpace(struct position *pos)
 
 /*
   handle cursor blinking at given position
+  (safe)
 */
 void handleCursorBlink(struct position *pos, char *buffer)
 {
@@ -362,10 +366,11 @@ void handleCursorBlink(struct position *pos, char *buffer)
   pos->blinking = false;
 }
 
+/*
+  Print message buffer to screen
+*/
 void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff, char key)
 {
-  printf("Buffer_indx: %d, Rows %d, Cols: %d\n", pos->msg_buff_indx, pos->msg_buff_row_indx, pos->msg_buff_col_indx);
-  printf("Cursor pos: (rows, cols, blink): (%d, %d, %d)\n", pos->cursor_row_indx, pos->cursor_col_indx, pos->blinking);
   /* if we hit the end of the screen go to the next row and reset colun index*/
   if (pos->cursor_col_indx == pos->msg_buff_col_indx && pos->cursor_row_indx == pos->cursor_row_indx)
   {
@@ -425,12 +430,11 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
   }
 }
 
-/* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
-
-od --address-radix=n --width=16 -v -t x1 -j 4 -N 2048 lat0-16.psfu
-
+/*
+  8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
+  od --address-radix=n --width=16 -v -t x1 -j 4 -N 2048 lat0-16.psfu
+  (given don't care)
 */
-
 static unsigned char font[] = {
     0x00,
     0x00,
