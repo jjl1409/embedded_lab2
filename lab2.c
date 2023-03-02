@@ -229,7 +229,7 @@ void *keyboard_thread_f(void *ignored)
             seen = 1;
           }
         }
-        if (!seen) {
+        if (!seen && keystate[cur_index] != 0) {
           printf("Seen %d\n", cur_index);
           key_index = cur_index;
         }
