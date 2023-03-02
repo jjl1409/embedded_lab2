@@ -239,7 +239,7 @@ void *keyboard_thread_f(void *ignored)
       char key = keys[key_index];
       printf("%c: %d %d\n", key, key_index, seen);
       if (!key)
-        continue;
+        goto fail;
       /* write the char to the message buffer and print to the correct position on screen */
       if (key == '\n')
         handleEnterKey(&message_pos);
@@ -256,9 +256,10 @@ void *keyboard_thread_f(void *ignored)
         printChar(&message_pos, &s_keys, &msg_buff, key);
       }
     }
-    memcpy(old_keys, keys, sizeof(keys));
-    printf("Unlocking Thread\n");
-    pthread_mutex_unlock(&keyboard_lock);
+    fail:
+      memcpy(old_keys, keys, sizeof(keys));
+      printf("Unlocking Thread\n");
+      pthread_mutex_unlock(&keyboard_lock);
   }
 }
 
