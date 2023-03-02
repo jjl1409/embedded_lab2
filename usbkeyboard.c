@@ -154,10 +154,10 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x31: return '|';
           case 0x33: return ':';
           case 0x34: return '"';
-          case 0x35: return "~";
-          case 0x36: return "<";
-          case 0x37: return ">";
-          case 0x38: return "?";
+          case 0x35: return '~';
+          case 0x36: return '<';
+          case 0x37: return '>';
+          case 0x38: return '?';
           default: return 0;
       }
   } else {
@@ -183,10 +183,10 @@ char getCharFromKeyCode(uint8_t modifier, uint8_t keycode)
           case 0x31: return '\\';
           case 0x33: return ';';
           case 0x34: return '\'';
-          case 0x35: return "`";
-          case 0x36: return ",";
-          case 0x37: return ".";
-          case 0x38: return "/";
+          case 0x35: return '`';
+          case 0x36: return ','';
+          case 0x37: return '.';
+          case 0x38: return '/';
           default: return 0;
       }
   }
