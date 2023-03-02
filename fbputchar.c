@@ -175,6 +175,37 @@ void fbputs(const char *s, int row, int col)
 /*
   Handles wrap around
 */
+// void fbPutString(const char *s, struct position *text_pos)
+// {
+//   // this is the code causing wird block
+//   char c;
+//   // for each char in the string
+//   while ((c = *s++) != 0)
+//   {
+//     // return when we hit end of string
+//     if (c == '\n')
+//     {
+//       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+//       text_pos->msg_buff_row_indx++;
+//       // newLined = true;
+//       continue;
+//     }
+//     // if we reach the end of the text box call scroll
+//     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
+//     {
+//       fbscroll(text_pos); // Need to check... yup
+//     }
+//     // if hit the end of the screen wrap around
+//     else if (text_pos->msg_buff_col_indx == MAX_COLS)
+//     {
+//       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+//       text_pos->msg_buff_row_indx++;
+//     }
+//     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
+//     text_pos->msg_buff_col_indx++;
+//   }
+// }
+
 void fbPutString(const char *s, struct position *text_pos)
 {
   char c;
@@ -182,23 +213,22 @@ void fbPutString(const char *s, struct position *text_pos)
   while ((c = *s++) != 0)
   {
     // return when we hit end of string
+    // or f hit the end of the screen wrap around
     if (c == '\n')
     {
       text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
       text_pos->msg_buff_row_indx++;
-      // newLined = true;
       continue;
+    }
+    if (text_pos->msg_buff_col_indx == MAX_COLS)
+    {
+      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
+      text_pos->msg_buff_row_indx++;
     }
     // if we reach the end of the text box call scroll
     if ((text_pos->msg_buff_row_indx >= TEXT_BOX_END_ROWS))
     {
       fbscroll(text_pos); // Need to check... yup
-    }
-    // if hit the end of the screen wrap around
-    else if (text_pos->msg_buff_col_indx == MAX_COLS)
-    {
-      text_pos->msg_buff_col_indx = TEXT_BOX_START_COLS;
-      text_pos->msg_buff_row_indx++;
     }
     fbputchar(c, text_pos->msg_buff_row_indx, text_pos->msg_buff_col_indx);
     text_pos->msg_buff_col_indx++;
