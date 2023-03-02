@@ -427,6 +427,10 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     printf("Insert Unimplemented\n");
     // Too hard lmao
     /*
+    framebuffer +
+                                (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
+                                (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+
     unsigned char *afterCursor = framebuffer + \
                         (TEXT_BOX_START_ROWS * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length + \
                         (TEXT_BOX_START_COLS * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
@@ -445,6 +449,15 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
                               (row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +
                               (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
     */
+   if (pos->msg_buff_row_indx == pos->cursor_row_indx && pos->msg_buff_col_indx < MAX_COLS - 1) { // Same row no flowing to next line
+    unsigned char *Cursor = framebuffer + (pos->cursor_row_indx * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +\
+                                               ((pos->cursor_col_indx) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+    unsigned char *afterCursor = framebuffer + (pos->cursor_row_indx * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length +\
+                                          ((pos->cursor_col_indx + 1) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+    ssize_t cursorToEndCols = ((MAX_COLS - (pos->cursor_buff_indx + 1)) * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
+    memmove(afterCursor, Cursor, cursorToEndCols);
+    memmove(msg_buff + pos->cursor_buff_indx, msg_buff + pos->cursor_buff_indx + 1, pos->msg_buff_col_indx - pos->cursor_buff_indx);
+   }
   }
   else
   {
