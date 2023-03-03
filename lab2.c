@@ -51,7 +51,7 @@ void *network_thread_f_w(void *);
 void *keyboard_thread_f(void *);
 void fbline(char c, int row);
 void fbputs(const char *s, int row, int col);
-char msg_buff[MESSAGE_SIZE + 3]; // +2 because we want to append \n \0
+char msg_buff[MESSAGE_SIZE + 2]; // +2 because we want to append \n \0
 char keys[MAX_KEYS_PRESSED];
 char keystate[12];
 char old_keys[MAX_KEYS_PRESSED];
@@ -318,7 +318,7 @@ void sendMsg()
     msg_buff[1] = 0;
     printf("\n");
     write(sockfd, msg_buff, 2);
-  } else if (message_pos.msg_buff_indx < MESSAGE_SIZE)
+  } else if (message_pos.msg_buff_indx < MESSAGE_SIZE - 1)
   {
     msg_buff[message_pos.msg_buff_indx] = '\n';
     msg_buff[message_pos.msg_buff_indx + 1] = '\0';
@@ -327,10 +327,10 @@ void sendMsg()
   }
   else
   {
-    msg_buff[MESSAGE_SIZE + 2] = '\n';
-    msg_buff[MESSAGE_SIZE + 3] = '\0';
+    msg_buff[MESSAGE_SIZE + 1] = '\n';
+    msg_buff[MESSAGE_SIZE + 2] = '\0';
     printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
-    write(sockfd, msg_buff, MESSAGE_SIZE + 3);
+    write(sockfd, msg_buff, MESSAGE_SIZE + 2);
   }
 }
 
