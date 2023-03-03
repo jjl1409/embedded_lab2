@@ -247,6 +247,7 @@ void *keyboard_thread_f(void *ignored)
         goto fail;
       /* write the char to the message buffer and print to the correct position on screen */
       if (key == '\n')
+        memset(msg_buff, 0, len(msg_buff));
         handleEnterKey(&message_pos);
       else if (key == '\b')
         handleBackSpace(&message_pos);

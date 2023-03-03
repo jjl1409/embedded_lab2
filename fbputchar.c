@@ -323,7 +323,6 @@ void handleEnterKey(struct position *pos)
   pos->cursor_col_indx = MESSAGE_BOX_START_COLS;
   pos->cursor_row_indx = MESSAGE_BOX_START_ROWS;
   pos->cursor_buff_indx = 0;
-
   // clear message box
   fbline(' ', MAX_ROWS - 3);
   fbline(' ', MAX_ROWS - 2);
