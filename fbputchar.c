@@ -498,7 +498,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
       msg_buff[i] = msg_buff[i-1];
     }
     msg_buff[pos->cursor_buff_indx] = key;
-    fbputchar(msg_buff[pos->cursor_buff_index], MESSAGE_BOX_START_ROWS + (i + 1) / 64, (i+1) % 64);
+    fbputchar(msg_buff[pos->cursor_buff_indx], MESSAGE_BOX_START_ROWS + (i + 1) / 64, (i+1) % 64);
     pos->msg_buff_col_indx++;
     if (pos->msg_buff_col_indx == MAX_COLS){
       pos->msg_buff_col_indx = 0;
