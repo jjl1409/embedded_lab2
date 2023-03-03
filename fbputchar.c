@@ -488,9 +488,6 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
   else if (s_keys->insert && (pos->cursor_buff_indx < MESSAGE_SIZE - 1))
   {
     printf("Insert Activated %d\n", pos->cursor_buff_indx);
-    for (int i = pos->cursor_buff_indx; i < pos->msg_buff_indx; i++){
-      fbputchar(msg_buff[i], MESSAGE_BOX_START_ROWS + (i + 1) / 64, (i+1) % 64);
-    }
     int i = pos->cursor_buff_indx;
     // memmove(msg_buff[i + 1], msg_buff[i], (pos->cursor_buff_indx - i - 1));
     char temp = msg_buff[i];
@@ -498,7 +495,6 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
       msg_buff[i] = msg_buff[i-1];
     }
     msg_buff[pos->cursor_buff_indx] = key;
-    fbputchar(msg_buff[pos->cursor_buff_indx], MESSAGE_BOX_START_ROWS + (i + 1) / 64, (i+1) % 64);
     pos->msg_buff_col_indx++;
     if (pos->msg_buff_col_indx == MAX_COLS){
       pos->msg_buff_col_indx = 0;
@@ -511,6 +507,9 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     }
     pos->cursor_buff_indx++;
     pos->msg_buff_indx++;
+    for (int i = pos->cursor_buff_indx - 1; i < pos->msg_buff_indx; i++){
+      fbputchar(msg_buff[i], MESSAGE_BOX_START_ROWS + i / 64, i % 64);
+    }
 
     // Too hard lmao
     
