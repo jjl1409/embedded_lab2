@@ -313,11 +313,11 @@ void sendMsg()
   /*
     Append newline and end string before sending message
   */
-  if (message_pos.msg_buff == 0) {
+  if (message_pos.msg_buff_indx == 0) {
     msg_buff[0] = '\n';
     msg_buff[1] = 0;
     printf("\n");
-    write(sockdf, msg_buff, 2);
+    write(sockfd, msg_buff, 2);
   } else if (message_pos.msg_buff_indx <= MESSAGE_SIZE)
   {
     msg_buff[message_pos.msg_buff_indx + 1] = '\n';
