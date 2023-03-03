@@ -2,7 +2,7 @@
  *
  * CSEE 4840 Lab 2 for 2019
  *
- * Name/UNI: Please Changeto Yourname (pcy2301)
+ * Jason Lam, Tyler Manrique, Otito Darl-Uzu, jjl2247, tm3147, ood2130
  */
 #include "fbputchar.h"
 #include <stdio.h>
