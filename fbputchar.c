@@ -495,7 +495,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     // memmove(msg_buff[i + 1], msg_buff[i], (pos->cursor_buff_indx - i - 1));
     char temp = msg_buff[i];
     for (i = MESSAGE_SIZE - 1; i > pos->cursor_buff_indx; i--){
-      msg_buff[i] = msg_buf[i-1];
+      msg_buff[i] = msg_buff[i-1];
     }
     msg_buff[pos->cursor_buff_indx] = key;
     pos->msg_buff_col_indx++;
