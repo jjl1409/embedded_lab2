@@ -247,7 +247,7 @@ void *keyboard_thread_f(void *ignored)
         goto fail;
       /* write the char to the message buffer and print to the correct position on screen */
       if (key == '\n'){
-        memset(msg_buff, 0, sizeof(msg_buff));
+        // memset(msg_buff, 0, sizeof(msg_buff));
         handleEnterKey(&message_pos);
       }
       else if (key == '\b')
@@ -313,7 +313,12 @@ void sendMsg()
   /*
     Append newline and end string before sending message
   */
-  if (message_pos.msg_buff_indx <= MESSAGE_SIZE)
+  if (message_pos.msg_buff == 0) {
+    msg_buff[0] = '\n';
+    msg_buff[1] = 0;
+    printf("\n");
+    write(sockdf, msg_buff, 2);
+  } else if (message_pos.msg_buff_indx <= MESSAGE_SIZE)
   {
     msg_buff[message_pos.msg_buff_indx + 1] = '\n';
     msg_buff[message_pos.msg_buff_indx + 2] = '\0';
