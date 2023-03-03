@@ -318,10 +318,10 @@ void sendMsg()
     msg_buff[1] = 0;
     printf("\n");
     write(sockfd, msg_buff, 2);
-  } else if (message_pos.msg_buff_indx <= MESSAGE_SIZE)
+  } else if (message_pos.msg_buff_indx < MESSAGE_SIZE)
   {
-    msg_buff[message_pos.msg_buff_indx + 1] = '\n';
-    msg_buff[message_pos.msg_buff_indx + 2] = '\0';
+    msg_buff[message_pos.msg_buff_indx] = '\n';
+    msg_buff[message_pos.msg_buff_indx + 1] = '\0';
     printf("Message: %d %s", message_pos.msg_buff_indx, msg_buff);
     write(sockfd, msg_buff, message_pos.msg_buff_indx + 1);
   }
