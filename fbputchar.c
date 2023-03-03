@@ -507,7 +507,7 @@ void printChar(struct position *pos, struct special_keys *s_keys, char *msg_buff
     }
     pos->cursor_buff_indx++;
     pos->msg_buff_indx++;
-    for (int i = pos->cursor_buff_indx - 1; i < pos->msg_buff_indx; i++){
+    for (int i = pos->cursor_buff_indx - 1; i < pos->msg_buff_indx && i < MESSAGE_SIZE-1; i++){
       fbputchar(msg_buff[i], MESSAGE_BOX_START_ROWS + i / 64, i % 64);
     }
 
